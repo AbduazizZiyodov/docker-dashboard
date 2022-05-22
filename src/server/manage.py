@@ -2,26 +2,37 @@ import typer
 import uvicorn
 import typing as t
 
-from fastapi import FastAPI, APIRouter
+from starlette.routing import Route
+from starlette.applications import Starlette
+from starlette.exceptions import HTTPException
 
-from settings import Settings as settings
-from images.views import images_router
-from containers.views import containers_router
+from docker.errors import DockerException
 
-
-def create_app(routers: t.List[APIRouter]) -> FastAPI:
-    api = FastAPI(**settings.FASTAPI_SETTINGS)
-
-    for router in routers:
-        api.include_router(router)
-
-    return api
-
+from containers.views import *
+from exceptions import http_exception_handler
 
 cli = typer.Typer()
 
 
-api = create_app([containers_router, images_router])
+def create_app() -> Starlette:
+    routes = [
+        Route("/api/containers", get_containers, methods=["GET"]),
+        Route(
+            "/api/containers/{container_id:str}",
+            get_container, methods=["GET"]
+        ),
+    ]
+
+    return Starlette(
+        routes=routes,
+        exception_handlers={
+            HTTPException: http_exception_handler,
+            DockerException: http_exception_handler
+        }
+    )
+
+
+api = create_app()
 
 
 @cli.command()
@@ -31,6 +42,7 @@ def serve(
     reload: t.Optional[bool] = True,
     debug: t.Optional[bool] = True
 ):
+
     uvicorn.run(
         "manage:api",
         host=host,
