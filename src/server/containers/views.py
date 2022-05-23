@@ -1,17 +1,19 @@
 import docker
 import typing as t
 
+from starlette.routing import Route
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from docker.models.containers import Container
 
+
 from .utils import container_as_dict
 
-client = docker.DockerClient()
+client = docker.from_env()
 
 
 async def get_containers(request: Request) -> JSONResponse:
-    containers: t.List[Container] = client.containers.list()
+    containers: t.List[Container] = client.containers.list(all=True)
     response = container_as_dict(containers)
 
     return JSONResponse(response)
@@ -26,5 +28,35 @@ async def get_container(request: Request) -> JSONResponse:
     return JSONResponse(response)
 
 
+async def stop_container(request: Request) -> JSONResponse:
+    container: Container = client.containers.get(
+        request.path_params["container_id"]
+    )
+    container.stop()
 
-__all__ = ["get_containers", "get_container"]
+    return JSONResponse({"stopped": True, })
+
+
+async def delete_container(request: Request) -> JSONResponse:
+    container: Container = client.containers.get(
+        request.path_params["container_id"]
+    )
+    container.remove(force=True)
+
+    return JSONResponse({"deleted": True, })
+
+container_routes = [
+    Route("/api/containers", get_containers, methods=["GET"]),
+    Route(
+        "/api/containers/{container_id:str}",
+        get_container, methods=["GET"]
+    ),
+    Route(
+        "/api/containers/{container_id:str}/stop",
+        stop_container, methods=["GET"]
+    ),
+    Route(
+        "/api/containers/{container_id:str}/delete",
+        delete_container, methods=["DELETE"]
+    ),
+]
