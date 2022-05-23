@@ -2,32 +2,33 @@ import typer
 import uvicorn
 import typing as t
 
-from starlette.routing import Route
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 
+from pydantic import ValidationError
 from docker.errors import DockerException
 
-from containers.views import *
-from exceptions import http_exception_handler
+from pydantic import ValidationError
+from images.views import image_routes
+from containers.views import container_routes
+
+from exceptions import (
+    http_exception_handler,
+    pydantic_exception_handler
+)
 
 cli = typer.Typer()
 
 
 def create_app() -> Starlette:
-    routes = [
-        Route("/api/containers", get_containers, methods=["GET"]),
-        Route(
-            "/api/containers/{container_id:str}",
-            get_container, methods=["GET"]
-        ),
-    ]
+    routes = container_routes + image_routes
 
     return Starlette(
         routes=routes,
         exception_handlers={
             HTTPException: http_exception_handler,
-            DockerException: http_exception_handler
+            DockerException: http_exception_handler,
+            ValidationError: pydantic_exception_handler
         }
     )
 

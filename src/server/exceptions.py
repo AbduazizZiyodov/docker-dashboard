@@ -1,8 +1,11 @@
+import json
 import typing as t
 
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.exceptions import HTTPException
+
+from pydantic import ValidationError
 
 from docker.errors import DockerException
 
@@ -17,4 +20,16 @@ async def http_exception_handler(
         {"detail": detail},
         status_code=exc.status_code,
         headers=exc.headers if isinstance(exc, HTTPException) else {}
+    )
+
+
+async def pydantic_exception_handler(
+    request: Request,
+    exc: ValidationError
+) -> JSONResponse:
+    detail: dict = json.loads(exc.json())
+
+    return JSONResponse(
+        detail,
+        status_code=422
     )
