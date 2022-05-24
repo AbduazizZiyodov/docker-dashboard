@@ -1,7 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
-@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
-@import '~@fortawesome/fontawesome-free/scss/solid.scss';
-@import '~@fortawesome/fontawesome-free/scss/regular.scss';
-@import '~@fortawesome/fontawesome-free/scss/brands.scss';
- 
-@import '~mdb-angular-ui-kit/assets/scss/mdb.scss';
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/regular.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+
+@import "~mdb-angular-ui-kit/assets/scss/mdb.scss";
+
+* {
+  font-family: "Fira Sans", sans-serif;
+}
+
+@font-face {
+  font-family: "OdibeeSans";
+  src: url("./assets/fonts/OdibeeSans.ttf");
+}
+
+.navbar-text {
+  font-family: "OdibeeSans";
+  font-size: 45px;
+  padding: 0;
+  color: DodgerBlue;
+}
+
+.dodger-blue {
+  color: DodgerBlue;
+}
+
+.dodger-blue-bg {
+  background: DodgerBlue;
+  color: white;
+  text-transform: capitalize;
+}
