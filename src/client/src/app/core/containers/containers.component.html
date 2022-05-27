@@ -1,0 +1,105 @@
+<div class="container p-3">
+  <h2 class="h2-responsive text-center fw-bold navbar-text">Containers</h2>
+
+  <div class="card">
+    <div class="card-body">
+      <p
+        *ngIf="containers.length == 0"
+        class="note border note-primary text-center"
+      >
+        There are no containers ...
+      </p>
+      <table
+        *ngIf="containers.length != 0"
+        class="table align-middle mb-0 bg-white"
+      >
+        <thead class="bg-light">
+          <tr>
+            <th><i class="fas fa-list-ol"></i> Container ID</th>
+            <th><i class="fas fa-tags"></i> Name</th>
+            <th><i class="fas fa-battery-three-quarters"></i> Status</th>
+            <th><i class="fas fa-compact-disc"></i> Image</th>
+            <th><i class="fas fa-ellipsis-v"></i> Actions</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="for; let container; of: containers" data-aos="zoom-in" data-aos-duration="2000">
+          <tr>
+            <td>
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm text-lowercase btn-rounded"
+              >
+                {{ container.short_id }}
+              </button>
+            </td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-warning btn-rounded text-lowercase"
+              >
+                {{ container.name }}
+              </button>
+            </td>
+            <td>
+              <span
+                class="text-capitalize p-2 badge badge-{{
+                  getStatus(container.status)
+                }} rounded-pill d-inline"
+              >
+                {{ container.status }}</span
+              >
+            </td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-primary btn-rounded text-lowercase"
+              >
+                {{ container.image.name }}
+              </button>
+            </td>
+
+            <td>
+              <div mdbDropdown class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-light dropdown-toggle dropdown-toggle-split"
+                  mdbDropdownToggle
+                  aria-expanded="false"
+                >
+                  <span class="visually-hidden"></span>
+                </button>
+                <ul mdbDropdownMenu class="dropdown-menu">
+                  <li *ngIf="container.status == 'exited'">
+                    <a
+                      class="dropdown-item bg-success text-white"
+                      (click)="startContainer(container.name)"
+                    >
+                      Start <i class="fas fa-play"></i
+                    ></a>
+                  </li>
+
+                  <li *ngIf="container.status != 'exited'">
+                    <a
+                      class="dropdown-item bg-warning text-white"
+                      (click)="stopContainer(container.name)"
+                    >
+                      Stop <i class="fas fa-stop"></i
+                    ></a>
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item bg-danger text-white"
+                      (click)="deleteContainer(container.name)"
+                    >
+                      Delete <i class="fas fa-trash"></i
+                    ></a>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
