@@ -2,8 +2,10 @@ import typer
 import uvicorn
 import typing as t
 
+from starlette.middleware import Middleware
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
+from starlette.middleware.cors import CORSMiddleware
 
 from pydantic import ValidationError
 from docker.errors import DockerException
@@ -29,7 +31,15 @@ def create_app() -> Starlette:
             HTTPException: http_exception_handler,
             DockerException: http_exception_handler,
             ValidationError: pydantic_exception_handler
-        }
+        },
+        middleware=[
+            Middleware(
+                CORSMiddleware,
+                allow_origins=['*'],
+                allow_methods=["*"],
+                allow_headers=["*"],
+            )
+        ]
     )
 
 
