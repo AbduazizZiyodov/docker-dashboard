@@ -28,6 +28,15 @@ async def get_container(request: Request) -> JSONResponse:
     return JSONResponse(response)
 
 
+async def start_stopped_container(request: Request) -> JSONResponse:
+    container: Container = client.containers.get(
+        request.path_params["container_id"]
+    )
+    container.start()
+
+    return JSONResponse({"started": True})
+
+
 async def stop_container(request: Request) -> JSONResponse:
     container: Container = client.containers.get(
         request.path_params["container_id"]
@@ -50,6 +59,10 @@ container_routes = [
     Route(
         "/api/containers/{container_id:str}",
         get_container, methods=["GET"]
+    ),
+    Route(
+        "/api/containers/{container_id:str}/start",
+        start_stopped_container, methods=["GET"]
     ),
     Route(
         "/api/containers/{container_id:str}/stop",
