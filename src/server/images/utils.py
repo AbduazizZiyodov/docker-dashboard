@@ -2,6 +2,7 @@ import typing as t
 
 from docker import DockerClient
 from docker.models.images import Image
+from docker.models.containers import Container
 
 
 def parse_image_name(image: Image) -> str:
@@ -17,7 +18,6 @@ def image_as_dict(images: t.Union[t.List[Image], Image]):
             name=parse_image_name(image),
             short_id=image.short_id,
             labels=image.labels,
-
         )
 
     if isinstance(images, list):
@@ -30,3 +30,14 @@ def remove_image(image: Image, client: DockerClient) -> None:
     image_name: str = parse_image_name(image)
     client.images.remove(image_name)
     return
+
+
+def filter_containers_by_image(image_name: str, client: DockerClient) -> t.List[Container]:
+    def filter_image_name(container: Container) -> bool:
+        return parse_image_name(container.image) == image_name
+
+    return list(
+        filter(
+            filter_image_name, client.containers.list(all=True)
+        )
+    )
