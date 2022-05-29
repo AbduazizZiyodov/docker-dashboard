@@ -26,6 +26,13 @@ import { HeaderComponent } from './components/header/header.component';
 import { MenuComponent } from './core/menu/menu.component';
 import { ContainersComponent } from './core/containers/containers.component';
 import { ToastrModule } from 'ngx-toastr';
+import { ImagesComponent } from './core/images/images.component';
+import { ClipboardModule } from 'ngx-clipboard';
+
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpInterceptorService } from './core/services/http-interceptor.service';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +41,9 @@ import { ToastrModule } from 'ngx-toastr';
     HeaderComponent,
     MenuComponent,
     ContainersComponent,
+    ImagesComponent,
+    NotFoundComponent,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,8 +69,15 @@ import { ToastrModule } from 'ngx-toastr';
     ToastrModule.forRoot({
       timeOut: 2000,
     }),
+    ClipboardModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
