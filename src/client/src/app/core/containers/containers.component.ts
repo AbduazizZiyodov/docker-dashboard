@@ -19,7 +19,7 @@ interface Status {
   styleUrls: ['./containers.component.scss'],
 })
 export class ContainersComponent implements OnInit {
-  containers: any | Container[];
+  containers!: Container[];
   status: Status = {
     created: 'success',
     restarting: 'warning',
@@ -29,6 +29,7 @@ export class ContainersComponent implements OnInit {
     exited: 'danger',
     dead: 'danger',
   };
+
   constructor(
     private containerService: ContainerService,
     private toastrService: ToastrService
@@ -39,7 +40,7 @@ export class ContainersComponent implements OnInit {
   }
 
   getContainers() {
-    this.containerService.getContainers().subscribe((data) => {
+    this.containerService.getContainers().subscribe((data: Container[]) => {
       this.containers = data.reverse();
     });
   }

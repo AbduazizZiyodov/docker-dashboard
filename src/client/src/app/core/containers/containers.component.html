@@ -1,13 +1,17 @@
 <div class="container p-3">
-  <h2 class="h2-responsive text-center fw-bold navbar-text">Containers</h2>
+  <h2 class="h2-responsive text-center fw-bold navbar-text">
+    <i class="fas fa-cubes"></i> Containers
+  </h2>
 
   <div class="card">
     <div class="card-body">
       <p
+        data-aos="zoom-in"
+        data-aos-duration="1000"
         *ngIf="containers.length == 0"
         class="note border note-primary text-center"
       >
-        There are no containers ...
+        There are no containers <i class="fas fa-exclamation-circle"></i>
       </p>
       <table
         *ngIf="containers.length != 0"
@@ -15,29 +19,26 @@
       >
         <thead class="bg-light">
           <tr>
+            <th></th>
             <th><i class="fas fa-list-ol"></i> Container ID</th>
-            <th><i class="fas fa-tags"></i> Name</th>
             <th><i class="fas fa-battery-three-quarters"></i> Status</th>
             <th><i class="fas fa-compact-disc"></i> Image</th>
-            <th><i class="fas fa-ellipsis-v"></i> Actions</th>
+            <th><i class="fas fa-tags"></i> Container Name</th>
           </tr>
         </thead>
-        <tbody *ngFor="for; let container; of: containers" data-aos="zoom-in" data-aos-duration="2000">
+        <tbody
+          *ngFor="for; let container; of: containers; index as i"
+          data-aos="zoom-in"
+          data-aos-duration="2000"
+        >
           <tr>
+            <td>{{ i + 1 }}.</td>
             <td>
               <button
                 type="button"
                 class="btn btn-secondary btn-sm text-lowercase btn-rounded"
               >
                 {{ container.short_id }}
-              </button>
-            </td>
-            <td>
-              <button
-                type="button"
-                class="btn btn-warning btn-rounded text-lowercase"
-              >
-                {{ container.name }}
               </button>
             </td>
             <td>
@@ -61,12 +62,13 @@
             <td>
               <div mdbDropdown class="btn-group">
                 <button
+                  class="btn btn-primary dropdown-toggle text-lowercase btn-light"
                   type="button"
-                  class="btn btn-sm btn-light dropdown-toggle dropdown-toggle-split"
-                  mdbDropdownToggle
+                  id="dropdownMenuButton"
                   aria-expanded="false"
+                  mdbDropdownToggle
                 >
-                  <span class="visually-hidden"></span>
+                  {{ container.name }}
                 </button>
                 <ul mdbDropdownMenu class="dropdown-menu">
                   <li *ngIf="container.status == 'exited'">
