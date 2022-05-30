@@ -1,0 +1,84 @@
+<div class="container p-5">
+  <div *ngIf="isLoading" class="text-center mt-3">
+    <div class="spinner-border dodger-blue" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <br />
+    <span class="dodger-blue">Loading ...</span>
+  </div>
+  <div *ngIf="!isLoading" class="row">
+    <div class="col-md-6 m-auto">
+      <div class="card m-2" data-aos="zoom-out" data-aos-duration="1000">
+        <img
+          src="assets/images/docker-logo.png"
+          class="card-img-top rounded-circle shadow-2"
+          style="width: 200px; margin: auto"
+        />
+
+        <div class="card-body">
+          <h4 class="card-title dodger-blue text-capitalize">
+            <i *ngIf="image.is_official" class="fas fa-award"></i>
+            <i *ngIf="!image.is_official" class="fas fa-cube"></i>
+            {{ image.name }}
+          </h4>
+          <div class="shadow-2 rounded p-2 mb-1 mt-1">
+            <h5 class="text-center h5-responsive">
+              "{{ image.description }}""
+            </h5>
+          </div>
+
+          <ul class="list-group mb-1">
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-md-6">
+                  <span class="text-warning fw-bold">Short ID:</span>
+                </div>
+                <div class="col-md-6">
+                  <button
+                    class="btn btn-rounded btn-warning text-lowercase"
+                    (click)="copyId(image.short_id)"
+                  >
+                    <i class="fas fa-clone"></i> {{ image.short_id }}
+                  </button>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-md-6">
+                  <span class="text-secondary fw-bold">Stars:</span>
+                </div>
+                <div class="col-md-6">
+                  <button class="btn btn-rounded btn-secondary text-lowercase">
+                    <i class="fas fa-star"></i> {{ image.star_count }}
+                  </button>
+                </div>
+              </div>
+            </li>
+          </ul>
+
+          <div class="text-center">
+            <button class="mt-2 m-1 btn btn-success text-capitalize">
+              <i class="fas fa-space-shuttle"></i> Run
+            </button>
+
+            <button
+              (click)="deleteImage(image)"
+              class="mt-2 m-1 btn btn-danger text-capitalize"
+            >
+              <i class="fas fa-trash"></i> Delete
+            </button>
+
+            <button
+              (click)="getContainerByImage(image.name)"
+              class="text-white mt-2 m-1 btn dodger-blue-bg text-capitalize"
+            >
+              <i class="fas fa-list-alt"></i> Containers
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

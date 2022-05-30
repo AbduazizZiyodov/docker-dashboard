@@ -33,6 +33,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpInterceptorService } from './core/services/http-interceptor.service';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { PullImagesComponent } from './core/pull-images/pull-images.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ImageComponent } from './core/image/image.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +47,8 @@ import { ModalComponent } from './components/modal/modal.component';
     ImagesComponent,
     NotFoundComponent,
     ModalComponent,
+    PullImagesComponent,
+    ImageComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,6 +75,8 @@ import { ModalComponent } from './components/modal/modal.component';
       timeOut: 2000,
     }),
     ClipboardModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [
     {
