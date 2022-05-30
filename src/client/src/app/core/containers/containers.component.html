@@ -36,9 +36,10 @@
             <td>
               <button
                 type="button"
+                (click)="copyId(container.short_id)"
                 class="btn btn-secondary btn-sm text-lowercase btn-rounded"
               >
-                {{ container.short_id }}
+                <i class="fas fa-clone"></i> {{ container.short_id }}
               </button>
             </td>
             <td>

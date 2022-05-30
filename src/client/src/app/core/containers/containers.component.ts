@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { ClipboardService } from 'ngx-clipboard';
+import {  ToastrService } from 'ngx-toastr';
 import { Container } from '../models/container';
 import { ContainerService } from '../services/container.service';
 
@@ -32,7 +33,8 @@ export class ContainersComponent implements OnInit {
 
   constructor(
     private containerService: ContainerService,
-    private toastrService: ToastrService
+    private toastr: ToastrService,
+    private clipboardService: ClipboardService
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +51,7 @@ export class ContainersComponent implements OnInit {
       .deleteContainer(container_id)
       .subscribe((res: any) => {
         this.getContainers();
-        this.toastrService.error(`Container ${container_id} deleted!`);
+        this.toastr.error(`Container ${container_id} deleted!`);
       });
   }
 
@@ -58,7 +60,7 @@ export class ContainersComponent implements OnInit {
       .startStoppedContainer(container_id)
       .subscribe((res: any) => {
         this.getContainers();
-        this.toastrService.success(`Container ${container_id} started!`);
+        this.toastr.success(`Container ${container_id} started!`);
       });
   }
 
@@ -67,11 +69,15 @@ export class ContainersComponent implements OnInit {
       .stopContainer(container_id)
       .subscribe((res: any) => {
         this.getContainers();
-        this.toastrService.warning(`Container ${container_id} stopped!`);
+        this.toastr.warning(`Container ${container_id} stopped!`);
       });
   }
 
   getStatus(key: keyof Status) {
     return this.status[key];
+  }
+  copyId(content: string) {
+    this.clipboardService.copyFromContent(content);
+    this.toastr.success('Copied!');
   }
 }
