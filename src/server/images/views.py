@@ -18,7 +18,7 @@ client = docker.from_env()
 
 async def get_images(request: Request) -> JSONResponse:
     images: t.List[Image] = client.images.list(all=True)
-    response = image_as_dict(images)
+    response = image_as_dict(images, client)
 
     return JSONResponse(response)
 
@@ -27,7 +27,7 @@ async def get_image(request: Request) -> JSONResponse:
     image: Image = client.images.get(
         request.path_params["image_id"]
     )
-    response: Image = image_as_dict(image)
+    response: Image = image_as_dict(image, client, True)
 
     return JSONResponse(response)
 

@@ -1,3 +1,4 @@
+from rich import print
 import typing as t
 
 from docker import DockerClient
@@ -11,19 +12,33 @@ def parse_image_name(image: Image) -> str:
         .replace("'", "")
 
 
-def image_as_dict(images: t.Union[t.List[Image], Image]):
-    def util(image: Image):
-        return dict(
-            id=image.id,
-            name=parse_image_name(image),
-            short_id=image.short_id,
-            labels=image.labels,
-        )
+def get_additional_info(client: DockerClient, term: str):
+    return client.images.search(term=term, limit=1)[0]
+
+
+def image_as_dict(
+    images: t.Union[t.List[Image], Image],
+    client: DockerClient = None,
+    additional_info: bool = False
+) -> dict:
+
+    def build_dict(image: Image):
+        name = parse_image_name(image)
+        attrs: list[str] = ["id", "short_id", "labels"]
+        image_dict: dict = {"name": name}
+
+        for attr in attrs:
+            image_dict[attr] = getattr(image, attr)
+
+        if additional_info:
+            image_dict = {**image_dict, **get_additional_info(client, name)}
+
+        return image_dict
 
     if isinstance(images, list):
-        return list(map(util, images))
+        return list(map(build_dict, images))
 
-    return util(images)
+    return build_dict(images)
 
 
 def remove_image(image: Image, client: DockerClient) -> None:
