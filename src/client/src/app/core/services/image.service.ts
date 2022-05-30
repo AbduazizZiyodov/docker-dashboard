@@ -15,11 +15,22 @@ export class ImageService {
     return this.http.get<Image[]>(`${this.api}/images`);
   }
 
+  getImage(imageId: string) {
+    return this.http.get<Image>(`${this.api}/images/${imageId}`);
+  }
+
   deleteImage(image_id: string) {
     return this.http.delete(`${this.api}/images/${image_id}/delete`);
   }
 
   getContainersByImage(image_id: string) {
     return this.http.get<Image[]>(`${this.api}/images/${image_id}/containers`);
+  }
+
+  searchImages(search_term: string, limit: number = 10) {
+    return this.http.post<Image[]>(`${this.api}/images/search`, {
+      term: search_term,
+      limit: limit,
+    });
   }
 }
