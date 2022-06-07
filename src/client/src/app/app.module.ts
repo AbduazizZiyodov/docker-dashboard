@@ -3,8 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 import { MdbCarouselModule } from 'mdb-angular-ui-kit/carousel';
 import { MdbCheckboxModule } from 'mdb-angular-ui-kit/checkbox';
@@ -21,21 +22,23 @@ import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FooterComponent } from './components/footer/footer.component';
-import { HeaderComponent } from './components/header/header.component';
-import { MenuComponent } from './core/menu/menu.component';
-import { ContainersComponent } from './core/containers/containers.component';
-import { ToastrModule } from 'ngx-toastr';
-import { ImagesComponent } from './core/images/images.component';
-import { ClipboardModule } from 'ngx-clipboard';
 
+
+import { ToastrModule } from 'ngx-toastr';
+import { ClipboardModule } from 'ngx-clipboard';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpInterceptorService } from './core/services/http-interceptor.service';
-import { NotFoundComponent } from './components/not-found/not-found.component';
-import { ModalComponent } from './components/modal/modal.component';
-import { PullImagesComponent } from './core/pull-images/pull-images.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ImageComponent } from './core/image/image.component';
+
+import { MenuComponent } from '@core/menu/menu.component';
+import { ImagesComponent } from '@core/images/images.component';
+import { ModalComponent } from '@components/modal/modal.component';
+import { FooterComponent } from '@components/footer/footer.component';
+import { HeaderComponent } from '@components/header/header.component';
+import { HttpInterceptorService } from '@services/http-interceptor.service';
+import { ContainersComponent } from '@core/containers/containers.component';
+import { NotFoundComponent } from '@components/not-found/not-found.component';
+import { PullImagesComponent } from '@core/pull-images/pull-images.component';
+import { ImageComponent } from '@core/image/image.component';
 
 @NgModule({
   declarations: [

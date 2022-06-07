@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Image } from '../models/image';
-import { ImageService } from '../services/image.service';
+import { Image } from '@models/image';
+import { ImageService } from '@services/image.service';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ClipboardService } from 'ngx-clipboard';

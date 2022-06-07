@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import {  ToastrService } from 'ngx-toastr';
-import { Container } from '../models/container';
-import { ContainerService } from '../services/container.service';
+import { Container } from '@models/container';
+import { ContainerService } from '@services/container.service';
 
 interface Status {
   created: string;
