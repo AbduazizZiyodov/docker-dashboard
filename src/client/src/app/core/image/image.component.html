@@ -16,14 +16,14 @@
         />
 
         <div class="card-body">
-          <h4 class="card-title dodger-blue text-capitalize">
+          <h4 class="card-title dodger-blue">
             <i *ngIf="image.is_official" class="fas fa-award"></i>
             <i *ngIf="!image.is_official" class="fas fa-cube"></i>
             {{ image.name }}
           </h4>
-          <div class="shadow-2 rounded p-2 mb-1 mt-1">
+          <div class="shadow-1 rounded p-2 mb-1 mt-1">
             <h5 class="text-center h5-responsive">
-              "{{ image.description }}""
+              "{{ image.description?.replace(".", "") }}""
             </h5>
           </div>
 
@@ -71,7 +71,7 @@
             </button>
 
             <button
-              (click)="getContainerByImage(image.name)"
+              (click)="getContainerByImage(image.short_id)"
               class="text-white mt-2 m-1 btn dodger-blue-bg text-capitalize"
             >
               <i class="fas fa-list-alt"></i> Containers
