@@ -10,7 +10,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from containers.utils import container_as_dict
-from .schemas import DockerPullRequest, DockerSearchRequest
+from .schemas import  DockerSearchRequest
 from .utils import image_as_dict, remove_image, filter_containers_by_image
 
 client = docker.from_env()
@@ -52,14 +52,9 @@ async def search_image(request: Request) -> JSONResponse:
 
 
 async def pull_image(request: Request) -> JSONResponse:
-    request_body: DockerPullRequest = DockerPullRequest(** await request.json())
-    image: Image = client.images.pull(
-        request_body.repository,
-        auth_config={
-            "username": request_body.username,
-            "password": request_body.password
-        }
-    )
+    request_body = await request.json()
+
+    image: Image = client.images.pull(request_body.get("repository"))
 
     return JSONResponse(image_as_dict(image))
 

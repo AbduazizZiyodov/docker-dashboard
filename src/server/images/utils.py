@@ -1,4 +1,3 @@
-from rich import print
 import typing as t
 
 from docker import DockerClient
@@ -12,8 +11,19 @@ def parse_image_name(image: Image) -> str:
         .replace("'", "")
 
 
-def get_additional_info(client: DockerClient, term: str):
-    return client.images.search(term=term, limit=1)[0]
+def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
+    term_original = term
+
+    if len(term.split("/")) == 2:
+        term = term.split("/")[1]
+
+    results: list[dict] = client.images.search(term=term, limit=10)
+
+    for result in results:
+        if result["name"] == term_original:
+            return result
+
+    return None
 
 
 def image_as_dict(
@@ -21,11 +31,10 @@ def image_as_dict(
     client: DockerClient = None,
     additional_info: bool = False
 ) -> dict:
-
     def build_dict(image: Image):
         name = parse_image_name(image)
         attrs: list[str] = ["id", "short_id", "labels"]
-        image_dict: dict = {"name": name}
+        image_dict: dict = {"name": image.tags[0]}
 
         for attr in attrs:
             image_dict[attr] = getattr(image, attr)
@@ -47,12 +56,12 @@ def remove_image(image: Image, client: DockerClient) -> None:
     return
 
 
-def filter_containers_by_image(image_name: str, client: DockerClient) -> t.List[Container]:
-    def filter_image_name(container: Container) -> bool:
-        return parse_image_name(container.image) == image_name
+def filter_containers_by_image(image_id: str, client: DockerClient) -> t.List[Container]:
+    def filter_image(container: Container) -> bool:
+        return container.image.short_id == image_id
 
     return list(
         filter(
-            filter_image_name, client.containers.list(all=True)
+            filter_image, client.containers.list(all=True)
         )
     )
