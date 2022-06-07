@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'containers', component: ContainersComponent },
   { path: 'images', component: ImagesComponent },
   { path: 'images/:id', component: ImageComponent },
-  { path: 'images/pull', component: PullImagesComponent },
+  { path: 'pull-images', component: PullImagesComponent },
   { path: '**', component: NotFoundComponent },
 ];
 
