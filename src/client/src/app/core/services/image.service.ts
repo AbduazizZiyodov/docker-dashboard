@@ -33,4 +33,10 @@ export class ImageService {
       limit: limit,
     });
   }
+
+  pullImage(repository: string) {
+    return this.http.post<Image>(`${this.api}/images/pull`, {
+      repository: repository,
+    });
+  }
 }

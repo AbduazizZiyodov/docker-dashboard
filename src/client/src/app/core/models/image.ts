@@ -6,4 +6,7 @@ export interface Image {
   star_count?: number;
   is_official?: boolean;
   description?: string;
+  is_pulled?: boolean;
+
+  is_pulling?: boolean;
 }
