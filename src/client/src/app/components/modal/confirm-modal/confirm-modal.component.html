@@ -1,0 +1,27 @@
+<div class="text-center">
+  <h3 class="h3-responsive">
+    <i class="fas fa-exclamation-circle"></i> Are you sure?
+  </h3>
+
+  <blockquote class="note note-warning border">
+    Do you really want to delete this (<span class="fw-bold text-danger">{{
+      data?.resource?.name
+    }}</span>
+    ) docker
+
+    {{ data?.is_delete_image_modal ? "image" : "container" }}?
+  </blockquote>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-success text-capitalize" (click)="delete()">
+    <i class="far fa-check-circle"></i> Sure
+  </button>
+  <button
+    type="button"
+    class="btn btn-danger text-capitalize"
+    (click)="data?.modalRef?.close()"
+  >
+    <i class="far fa-times-circle"></i> Close
+  </button>
+</div>
