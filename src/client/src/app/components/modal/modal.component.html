@@ -1,71 +1,13 @@
 <div class="modal-header">
-  <h5 class="modal-title" id="exampleModalLabel">Containers</h5>
-  <button
-    type="button"
-    class="btn-close"
-    aria-label="Close"
-    (click)="modalRef.close()"
-  ></button>
+  <h5 class="modal-title" id="exampleModalLabel">{{ data.title }}</h5>
 </div>
 <div class="modal-body">
-  <p
-    data-aos="zoom-in"
-    data-aos-duration="1000"
-    *ngIf="containers.length == 0"
-    class="note border note-primary text-center"
-  >
-    There are no containers <i class="fas fa-exclamation-circle"></i>
-  </p>
-  <table
-    *ngIf="containers.length != 0"
-    class="table align-middle mb-0 bg-white"
-  >
-    <thead class="bg-light">
-      <tr>
-        <th><i class="far fa-list-alt"></i> Container ID</th>
-        <th><i class="fas fa-tags"></i> Container Name</th>
-        <th><i class="fas fa-battery-three-quarters"></i> Status</th>
-      </tr>
-    </thead>
-    <tbody
-      *ngFor="for; let container; of: containers; index as i"
-      data-aos="zoom-in"
-      data-aos-duration="500"
-    >
-      <tr>
-        <td>
-          <span class="btn btn-sm btn-warning text-lowercase">{{
-            container.short_id
-          }}</span>
-        </td>
-        <td>
-          <button
-            class="btn btn-primary text-lowercase btn-light"
-            type="button"
-            mdbDropdownToggle
-          >
-            {{ container.name }}
-          </button>
-        </td>
-        <td>
-          <span
-            class="text-capitalize p-2 badge badge-{{
-              getStatus(container.status)
-            }} rounded-pill d-inline"
-          >
-            {{ container.status }}</span
-          >
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="modal-footer">
-  <button
-    type="button"
-    class="btn btn-danger text-capitalize"
-    (click)="modalRef.close()"
-  >
-    <i class="far fa-times-circle"></i> Close
-  </button>
+  <app-containers-modal
+    *ngIf="data.is_container_modal"
+    [data]="data"
+  ></app-containers-modal>
+  <app-confirm-modal
+    *ngIf="!data.is_container_modal"
+    [data]="data"
+  ></app-confirm-modal>
 </div>
