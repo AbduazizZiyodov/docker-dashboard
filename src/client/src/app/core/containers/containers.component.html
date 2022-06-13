@@ -7,7 +7,7 @@
     <div class="card-body">
       <p
         data-aos="zoom-in"
-        data-aos-duration="1000"
+        data-aos-duration="500"
         *ngIf="containers.length == 0"
         class="note border note-primary text-center"
       >
@@ -92,7 +92,7 @@
                   <li>
                     <a
                       class="dropdown-item bg-danger text-white"
-                      (click)="deleteContainer(container.name)"
+                      (click)="getConfirmModal(container)"
                     >
                       Delete <i class="fas fa-trash"></i
                     ></a>

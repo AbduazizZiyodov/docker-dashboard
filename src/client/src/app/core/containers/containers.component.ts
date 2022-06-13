@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
-import {  ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { Container } from '@models/container';
 import { ContainerService } from '@services/container.service';
+import { ModalData } from '@models/modal';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { ModalComponent } from '@components/modal/modal.component';
 
 interface Status {
   created: string;
@@ -30,11 +33,13 @@ export class ContainersComponent implements OnInit {
     exited: 'danger',
     dead: 'danger',
   };
+  modalRef: MdbModalRef<ModalComponent> | null = null;
 
   constructor(
     private containerService: ContainerService,
     private toastr: ToastrService,
-    private clipboardService: ClipboardService
+    private clipboardService: ClipboardService,
+    private modalService: MdbModalService
   ) {}
 
   ngOnInit(): void {
@@ -45,14 +50,6 @@ export class ContainersComponent implements OnInit {
     this.containerService.getContainers().subscribe((data: Container[]) => {
       this.containers = data.reverse();
     });
-  }
-  deleteContainer(container_id: string) {
-    return this.containerService
-      .deleteContainer(container_id)
-      .subscribe((res: any) => {
-        this.getContainers();
-        this.toastr.error(`Container ${container_id} deleted!`);
-      });
   }
 
   startContainer(container_id: string) {
@@ -79,5 +76,19 @@ export class ContainersComponent implements OnInit {
   copyId(content: string) {
     this.clipboardService.copyFromContent(content);
     this.toastr.success('Copied!');
+  }
+
+  getConfirmModal(container: Container) {
+    let modalData: ModalData = {
+      title: 'Delete Container',
+      resource: container,
+      is_delete_container_modal: true,
+    };
+
+    this.modalRef = this.modalService.open(ModalComponent, {
+      data: {
+        data: modalData,
+      },
+    });
   }
 }

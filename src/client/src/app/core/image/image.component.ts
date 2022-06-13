@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Image } from '@models/image';
-import { ImageService } from '@services/image.service';
-import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ClipboardService } from 'ngx-clipboard';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { Image } from '@models/image';
+import { ModalData } from '@models/modal';
+import { ImageService } from '@services/image.service';
+import { ModalComponent } from '@components/modal/modal.component';
+import { Container } from '@angular/compiler/src/i18n/i18n_ast';
 
 @Component({
   selector: 'app-image',
@@ -23,7 +25,6 @@ export class ImageComponent implements OnInit {
     private toastr: ToastrService,
     private imageService: ImageService,
     private clipboardService: ClipboardService,
-    private router: Router,
     private modalService: MdbModalService
   ) {}
 
@@ -44,19 +45,33 @@ export class ImageComponent implements OnInit {
     this.toastr.success('Copied!');
   }
 
-  deleteImage(image: Image) {
-    this.imageService.deleteImage(image.short_id).subscribe((data) => {
-      this.toastr.error(`Image ${image.name} deleted!`);
-      this.router.navigate(['images']);
-    });
-  }
   getContainerByImage(image_id: string) {
     this.imageService.getContainersByImage(image_id).subscribe((data) => {
+      let modalData: ModalData = {
+        is_container_modal: true,
+        title: 'Containers',
+        containers: data,
+      };
+
       this.modalRef = this.modalService.open(ModalComponent, {
         data: {
-          containers: data,
+          data: modalData,
         },
       });
+    });
+  }
+
+  getConfirmModal(image: Image) {
+    let modalData: ModalData = {
+      title: 'Delete Image',
+      resource: image,
+      is_delete_image_modal: true,
+    };
+
+    this.modalRef = this.modalService.open(ModalComponent, {
+      data: {
+        data: modalData,
+      },
     });
   }
 }
