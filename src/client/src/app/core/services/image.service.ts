@@ -24,7 +24,7 @@ export class ImageService {
   }
 
   getContainersByImage(image_id: string) {
-    return this.http.get<Image[]>(`${this.api}/images/${image_id}/containers`);
+    return this.http.get<Container[]>(`${this.api}/images/${image_id}/containers`);
   }
 
   searchImages(search_term: string, limit: number = 10) {

@@ -36,6 +36,13 @@ export class HttpInterceptorService implements HttpInterceptor {
               this.toastr.error('Another container is using this image!');
               handled = true;
               break;
+
+            case 500:
+              this.toastr.error(
+                'Internal Server Error, please open an issue on github.',
+                '',
+                { timeOut: 3000 }
+              );
           }
         }
         if (handled) {
