@@ -39,6 +39,8 @@ import { ContainersComponent } from '@core/containers/containers.component';
 import { NotFoundComponent } from '@components/not-found/not-found.component';
 import { PullImagesComponent } from '@core/pull-images/pull-images.component';
 import { ImageComponent } from '@core/image/image.component';
+import { ContainersModalComponent } from './components/modal/containers-modal/containers-modal.component';
+import { ConfirmModalComponent } from './components/modal/confirm-modal/confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,8 @@ import { ImageComponent } from '@core/image/image.component';
     ModalComponent,
     PullImagesComponent,
     ImageComponent,
+    ContainersModalComponent,
+    ConfirmModalComponent,
   ],
   imports: [
     BrowserModule,
