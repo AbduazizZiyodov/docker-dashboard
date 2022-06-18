@@ -20,11 +20,12 @@
     "module": "es2020",
     "lib": ["es2020", "dom"],
     "paths": {
-      "@core/*":["src/app/core/*"],
+      "@core/*": ["src/app/core/*"],
       "@services/*": ["src/app/core/services/*"],
       "@models/*": ["src/app/core/models/*"],
       "@components/*": ["src/app/components/*"],
-      "@env/*": ["src/environments/environment"]
+      "@env/*": ["src/environments/environment"],
+      "@modals/*": ["src/app/components/modal/*"]
     }
   },
   "angularCompilerOptions": {
