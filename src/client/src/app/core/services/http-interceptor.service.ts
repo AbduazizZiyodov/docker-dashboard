@@ -38,11 +38,9 @@ export class HttpInterceptorService implements HttpInterceptor {
               break;
 
             case 500:
-              this.toastr.error(
-                'Internal Server Error, please open an issue on github.',
-                '',
-                { timeOut: 3000 }
-              );
+              this.toastr.error(httpError.error.detail, 'Error', {
+                timeOut: 5000,
+              });
           }
         }
         if (handled) {
