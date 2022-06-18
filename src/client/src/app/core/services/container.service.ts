@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Container } from '../models/container';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { Container, RunContainerData } from '@models/container';
 
 @Injectable({
   providedIn: 'root',
@@ -28,5 +28,12 @@ export class ContainerService {
 
   deleteContainer(container_id: string) {
     return this.http.delete(`${this.api}/containers/${container_id}/delete`);
+  }
+
+  runContainer(containerData: RunContainerData) {
+    return this.http.post<Container>(
+      `${this.api}/containers/run`,
+      containerData
+    );
   }
 }
