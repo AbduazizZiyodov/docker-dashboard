@@ -20,6 +20,7 @@ export class ImageComponent implements OnInit {
   isLoading: boolean = false;
   modalRef: MdbModalRef<ModalComponent> | null = null;
 
+
   constructor(
     private route: ActivatedRoute,
     private toastr: ToastrService,
@@ -66,6 +67,20 @@ export class ImageComponent implements OnInit {
       title: 'Delete Image',
       resource: image,
       is_delete_image_modal: true,
+    };
+
+    this.modalRef = this.modalService.open(ModalComponent, {
+      data: {
+        data: modalData,
+      },
+    });
+  }
+
+  getRunContainerModal(image: Image) {
+    let modalData: ModalData = {
+      title: 'Run Container',
+      resource: image,
+      is_run_container_modal: true,
     };
 
     this.modalRef = this.modalService.open(ModalComponent, {

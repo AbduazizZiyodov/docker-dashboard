@@ -8,7 +8,7 @@
   </div>
   <div *ngIf="!isLoading" class="row">
     <div class="col-md-6 m-auto">
-      <div class="card m-2" data-aos="zoom-out" data-aos-duration="1000">
+      <div class="card m-2" data-aos="zoom-out" data-aos-duration="500">
         <img
           src="assets/images/docker-logo.png"
           class="card-img-top rounded-circle shadow-2"
@@ -59,8 +59,11 @@
           </ul>
 
           <div class="text-center">
-            <button class="mt-2 m-1 btn btn-success text-capitalize">
-              <i class="fas fa-space-shuttle"></i> Run
+            <button
+              (click)="getRunContainerModal(image)"
+              class="mt-2 m-1 btn btn-success text-capitalize"
+            >
+              <i class="fas fa-rocket"></i> Run
             </button>
 
             <button
