@@ -34,8 +34,7 @@ export class ConfirmModalComponent {
       .deleteContainer(container_id)
       .subscribe((res: any) => {
         this.toastr.error(`Container ${container_id} deleted!`);
-        this.data?.modalRef?.close();
-        window.location.reload();
+        this.data?.modalRef?.close(container_id);
       });
   }
 
