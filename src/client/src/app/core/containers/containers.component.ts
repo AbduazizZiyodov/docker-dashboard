@@ -90,5 +90,11 @@ export class ContainersComponent implements OnInit {
         data: modalData,
       },
     });
+
+    this.modalRef.onClose.subscribe((container_id: any) => {
+      this.containers = this.containers.filter(
+        (container) => container.id != container_id
+      );
+    });
   }
 }
