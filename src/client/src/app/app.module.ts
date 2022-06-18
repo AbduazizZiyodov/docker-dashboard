@@ -23,7 +23,6 @@ import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-
 import { ToastrModule } from 'ngx-toastr';
 import { ClipboardModule } from 'ngx-clipboard';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -39,8 +38,9 @@ import { ContainersComponent } from '@core/containers/containers.component';
 import { NotFoundComponent } from '@components/not-found/not-found.component';
 import { PullImagesComponent } from '@core/pull-images/pull-images.component';
 import { ImageComponent } from '@core/image/image.component';
-import { ContainersModalComponent } from './components/modal/containers-modal/containers-modal.component';
-import { ConfirmModalComponent } from './components/modal/confirm-modal/confirm-modal.component';
+import { ContainersModalComponent } from '@modals/containers-modal/containers-modal.component';
+import { ConfirmModalComponent } from '@modals/confirm-modal/confirm-modal.component';
+import { RunContainerModalComponent } from '@modals/run-container-modal/run-container-modal.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +56,7 @@ import { ConfirmModalComponent } from './components/modal/confirm-modal/confirm-
     ImageComponent,
     ContainersModalComponent,
     ConfirmModalComponent,
+    RunContainerModalComponent,
   ],
   imports: [
     BrowserModule,
