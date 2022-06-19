@@ -1,9 +1,11 @@
 import docker
 import typing as t
 
+import starlette.status as status
+
 from starlette.routing import Route
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import Response, JSONResponse
 from docker.models.containers import Container
 
 from .utils import container_as_dict
@@ -32,11 +34,14 @@ async def run_container(request: Request) -> JSONResponse:
     request_body = await request.json()
     container_options = ContainerOptions.parse_obj(request_body)
     container = client.containers.run(
-        **container_options.dict(), 
+        **container_options.dict(),
         detach=True
     )
-    
-    return JSONResponse(container_as_dict(container))
+
+    return JSONResponse(
+        container_as_dict(container),
+        status_code=status.HTTP_201_CREATED
+    )
 
 
 async def start_stopped_container(request: Request) -> JSONResponse:
@@ -63,7 +68,7 @@ async def delete_container(request: Request) -> JSONResponse:
     )
     container.remove(force=True)
 
-    return JSONResponse({"deleted": True, })
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 container_routes = [

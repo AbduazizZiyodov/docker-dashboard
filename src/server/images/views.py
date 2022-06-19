@@ -6,11 +6,13 @@ from starlette.routing import Route
 from docker.models.images import Image
 from docker.models.containers import Container
 
+import starlette.status as status
+
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import Response, JSONResponse
 
 from containers.utils import container_as_dict
-from .schemas import  DockerSearchRequest
+from .schemas import DockerSearchRequest
 from .utils import image_as_dict, remove_image, filter_containers_by_image
 
 client = docker.from_env()
@@ -38,7 +40,7 @@ async def delete_image(request: Request) -> JSONResponse:
     )
     remove_image(image, client)
 
-    return JSONResponse({"deleted": True})
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 async def search_image(request: Request) -> JSONResponse:
@@ -82,5 +84,4 @@ image_routes = [
     ),
     Route("/api/images/search", search_image, methods=["POST"]),
     Route("/api/images/pull", pull_image, methods=["POST"]),
-    Route("/api/images/containers", search_image, methods=["POST"]),
 ]
