@@ -35,6 +35,7 @@ export class RunContainerModalComponent implements OnInit {
   }
 
   formSubmit() {
+    this.toastr.warning("Running ...")
     this.containerService
       .runContainer(this.getContainerData())
       .subscribe((container: Container) => {
