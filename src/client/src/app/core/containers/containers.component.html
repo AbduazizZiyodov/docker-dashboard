@@ -24,6 +24,7 @@
             <th><i class="fas fa-battery-three-quarters"></i> Status</th>
             <th><i class="fas fa-compact-disc"></i> Image</th>
             <th><i class="fas fa-tags"></i> Container Name</th>
+            <th><i class="fas fa-compact-disc"></i> Actions</th>
           </tr>
         </thead>
         <tbody
@@ -55,51 +56,53 @@
               <button
                 type="button"
                 class="btn btn-primary btn-rounded text-lowercase"
-                [routerLink]="['/images',container.image.short_id]"
+                [routerLink]="['/images', container.image.short_id]"
               >
                 {{ container.image.name }}
               </button>
             </td>
 
             <td>
-              <div mdbDropdown class="btn-group">
-                <button
-                  class="btn btn-primary dropdown-toggle text-lowercase btn-light"
-                  type="button"
-                  id="dropdownMenuButton"
-                  aria-expanded="false"
-                  mdbDropdownToggle
-                >
-                  {{ container.name }}
-                </button>
-                <ul mdbDropdownMenu class="dropdown-menu">
-                  <li *ngIf="container.status == 'exited'">
-                    <a
-                      class="dropdown-item bg-success text-white"
-                      (click)="startContainer(container.name)"
-                    >
-                      Start <i class="fas fa-play"></i
-                    ></a>
-                  </li>
+              <button type="button" class="btn btn-rounded text-lowercase">
+                {{ container.name }}
+              </button>
+            </td>
 
-                  <li *ngIf="container.status != 'exited'">
-                    <a
-                      class="dropdown-item bg-warning text-white"
-                      (click)="stopContainer(container.name)"
-                    >
-                      Stop <i class="fas fa-stop"></i
-                    ></a>
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item bg-danger text-white"
-                      (click)="getConfirmModal(container)"
-                    >
-                      Delete <i class="fas fa-trash"></i
-                    ></a>
-                  </li>
-                </ul>
-              </div>
+            <td>
+              <a
+                *ngIf="container.status == 'exited'"
+                class="btn btn-sm m-1 btn-success text-white"
+                (click)="startContainer(container.name)"
+                mdbTooltip="Start"
+              >
+                <i class="fas fa-play"></i
+              ></a>
+
+              <a
+                *ngIf="container.status != 'exited'"
+                class="btn btn-sm m-1 btn-warning text-white"
+                (click)="stopContainer(container.name)"
+                mdbTooltip="Stop"
+              >
+                <i class="fas fa-stop"></i
+              ></a>
+
+              <a
+                class="btn btn-sm m-1 btn-danger text-white"
+                (click)="getConfirmModal(container)"
+                mdbTooltip="Delete"
+              >
+                <i class="fas fa-trash"></i
+              ></a>
+
+              <a
+                class="btn btn-sm m-1 btn-primary text-white"
+                style="background-color: #4c75a3"
+                [routerLink]="['/logs', container.short_id]"
+                mdbTooltip="Logs"
+              >
+                <i class="fas fa-paste"></i>
+              </a>
             </td>
           </tr>
         </tbody>

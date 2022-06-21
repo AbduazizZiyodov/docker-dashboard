@@ -7,7 +7,11 @@
     [data]="data"
   ></app-containers-modal>
   <app-confirm-modal
-    *ngIf="!data.is_container_modal && !data.is_run_container_modal"
+    *ngIf="
+      !data.is_container_modal &&
+      !data.is_run_container_modal &&
+      !data.is_logs_modal
+    "
     [data]="data"
   ></app-confirm-modal>
   <app-run-container-modal
