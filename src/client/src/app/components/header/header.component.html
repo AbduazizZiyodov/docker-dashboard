@@ -1,27 +1,42 @@
-<nav class="navbar navbar-expand-lg bg-light">
-  <div class="container-fluid">
-    <h1 class="h1-responsive navbar-text fw-bold dodger-blue" routerLink="">
-      <i class="fab fa-docker dodger-blue"></i> Docker Dashboard
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <h1 class="navbar-text fw-bold m-auto" routerLink="">
+      <i class="fab fa-docker"></i> Docker Dashboard
     </h1>
-
-    <div
-      class="collapse navbar-collapse"
-      id="navbarSupportedContent"
-      mdbCollapse
-      #basicNavbar="mdbCollapse"
-    ></div>
+    <button
+      [ngClass]="isRunning ? 'btn-success' : 'btn-danger'"
+      class="btn btn-sm btn-rounded text-capitalize fw-bold"
+      style="box-shadow: none"
+    >
+      <i class="fas fa-circle fa-beat"></i> {{ isRunning ? "Running" : "Stopped" }}
+    </button>
   </div>
 </nav>
 
-<div class="row mt-2 text-center">
-  <div class="col-md-6">
-    <button class="btn dodger-blue-bg" (click)="back()">
-      <i class="fas fa-angle-double-left"></i>
-    </button>
-  </div>
-  <div class="col-md-6">
-    <button class="btn dodger-blue-bg" (click)="next()">
-      <i class="fas fa-angle-double-right"></i>
-    </button>
-  </div>
+<div class="sidebar fixed">
+  <ul class="list-group text-center p-2">
+    <hr />
+
+    <li class="list-group-item" style="border: none">
+      <button
+        class="btn dodger-blue-bg text-capitalize"
+        routerLink="containers"
+      >
+        <i class="fas fa-th-large"></i> Containers
+      </button>
+    </li>
+    <hr />
+    <li class="list-group-item" style="border: none">
+      <button class="btn dodger-blue-bg text-capitalize" routerLink="images">
+        <i class="fas fa-compact-disc"></i> Images
+      </button>
+    </li>
+    <hr />
+    <li class="list-group-item" style="border: none">
+      <button class="btn dodger-blue-bg text-capitalize" routerLink="images">
+        <i class="fas fa-info-circle"></i> About
+      </button>
+    </li>
+    <hr />
+  </ul>
 </div>

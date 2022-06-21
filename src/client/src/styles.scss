@@ -17,9 +17,7 @@
 
 .navbar-text {
   font-family: "OdibeeSans";
-  font-size: 45px;
   padding: 0;
-  color: DodgerBlue;
   cursor: pointer;
 }
 
@@ -31,4 +29,10 @@
   background: DodgerBlue;
   color: white;
   text-transform: capitalize;
+}
+
+.content {
+  margin-top: 55px;
+  margin-left: 200px;
+  padding: 20px 20px;
 }
