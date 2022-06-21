@@ -12,4 +12,5 @@ export interface ModalData {
   is_delete_image_modal?: boolean;
   is_delete_container_modal?: boolean;
   is_run_container_modal?: boolean;
+  is_logs_modal?: boolean;
 }

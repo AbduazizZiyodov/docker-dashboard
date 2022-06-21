@@ -29,6 +29,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MenuComponent } from '@core/menu/menu.component';
+import { LogsComponent } from '@components/logs/logs.component';
 import { ImagesComponent } from '@core/images/images.component';
 import { ModalComponent } from '@components/modal/modal.component';
 import { FooterComponent } from '@components/footer/footer.component';
@@ -57,6 +58,7 @@ import { RunContainerModalComponent } from '@modals/run-container-modal/run-cont
     ContainersModalComponent,
     ConfirmModalComponent,
     RunContainerModalComponent,
+    LogsComponent,
   ],
   imports: [
     BrowserModule,
