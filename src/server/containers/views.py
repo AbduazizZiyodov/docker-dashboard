@@ -71,6 +71,15 @@ async def delete_container(request: Request) -> JSONResponse:
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
+async def get_logs(request: Request) -> JSONResponse:
+    container: Container = client.containers.get(
+        request.path_params["container_id"]
+    )
+
+    logs = container.logs().decode("utf-8")
+
+    return JSONResponse({"logs": logs})
+
 container_routes = [
     Route("/api/containers", get_containers, methods=["GET"]),
     Route(
@@ -92,5 +101,9 @@ container_routes = [
     Route(
         "/api/containers/{container_id:str}/delete",
         delete_container, methods=["DELETE"]
+    ),
+    Route(
+        "/api/containers/{container_id:str}/logs",
+        get_logs, methods=["GET"]
     ),
 ]
