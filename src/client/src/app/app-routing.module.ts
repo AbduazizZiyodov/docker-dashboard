@@ -7,6 +7,7 @@ import { NotFoundComponent } from '@components/not-found/not-found.component';
 import { PullImagesComponent } from '@core/pull-images/pull-images.component';
 import { ImageComponent } from '@core/image/image.component';
 import { LogsComponent } from '@components/logs/logs.component';
+import { AboutComponent } from '@components/about/about.component';
 
 const routes: Routes = [
   { path: '', component: MenuComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'images/:id', component: ImageComponent },
   { path: 'pull-images', component: PullImagesComponent },
   { path: 'logs/:id', component: LogsComponent },
+  { path: 'about', component: AboutComponent },
   { path: '**', component: NotFoundComponent },
 ];
 
