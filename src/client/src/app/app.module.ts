@@ -42,6 +42,7 @@ import { ImageComponent } from '@core/image/image.component';
 import { ContainersModalComponent } from '@modals/containers-modal/containers-modal.component';
 import { ConfirmModalComponent } from '@modals/confirm-modal/confirm-modal.component';
 import { RunContainerModalComponent } from '@modals/run-container-modal/run-container-modal.component';
+import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { RunContainerModalComponent } from '@modals/run-container-modal/run-cont
     ConfirmModalComponent,
     RunContainerModalComponent,
     LogsComponent,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
