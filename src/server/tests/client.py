@@ -3,7 +3,7 @@ import typing as t
 
 
 class CustomAsyncTestClient:
-    API_URL: str = "http://127.0.0.1:8000/api"
+    API_URL: str = "http://127.0.0.1:2121/api"
 
     async def send_request(
         self,

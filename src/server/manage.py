@@ -1,7 +1,6 @@
 import typer
 import pytest
 import uvicorn
-import typing as t
 
 from starlette.routing import Route
 from starlette.middleware import Middleware
@@ -13,18 +12,12 @@ from starlette.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 from docker.errors import DockerException
 
-from pydantic import ValidationError
-from .images.views import image_routes
-from .containers.views import container_routes
+from images import *
+from handlers import *
+from containers import *
 
-from .exceptions import (
-    http_exception_handler,
-    pydantic_exception_handler
-)
-from .tests.client import CustomAsyncTestClient
 
-cli, client = typer.Typer(), CustomAsyncTestClient()
-TESTING: bool = False
+cli = typer.Typer()
 
 
 def create_app() -> Starlette:
@@ -50,33 +43,14 @@ def create_app() -> Starlette:
     )
 
 
-api = create_app()
+@cli.command()
+def serve():
+    uvicorn.run(create_app(), host="localhost", port=2120, debug=False)
 
 
 @cli.command()
-def serve(
-    host: t.Optional[str] = "localhost",
-    port: t.Optional[int] = 8000,
-    reload: t.Optional[bool] = True,
-    debug: t.Optional[bool] = True
-):
-
-    uvicorn.run(
-        "server.manage:api",
-        host=host,
-        port=port,
-        debug=debug,
-        reload=reload
-    )
-
-if TESTING:
-    @cli.command()
-    def run_tests():
-        pytest.main(["-s", "server/tests/"])
-
-
-def main():
-    cli()
+def run_tests():
+    pytest.main(["-s", "tests/"])
 
 
 if __name__ == "__main__":
