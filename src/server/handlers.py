@@ -1,7 +1,6 @@
 import json
 import typing as t
 
-from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.exceptions import HTTPException
 
@@ -11,7 +10,7 @@ from docker.errors import DockerException
 
 
 async def http_exception_handler(
-    request: Request,
+    _,
     exc: t.Union[HTTPException, DockerException]
 ) -> JSONResponse:
     detail = exc.detail if isinstance(exc, HTTPException) else exc.explanation
@@ -24,7 +23,7 @@ async def http_exception_handler(
 
 
 async def pydantic_exception_handler(
-    request: Request,
+    _,
     exc: ValidationError
 ) -> JSONResponse:
     detail: dict = json.loads(exc.json())
@@ -33,3 +32,6 @@ async def pydantic_exception_handler(
         detail,
         status_code=422
     )
+
+
+__all__ = ["pydantic_exception_handler", "http_exception_handler"]
