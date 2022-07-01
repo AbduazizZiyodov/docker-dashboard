@@ -2,7 +2,7 @@ import typing as t
 from docker.models.images import Image
 from docker.models.containers import Container
 
-from server.images.utils import image_as_dict
+from images.utils import image_as_dict
 
 
 def parse_image_name(image: Image) -> str:
