@@ -1,7 +1,7 @@
 import pytest
 from rich import print
 
-from client import *
+from .client import *
 
 TEST_IMAGE_NAME: str = "nginx"
 client = CustomAsyncTestClient()

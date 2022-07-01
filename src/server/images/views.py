@@ -11,7 +11,7 @@ import starlette.status as status
 from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
 
-from containers.utils import container_as_dict
+from server.containers.utils import container_as_dict
 from .schemas import DockerSearchRequest
 from .utils import image_as_dict, remove_image, filter_containers_by_image
 

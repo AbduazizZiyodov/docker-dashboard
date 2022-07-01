@@ -14,16 +14,17 @@ from pydantic import ValidationError
 from docker.errors import DockerException
 
 from pydantic import ValidationError
-from images.views import image_routes
-from containers.views import container_routes
+from .images.views import image_routes
+from .containers.views import container_routes
 
-from exceptions import (
+from .exceptions import (
     http_exception_handler,
     pydantic_exception_handler
 )
-from tests.client import CustomAsyncTestClient
+from .tests.client import CustomAsyncTestClient
 
 cli, client = typer.Typer(), CustomAsyncTestClient()
+TESTING: bool = False
 
 
 def create_app() -> Starlette:
@@ -61,17 +62,21 @@ def serve(
 ):
 
     uvicorn.run(
-        "manage:api",
+        "server.manage:api",
         host=host,
         port=port,
         debug=debug,
         reload=reload
     )
 
+if TESTING:
+    @cli.command()
+    def run_tests():
+        pytest.main(["-s", "server/tests/"])
 
-@cli.command()
-def run_tests():
-    pytest.main(["-s", "tests/"])
+
+def main():
+    cli()
 
 
 if __name__ == "__main__":

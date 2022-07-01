@@ -1,6 +1,6 @@
 import pytest
 
-from client import *
+from .client import *
 
 
 client = CustomAsyncTestClient()
