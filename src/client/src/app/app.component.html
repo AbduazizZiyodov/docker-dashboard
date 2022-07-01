@@ -1,11 +1,22 @@
 <app-header></app-header>
 
 <div class="content">
-  <button class="btn btn-sm btn-success float-start rounded m-1" (click)="back()">
-    <i class="fas fa-caret-square-left"></i>
-  </button>
-  <button class="btn btn-sm btn-success float-end rounded m-1" (click)="next()">
-    <i class="fas fa-caret-square-right"></i>
-  </button>
+  <div class="row">
+    <div class="col">
+      <button
+        class="btn btn-sm btn-success float-start rounded m-1"
+        (click)="back()"
+      >
+        <i class="fas fa-caret-square-left"></i>
+      </button>
+      <button
+        class="btn btn-sm btn-success float-end rounded m-1"
+        (click)="next()"
+      >
+        <i class="fas fa-caret-square-right"></i>
+      </button>
+    </div>
+  </div>
+
   <router-outlet></router-outlet>
 </div>

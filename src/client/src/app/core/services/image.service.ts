@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { environment } from '@env';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { Image } from '../models/image';
-import { Container } from '../models/container';
+import { HttpClient } from '@angular/common/http';
+
+import { Image } from '@models/image';
+import { Container } from '@models/container';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,9 @@ export class ImageService {
   }
 
   getContainersByImage(image_id: string) {
-    return this.http.get<Container[]>(`${this.api}/images/${image_id}/containers`);
+    return this.http.get<Container[]>(
+      `${this.api}/images/${image_id}/containers`
+    );
   }
 
   searchImages(search_term: string, limit: number = 10) {
