@@ -24,10 +24,12 @@ export class HeaderComponent implements OnInit {
   }
 
   testAPI() {
-    this.http.get('http://127.0.0.1:8000').subscribe((res: any) => {
-      if (res == 'ok') {
-        this.isRunning = true;
-      }
-    });
+    this.http
+      .get(environment.apiUrl.replace('api', ''))
+      .subscribe((res: any) => {
+        if (res == 'ok') {
+          this.isRunning = true;
+        }
+      });
   }
 }
