@@ -1,6 +1,7 @@
 {
   "name": "client",
   "version": "0.0.0",
+  "main": "main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -28,6 +29,9 @@
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
+  },
+  "resolutions": {
+    "autoprefixer": "10.4.5"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~13.3.4",
