@@ -1,13 +1,13 @@
 import { ToastrService } from 'ngx-toastr';
+import { ActivatedRoute } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+
 import { Image } from '@models/image';
-import { ModalData } from '@models/modal';
+import { Container } from '@models/container';
 import { ImageService } from '@services/image.service';
 import { ModalComponent } from '@components/modal/modal.component';
-import { Container } from '@angular/compiler/src/i18n/i18n_ast';
 
 @Component({
   selector: 'app-image',
@@ -17,9 +17,8 @@ import { Container } from '@angular/compiler/src/i18n/i18n_ast';
 export class ImageComponent implements OnInit {
   imageId: string = this.route.snapshot.params['id'];
   image!: Image;
-  isLoading: boolean = false;
+  isLoading: boolean = true;
   modalRef: MdbModalRef<ModalComponent> | null = null;
-
 
   constructor(
     private route: ActivatedRoute,
@@ -30,63 +29,54 @@ export class ImageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getImage();
+    this.imageService.getImage(this.imageId).subscribe((image: Image) => {
+      this.image = image;
+      this.isLoading = false;
+    });
   }
 
-  getImage() {
-    this.isLoading = true;
-    this.imageService.getImage(this.imageId).subscribe((data: Image) => {
-      this.image = data;
-      this.isLoading = false;
+  getContainerByImage(image_id: string) {
+    this.imageService
+      .getContainersByImage(image_id)
+      .subscribe((containers: Container[]) => {
+        this.modalRef = this.modalService.open(ModalComponent, {
+          data: {
+            data: {
+              title: 'Containers',
+              containers: containers,
+              modal_type: 'containers_modal',
+            },
+          },
+        });
+      });
+  }
+
+  getDeleteModal(image: Image) {
+    this.modalRef = this.modalService.open(ModalComponent, {
+      data: {
+        data: {
+          title: 'Delete Image',
+          resource: image,
+          modal_type: 'delete_image_modal',
+        },
+      },
+    });
+  }
+
+  getRunContainerModal(image: Image) {
+    this.modalRef = this.modalService.open(ModalComponent, {
+      data: {
+        data: {
+          title: 'Run Container',
+          resource: image,
+          modal_type: 'run_container_modal',
+        },
+      },
     });
   }
 
   copyId(content: string) {
     this.clipboardService.copyFromContent(content);
     this.toastr.success('Copied!');
-  }
-
-  getContainerByImage(image_id: string) {
-    this.imageService.getContainersByImage(image_id).subscribe((data) => {
-      let modalData: ModalData = {
-        is_container_modal: true,
-        title: 'Containers',
-        containers: data,
-      };
-
-      this.modalRef = this.modalService.open(ModalComponent, {
-        data: {
-          data: modalData,
-        },
-      });
-    });
-  }
-
-  getConfirmModal(image: Image) {
-    let modalData: ModalData = {
-      title: 'Delete Image',
-      resource: image,
-      is_delete_image_modal: true,
-    };
-
-    this.modalRef = this.modalService.open(ModalComponent, {
-      data: {
-        data: modalData,
-      },
-    });
-  }
-
-  getRunContainerModal(image: Image) {
-    let modalData: ModalData = {
-      title: 'Run Container',
-      resource: image,
-      is_run_container_modal: true,
-    };
-
-    this.modalRef = this.modalService.open(ModalComponent, {
-      data: {
-        data: modalData,
-      },
-    });
   }
 }

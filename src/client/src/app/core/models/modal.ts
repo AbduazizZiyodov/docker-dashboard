@@ -7,10 +7,5 @@ export interface ModalData {
   modalRef?: MdbModalRef<any>;
   resource?: Image | Container;
   containers?: Container[];
-
-  is_container_modal?: boolean;
-  is_delete_image_modal?: boolean;
-  is_delete_container_modal?: boolean;
-  is_run_container_modal?: boolean;
-  is_logs_modal?: boolean;
+  modal_type: string;
 }

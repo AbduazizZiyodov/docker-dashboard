@@ -22,9 +22,9 @@ export class ConfirmModalComponent {
   ) {}
 
   delete() {
-    if (this.data?.is_delete_image_modal) {
+    if (this.data?.modal_type == 'delete_image_modal') {
       this.deleteImage(this.data.resource);
-    } else if (this.data?.is_delete_container_modal) {
+    } else if (this.data?.modal_type == 'delete_container_modal') {
       this.deleteContainer(this.data.resource?.id);
     }
   }

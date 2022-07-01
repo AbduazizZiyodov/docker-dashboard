@@ -3,19 +3,19 @@
 </div>
 <div class="modal-body">
   <app-containers-modal
-    *ngIf="data.is_container_modal"
+    *ngIf="data.modal_type == 'containers_modal'"
     [data]="data"
   ></app-containers-modal>
   <app-confirm-modal
     *ngIf="
-      !data.is_container_modal &&
-      !data.is_run_container_modal &&
-      !data.is_logs_modal
+      data.modal_type == 'delete_container_modal' ||
+      data.modal_type == 'delete_image_modal'
     "
     [data]="data"
   ></app-confirm-modal>
+
   <app-run-container-modal
-    *ngIf="data.is_run_container_modal"
+    *ngIf="data.modal_type == 'run_container_modal'"
     [data]="data"
   ></app-run-container-modal>
 </div>

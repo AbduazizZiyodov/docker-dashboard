@@ -9,7 +9,7 @@
     }}</span>
     ) docker
 
-    {{ data?.is_delete_image_modal ? "image" : "container" }}?
+    {{ data?.modal_type == "delete_image_modal" ? "image" : "container" }}?
   </blockquote>
 </div>
 

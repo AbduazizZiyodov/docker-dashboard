@@ -1,21 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { ClipboardService } from 'ngx-clipboard';
 import { ToastrService } from 'ngx-toastr';
+import { ClipboardService } from 'ngx-clipboard';
+import { Component, OnInit } from '@angular/core';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+
+import { Status } from '@models/status';
+import { ModalData } from '@models/modal';
 import { Container } from '@models/container';
 import { ContainerService } from '@services/container.service';
-import { ModalData } from '@models/modal';
-import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ModalComponent } from '@components/modal/modal.component';
-
-interface Status {
-  created: string;
-  restarting: string;
-  running: string;
-  removing: string;
-  paused: string;
-  exited: string;
-  dead: string;
-}
 
 @Component({
   selector: 'app-containers',
@@ -24,6 +16,8 @@ interface Status {
 })
 export class ContainersComponent implements OnInit {
   containers!: Container[];
+  modalRef: MdbModalRef<ModalComponent> | null = null;
+
   status: Status = {
     created: 'success',
     restarting: 'warning',
@@ -33,7 +27,6 @@ export class ContainersComponent implements OnInit {
     exited: 'danger',
     dead: 'danger',
   };
-  modalRef: MdbModalRef<ModalComponent> | null = null;
 
   constructor(
     private containerService: ContainerService,
@@ -43,10 +36,6 @@ export class ContainersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getContainers();
-  }
-
-  getContainers() {
     this.containerService.getContainers().subscribe((data: Container[]) => {
       this.containers = data.reverse();
     });
@@ -56,7 +45,7 @@ export class ContainersComponent implements OnInit {
     return this.containerService
       .startStoppedContainer(container_id)
       .subscribe((res: any) => {
-        this.getContainers();
+        this.changeStatus('running', container_id);
         this.toastr.success(`Container ${container_id} started!`);
       });
   }
@@ -65,29 +54,19 @@ export class ContainersComponent implements OnInit {
     return this.containerService
       .stopContainer(container_id)
       .subscribe((res: any) => {
-        this.getContainers();
+        this.changeStatus('exited', container_id);
         this.toastr.warning(`Container ${container_id} stopped!`);
       });
   }
 
-  getStatus(key: keyof Status) {
-    return this.status[key];
-  }
-  copyId(content: string) {
-    this.clipboardService.copyFromContent(content);
-    this.toastr.success('Copied!');
-  }
-
   getConfirmModal(container: Container) {
-    let modalData: ModalData = {
-      title: 'Delete Container',
-      resource: container,
-      is_delete_container_modal: true,
-    };
-
     this.modalRef = this.modalService.open(ModalComponent, {
       data: {
-        data: modalData,
+        data: {
+          title: 'Delete Container',
+          resource: container,
+          modal_type: 'delete_container_modal',
+        },
       },
     });
 
@@ -96,5 +75,21 @@ export class ContainersComponent implements OnInit {
         (container) => container.id != container_id
       );
     });
+  }
+
+  changeStatus(to: string, container_id: string) {
+    for (let container of this.containers) {
+      if (container.short_id == container_id) {
+        container.status = to;
+      }
+    }
+  }
+
+  getStatus(key: keyof Status) {
+    return this.status[key];
+  }
+  copyId(content: string) {
+    this.clipboardService.copyFromContent(content);
+    this.toastr.success('Copied!');
   }
 }

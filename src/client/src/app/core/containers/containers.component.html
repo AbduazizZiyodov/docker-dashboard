@@ -72,7 +72,7 @@
               <a
                 *ngIf="container.status == 'exited'"
                 class="btn btn-sm m-1 btn-success text-white"
-                (click)="startContainer(container.name)"
+                (click)="startContainer(container.short_id)"
                 mdbTooltip="Start"
               >
                 <i class="fas fa-play"></i
@@ -81,7 +81,7 @@
               <a
                 *ngIf="container.status != 'exited'"
                 class="btn btn-sm m-1 btn-warning text-white"
-                (click)="stopContainer(container.name)"
+                (click)="stopContainer(container.short_id)"
                 mdbTooltip="Stop"
               >
                 <i class="fas fa-stop"></i
