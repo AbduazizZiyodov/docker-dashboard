@@ -14,8 +14,8 @@ def parse_image_name(image: Image) -> str:
 def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
     term_original = term
 
-    if len(term.split("/")) == 2:
-        term = term.split("/")[1]
+    if len(term_split := term.split("/")) > 1:
+        term = term_split[1]
 
     results: list[dict] = client.images.search(term=term, limit=10)
 
@@ -40,7 +40,8 @@ def image_as_dict(
             image_dict[attr] = getattr(image, attr)
 
         if additional_info:
-            image_dict = {**image_dict, **get_additional_info(client, name)}
+            if (info := get_additional_info(client, name)) is not None:
+                image_dict = {**image_dict, **info}
 
         return image_dict
 
@@ -57,11 +58,9 @@ def remove_image(image: Image, client: DockerClient) -> None:
 
 
 def filter_containers_by_image(image_id: str, client: DockerClient) -> t.List[Container]:
-    def filter_image(container: Container) -> bool:
-        return container.image.short_id == image_id
-
-    return list(
-        filter(
-            filter_image, client.containers.list(all=True)
-        )
+    filter_results = filter(
+        lambda container: container.image.short_id == image_id,
+        client.containers.list(all=True)
     )
+
+    return list(filter_results)
