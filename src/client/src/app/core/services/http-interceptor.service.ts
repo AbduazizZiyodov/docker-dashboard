@@ -7,10 +7,9 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
 import { Observable, of, throwError } from 'rxjs';
-
-import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
@@ -33,14 +32,24 @@ export class HttpInterceptorService implements HttpInterceptor {
               handled = true;
               break;
             case 409:
-              this.toastr.error('Another container is using this image!');
+              this.toastr.error(
+                'Another container is using this image!',
+                'Conflict'
+              );
               handled = true;
               break;
 
             case 500:
-              this.toastr.error(httpError.error.detail, 'Error', {
+              this.toastr.error(httpError.error.detail, 'Server Error', {
                 timeOut: 5000,
               });
+              handled = true;
+              break;
+
+            default:
+              this.toastr.error(httpError.error.detail, 'Error!');
+              handled = true;
+              break;
           }
         }
         if (handled) {

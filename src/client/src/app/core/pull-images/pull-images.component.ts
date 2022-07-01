@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { ImageService } from '@services/image.service';
-import { Image } from '@models/image';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { Image } from '@models/image';
+import { ImageService } from '@services/image.service';
 
 @Component({
   selector: 'app-pull-images',
@@ -13,9 +14,8 @@ export class PullImagesComponent {
   searchResults!: Image[];
   pulledImages!: string[];
   searchForm!: FormGroup;
-  isLoading: boolean = false;
-
   pulledImage!: Image;
+  isLoading: boolean = false;
 
   constructor(
     private imageService: ImageService,
