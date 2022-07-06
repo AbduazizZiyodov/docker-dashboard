@@ -1,14 +1,16 @@
 import typing as t
-
+from rich import print
 from docker import DockerClient
 from docker.models.images import Image
 from docker.models.containers import Container
 
 
+NoneType = type(None)
+
+
 def parse_image_name(image: Image) -> str:
-    return str(image).split(" ")[1]\
-        .split(":")[0] \
-        .replace("'", "")
+    image_name = str(image).split("'")[1]
+    return "<none>" if len(image_name) == 0 else image_name
 
 
 def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
@@ -32,17 +34,16 @@ def image_as_dict(
     additional_info: bool = False
 ) -> dict:
     def build_dict(image: Image):
-        name = parse_image_name(image)
+        image_name = parse_image_name(image)
         attrs: list[str] = ["id", "short_id", "labels"]
-        image_dict: dict = {"name": image.tags[0]}
+        image_dict: dict = {"name": image_name}
 
         for attr in attrs:
             image_dict[attr] = getattr(image, attr)
 
-        if additional_info:
-            if (info := get_additional_info(client, name)) is not None:
+        if additional_info and image_name != "<none>":
+            if (info := get_additional_info(client, image_name)) is not None:
                 image_dict = {**image_dict, **info}
-
         return image_dict
 
     if isinstance(images, list):
