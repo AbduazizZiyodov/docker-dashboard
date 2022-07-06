@@ -45,7 +45,12 @@ def create_app() -> Starlette:
 
 @cli.command()
 def serve():
-    uvicorn.run(create_app(), host="localhost", port=2120, debug=False)
+    uvicorn.run(
+        create_app(),
+        host="localhost",
+        port=2121,
+        debug=False
+    )
 
 
 @cli.command()

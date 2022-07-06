@@ -13,7 +13,6 @@ httpx==0.23.0
 idna==3.3
 iniconfig==1.1.1
 packaging==21.3
-pkg_resources==0.0.0
 pluggy==1.0.0
 py==1.11.0
 pycodestyle==2.8.0
