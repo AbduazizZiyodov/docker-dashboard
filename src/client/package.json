@@ -1,6 +1,13 @@
 {
-  "name": "client",
-  "version": "0.0.0",
+  "name": "docker-dashboard-client",
+  "description": "A simple lightweight application that makes managing containers & images on Docker easy!",
+  "author": {
+    "email": "abduaziz.ziyodov@mail.ru",
+    "name": "Abduaziz",
+    "url": "http://github.com/AbduazizZiyodov"
+  },
+  "license": "MIT",
+  "version": "1.0.0",
   "main": "main.js",
   "scripts": {
     "ng": "ng",
@@ -22,6 +29,7 @@
     "@angular/router": "~13.3.0",
     "@fortawesome/fontawesome-free": "^6.1.1",
     "aos": "^2.3.4",
+    "autoprefixer": "10.4.5",
     "chart.js": "^3.1.1",
     "mdb-angular-ui-kit": "^2.2.0",
     "ngx-clipboard": "^15.1.0",
@@ -40,6 +48,8 @@
     "@types/aos": "^3.0.4",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
+    "electron": "^19.0.8",
+    "electron-packager": "^15.5.1",
     "jasmine-core": "~4.0.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
