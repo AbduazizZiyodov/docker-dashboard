@@ -1,5 +1,5 @@
 {
-  "name": "docker-dashboard-client",
+  "name": "docker-dashboard",
   "description": "A simple lightweight application that makes managing containers & images on Docker easy!",
   "author": {
     "email": "abduaziz.ziyodov@mail.ru",
@@ -9,6 +9,16 @@
   "license": "MIT",
   "version": "1.0.0",
   "main": "main.js",
+  "productName": "Docker Dashboard",
+  "keywords": [
+    "angular",
+    "electron",
+    "docker"
+  ],
+  "os": [
+    "darwin",
+    "linux"
+  ],
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -49,6 +59,7 @@
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
     "electron": "^19.0.8",
+    "electron-installer-debian": "^3.1.0",
     "electron-packager": "^15.5.1",
     "jasmine-core": "~4.0.0",
     "karma": "~6.3.0",
