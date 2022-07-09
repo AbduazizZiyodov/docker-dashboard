@@ -10,9 +10,13 @@ DOCKER_DASHBOARD_BANNER: str = """
         |  |  | .'|_ -|   | . | . | .'|  _| . |
         |____/|__,|___|_|_|___|___|__,|_| |___|
 
-            [bold green]Installed successfully :fire: 
+            [bold green]Installed successfully :fire:
+             
     [bold cyan]Supervisor status :arrow_right: http://localhost:9001    
-         [bold magenta]API url :arrow_right: http://localhost:2121     
+         [bold magenta]API url :arrow_right: http://localhost:2121  
+
+               [bold yellow]See your applications,
+   find `Docker Dashboard` & add it to your favorites :heart:  
 """
 
 CURRENT_PATH: str = ""
@@ -29,3 +33,4 @@ ALL_COMPONENTS = [
     'containers',
     'images'
 ]
+DEBIAN_PACKAGE: str = "docker-dashboard_1.0.0_amd64.deb"
