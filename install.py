@@ -115,6 +115,11 @@ def restart_supervisor():
     run_command("systemctl restart supervisor")
 
 
+def install_debian_package():
+    os.chdir(installer_config.CURRENT_PATH)
+    run_command(f"sudo dpkg -i {installer_config.DEBIAN_PACKAGE}")
+
+
 def main():
     check_supervisor()
     check_files()
@@ -122,6 +127,7 @@ def main():
     create_venv()
     install_dependencies()
     restart_supervisor()
+    install_debian_package()
     print(installer_config.DOCKER_DASHBOARD_BANNER)
 
 
