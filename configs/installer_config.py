@@ -33,4 +33,3 @@ ALL_COMPONENTS = [
     'containers',
     'images'
 ]
-DEBIAN_PACKAGE: str = "docker-dashboard_1.0.0_amd64.deb"
