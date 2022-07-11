@@ -21,15 +21,29 @@ def print_success(message: str):
     print(f"[bold green]:white_check_mark: {message}")
 
 
-def print_info(message: str):
+def print_info(message: str) -> NoneType:
     print(f"\n[bold cyan]:dizzy: {message}")
 
 
-def check_supervisor() -> None:
+def run_command(command: str) -> t.Union[subprocess.CompletedProcess, NoneType]:
+    result: subprocess.CompletedProcess = subprocess.run(
+        command, shell=True, capture_output=True
+    )
+
+    if not result.stderr:
+        return result
+
+    error_message: str = result.stderr.decode("utf-8")
+    print_error(error_message)
+
+
+def check_supervisor() -> NoneType:
     print_info("Checking supervisor ...")
+
     try:
         __import__("supervisor")
         print_success("Supervisor installed :rocket:")
+
     except ImportError:
         result = input(
             "The `supervisor` is not installed, can I install it? (y/n): ")
@@ -38,10 +52,11 @@ def check_supervisor() -> None:
             print_info("Installing supervisor ...")
             run_command("sudo apt-get install supervisor -y")
             return
+
         print_error("Supervisor is not installed!")
 
 
-def check_files() -> bool:
+def check_files() -> NoneType:
     run_command("rm -rf /usr/lib/docker-dashboard/")  # clear files ...
     print_info("Checking files ...")
     if "src" not in os.listdir():
@@ -57,19 +72,7 @@ def check_files() -> bool:
     print_error("File checking - failed ...")
 
 
-def run_command(command: str) -> t.Union[subprocess.CompletedProcess, NoneType]:
-    result: subprocess.CompletedProcess = subprocess.run(
-        command, shell=True, capture_output=True
-    )
-
-    if not result.stderr:
-        return result
-
-    error_message: str = result.stderr.decode("utf-8")
-    print_error(error_message)
-
-
-def copy_files():
+def copy_files() -> NoneType:
     print_info("Copying server files ...")
     SERVER_DIR: str = f"{installer_config.APP_INSTALL_PATH}/server"
 
@@ -86,7 +89,7 @@ def copy_files():
     print_success("Files copied!")
 
 
-def create_venv():
+def create_venv() -> NoneType:
     print_info("Creating virtual environment ...")
     run_command(f"{installer_config.PYTHON_INTERPRETER} -m venv env")
     print_success("Virtual environment created!")
@@ -99,7 +102,7 @@ def create_venv():
     print_error("While creating a virtual environment")
 
 
-def install_dependencies():
+def install_dependencies() -> NoneType:
     PYTHON: str = installer_config.PYTHON_INTERPRETER.split("/")[-1]
     install_command: str = f"{installer_config.APP_INSTALL_PATH}/env/bin/{PYTHON} -m pip install -r server/requirements.txt"
     if "requirements.txt" in os.listdir("server"):
@@ -111,16 +114,22 @@ def install_dependencies():
     print_error("requirments.txt not found (server/requirements.txt ?)")
 
 
-def restart_supervisor():
+def restart_supervisor() -> NoneType:
     run_command("systemctl restart supervisor")
 
 
-def install_debian_package():
-    os.chdir(installer_config.CURRENT_PATH)
-    run_command(f"sudo dpkg -i {installer_config.DEBIAN_PACKAGE}")
+def install_debian_package() -> NoneType:
+    print_info("Installing debian package")
+
+    os.chdir(f"{installer_config.CURRENT_PATH}/src/client")
+    for filename in os.listdir("builds"):
+        if "deb" in filename.split("."):
+            run_command(f"sudo dpkg -i builds/{filename}")
+
+    print_success("Debian package installed!")
 
 
-def main():
+def main() -> NoneType:
     check_supervisor()
     check_files()
     copy_files()
