@@ -23,7 +23,6 @@ def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
     for result in results:
         if result["name"] == term_original:
             return result
-
     return None
 
 
@@ -47,7 +46,7 @@ def image_as_dict(
 
         if additional_info and image_name != "<none>" and len(image.tags) > 0:
             if (info := get_additional_info(client, image_name)) is not None:
-                # info.pop("name") node or node:16.15-alpine ?!
+                info.pop("name")
                 image_dict = {**image_dict, **info}
 
         return image_dict
@@ -56,12 +55,6 @@ def image_as_dict(
         return list(map(build_dict, images))
 
     return build_dict(images)
-
-
-def remove_image(image: Image, client: DockerClient) -> None:
-    image_name: str = parse_image_name(image)
-    client.images.remove(image_name)
-    return
 
 
 def filter_containers_by_image(image_id: str, client: DockerClient) -> t.List[Container]:

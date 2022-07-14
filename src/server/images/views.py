@@ -13,7 +13,7 @@ from starlette.responses import Response, JSONResponse
 
 from containers.utils import container_as_dict
 from .schemas import DockerSearchRequest
-from .utils import image_as_dict, remove_image, filter_containers_by_image
+from .utils import image_as_dict, filter_containers_by_image
 
 client = docker.from_env()
 
@@ -38,7 +38,8 @@ async def delete_image(request: Request) -> JSONResponse:
     image: Image = client.images.get(
         request.path_params["image_id"]
     )
-    remove_image(image, client)
+    
+    client.images.remove(image.short_id)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
