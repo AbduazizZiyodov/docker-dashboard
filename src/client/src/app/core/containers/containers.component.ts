@@ -4,10 +4,12 @@ import { Component, OnInit } from '@angular/core';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 
 import { Status } from '@models/status';
-import { ModalData } from '@models/modal';
 import { Container } from '@models/container';
 import { ContainerService } from '@services/container.service';
 import { ModalComponent } from '@components/modal/modal.component';
+
+import { Subscription, timer } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-containers',
@@ -16,6 +18,8 @@ import { ModalComponent } from '@components/modal/modal.component';
 })
 export class ContainersComponent implements OnInit {
   containers!: Container[];
+  timerSubscription!: Subscription;
+  subscription!: Subscription;
   modalRef: MdbModalRef<ModalComponent> | null = null;
 
   status: Status = {
@@ -36,9 +40,15 @@ export class ContainersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.containerService.getContainers().subscribe((data: Container[]) => {
-      this.containers = data.reverse();
-    });
+    this.subscription = timer(0, 1000)
+      .pipe(switchMap(() => this.containerService.getContainers()))
+      .subscribe((data: Container[]) => {
+        this.containers = data.reverse();
+      });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   startContainer(container_id: string) {

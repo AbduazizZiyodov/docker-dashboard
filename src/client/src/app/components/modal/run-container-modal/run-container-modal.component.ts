@@ -54,7 +54,7 @@ export class RunContainerModalComponent implements OnInit {
     containerData['ports'] = {};
     containerData['environment'] = {};
 
-    containerData['image'] = this.data.resource?.name;
+    containerData['image'] = this.data.resource?.short_id;
 
     if (firstPort && secondPort) {
       containerData['ports'][firstPort] = secondPort;
