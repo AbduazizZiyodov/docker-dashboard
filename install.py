@@ -12,12 +12,12 @@ NoneType = type(None)
 installer_config.CURRENT_PATH = os.getcwd()
 
 
-def print_error(message: str):
+def print_error(message: str) -> NoneType:
     print(f"[bold red]:x: Error {message}")
     sys.exit()
 
 
-def print_success(message: str):
+def print_success(message: str) -> NoneType:
     print(f"[bold green]:white_check_mark: {message}")
 
 
