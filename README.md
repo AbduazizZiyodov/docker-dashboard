@@ -1,5 +1,7 @@
 # 🐳 **Docker Dashboard**
 
+**Demo**: https://youtu.be/xIqG1UuwfXU
+
 > _A simple lightweight application that makes managing containers & images on Docker easy!_
 
 <blockquote>
