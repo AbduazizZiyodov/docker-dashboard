@@ -7,26 +7,33 @@
 @import "~mdb-angular-ui-kit/assets/scss/mdb.scss";
 
 * {
-  font-family: "Fira Sans", sans-serif;
+  font-family: "Comfortaa", sans-serif;
 }
 
 @font-face {
-  font-family: "OdibeeSans";
-  src: url("./assets/fonts/OdibeeSans.ttf");
+  font-family: "Comfortaa";
+  src: url("./assets/fonts/Comfortaa-VariableFont_wght.ttf");
+}
+
+@font-face {
+  font-family: "Oregano";
+  src: url("./assets/fonts/Oregano-Regular.ttf");
 }
 
 .navbar-text {
-  font-family: "OdibeeSans";
+  font-family: "Oregano";
+  font-weight: bold;
+  font-size: 45px;
   padding: 0;
   cursor: pointer;
 }
 
 .dodger-blue {
-  color: DodgerBlue;
+  color: #0288d1;
 }
 
 .dodger-blue-bg {
-  background: DodgerBlue;
+  background: #0288d1;
   color: white;
   text-transform: capitalize;
 }
