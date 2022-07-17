@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg fixed-top">
+<nav class="navbar navbar-expand-lg fixed-top bg-light shadow-1-strong">
   <div class="container">
-    <h1 class="navbar-text fw-bold m-auto" routerLink="">
-      <i class="fab fa-docker"></i> Docker Dashboard
+    <h1 class="navbar-text fw-bold dodger-blue" routerLink="">
+      <img src="assets/icons/Icon.svg" width="55px" /> Docker Dashboard
     </h1>
     <button
       [ngClass]="isRunning ? 'btn-success' : 'btn-danger'"
@@ -18,25 +18,24 @@
   <ul class="list-group text-center p-2">
     <hr />
 
-    <li class="list-group-item" style="border: none">
-      <button
-        class="btn dodger-blue-bg text-capitalize"
-        routerLink="containers"
-      >
-        <i class="fas fa-box"></i> Containers
-      </button>
+    <li
+      class="pointer list-group-item"
+      style="border: none"
+      routerLink="containers"
+    >
+      <span class="text-gray"><i class="fas fa-cube"></i> Containers</span>
     </li>
     <hr />
-    <li class="list-group-item" style="border: none">
-      <button class="btn dodger-blue-bg text-capitalize" routerLink="images">
-        <i class="fas fa-compact-disc"></i> Images
-      </button>
+    <li
+      class="pointer list-group-item"
+      style="border: none"
+      routerLink="images"
+    >
+      <span class="text-gray"> <i class="fas fa-box-open"></i> Images</span>
     </li>
     <hr />
-    <li class="list-group-item" style="border: none">
-      <button class="btn dodger-blue-bg text-capitalize" routerLink="about">
-        <i class="fas fa-info-circle"></i> About
-      </button>
+    <li class="pointer list-group-item" style="border: none" routerLink="about">
+      <span class="text-gray"> <i class="fas fa-info-circle"></i> About</span>
     </li>
     <hr />
   </ul>

@@ -1,9 +1,3 @@
-nav {
-  box-shadow: none;
-  background-color: dodgerblue;
-  color: white;
-}
-
 .sidebar {
   width: 200px;
   height: 100vh;
@@ -33,4 +27,12 @@ nav {
     text-align: center;
     float: none;
   }
+}
+
+.text-gray {
+  color: rgb(95, 95, 95);
+}
+
+.pointer {
+  cursor: pointer;
 }
