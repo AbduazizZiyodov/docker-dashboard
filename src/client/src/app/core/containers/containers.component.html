@@ -21,11 +21,11 @@
         <thead class="bg-light">
           <tr>
             <th></th>
-            <th><i class="fas fa-list-ol"></i> Container ID</th>
+            <th>Container ID</th>
             <th><i class="fas fa-battery-three-quarters"></i> Status</th>
-            <th><i class="fas fa-compact-disc"></i> Image</th>
+            <th><i class="fas fa-box-open"></i> Image</th>
             <th><i class="fas fa-tags"></i> Container Name</th>
-            <th><i class="fas fa-compact-disc"></i> Actions</th>
+            <th><i class="fas fa-cogs"></i> Actions</th>
           </tr>
         </thead>
         <tbody *ngFor="for; let container; of: containers; index as i">
@@ -98,7 +98,7 @@
                 [routerLink]="['/logs', container.short_id]"
                 mdbTooltip="Logs"
               >
-                <i class="fas fa-paste"></i>
+                <i class="fas fa-file-alt"></i>
               </a>
             </td>
           </tr>
