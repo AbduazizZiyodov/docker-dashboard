@@ -2,13 +2,9 @@
 
 **Demo**: https://www.youtube.com/watch?v=iX0J5rDwA5k
 
-
 > _A simple lightweight application that makes managing containers & images on Docker easy!_
 
-<blockquote>
-    Perhaps it can be a good alternative to Docker Desktop in the future 😂
-    <figcaption>- Abduaziz Ziyodov, <cite>author</cite></figcaption>
-</blockquote>
+Perhaps it can be a good alternative to Docker Desktop in the future 😂
 
 **Requirements**:
 
@@ -32,8 +28,6 @@ $ sudo python3 install.py
 ```
 
 ![](assets/install.png)
-
-![](assets/dashboard.png)
 
 ## **Development**
 
