@@ -24,7 +24,7 @@ Open the directory on the terminal and run this command:
 
 ```bash
 $ cd docker-dashboard/
-$ sudo python3 install.py
+$ pip3 install -U rich && sudo python3 install.py
 ```
 
 ![](assets/install.png)
