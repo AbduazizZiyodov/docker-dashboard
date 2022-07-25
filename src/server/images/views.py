@@ -12,8 +12,14 @@ from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
 
 from containers.utils import container_as_dict
-from .schemas import DockerSearchRequest
-from .utils import image_as_dict, filter_containers_by_image
+from .utils import (
+    get_tags,
+    image_as_dict,
+    sort_tag_versions,
+    filter_containers_by_image,
+)
+from .schemas import DockerSearchRequest, DockerPullRequest
+
 
 client = docker.from_env()
 
@@ -38,8 +44,8 @@ async def delete_image(request: Request) -> JSONResponse:
     image: Image = client.images.get(
         request.path_params["image_id"]
     )
-    
-    client.images.remove(image.short_id)
+
+    client.images.remove(image.short_id, force=True)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -55,9 +61,8 @@ async def search_image(request: Request) -> JSONResponse:
 
 
 async def pull_image(request: Request) -> JSONResponse:
-    request_body = await request.json()
-
-    image: Image = client.images.pull(request_body.get("repository"))
+    request_body = DockerPullRequest(**await request.json())
+    image: Image = client.images.pull(**request_body.dict())
 
     return JSONResponse(image_as_dict(image))
 
@@ -70,6 +75,23 @@ async def get_containers_by_image(request: Request) -> JSONResponse:
     )
 
     return JSONResponse(container_as_dict(containers))
+
+
+async def get_all_tags(request: Request) -> JSONResponse:
+    request_body: dict = await request.json()
+    repository = request_body.get("repository")
+
+    tags = await get_tags(repository)
+
+    if not isinstance(tags, list):
+        return JSONResponse(
+            [],
+            status_code=status.HTTP_404_NOT_FOUND
+        )
+
+    tags = sort_tag_versions(tags)
+
+    return JSONResponse(tags)
 
 
 image_routes = [
@@ -85,4 +107,5 @@ image_routes = [
     ),
     Route("/api/images/search", search_image, methods=["POST"]),
     Route("/api/images/pull", pull_image, methods=["POST"]),
+    Route("/api/images/get-tags", get_all_tags, methods=["POST"]),
 ]
