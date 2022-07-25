@@ -8,4 +8,5 @@ export interface Image {
   description?: string;
   is_pulled?: boolean;
   is_pulling?: boolean;
+  tag: string;
 }

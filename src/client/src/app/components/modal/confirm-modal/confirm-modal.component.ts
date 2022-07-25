@@ -40,7 +40,7 @@ export class ConfirmModalComponent {
 
   deleteImage(image: Image | any) {
     this.imageService.deleteImage(image.short_id).subscribe((data) => {
-      this.toastr.error(`Image ${image.name} deleted!`);
+      this.toastr.error(`Image ${image.name + ':' + image.tag} deleted!`);
       this.router.navigate(['images']);
       this.data?.modalRef?.close();
     });
