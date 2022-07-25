@@ -37,8 +37,15 @@ export class ImageService {
     });
   }
 
-  pullImage(repository: string) {
+  pullImage(repository: string, tag: string) {
     return this.http.post<Image>(`${this.api}/images/pull`, {
+      repository: repository,
+      tag: tag,
+    });
+  }
+
+  getAllTags(repository: string) {
+    return this.http.post<string[]>(`${this.api}/images/get-tags`, {
       repository: repository,
     });
   }

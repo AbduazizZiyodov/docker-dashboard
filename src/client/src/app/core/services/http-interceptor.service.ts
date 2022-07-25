@@ -32,10 +32,7 @@ export class HttpInterceptorService implements HttpInterceptor {
               handled = true;
               break;
             case 409:
-              this.toastr.error(
-                'Another container is using this image!',
-                'Conflict'
-              );
+              this.toastr.error(httpError.error.detail, 'Conflict');
               handled = true;
               break;
 
@@ -47,7 +44,10 @@ export class HttpInterceptorService implements HttpInterceptor {
               break;
 
             default:
-              this.toastr.error(httpError.error.detail, 'Error!');
+              this.toastr.error(
+                httpError.error.detail,
+                `Error ${httpError.status}`
+              );
               handled = true;
               break;
           }
