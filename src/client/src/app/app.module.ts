@@ -25,6 +25,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
 import { ClipboardModule } from 'ngx-clipboard';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -43,6 +44,7 @@ import { ContainersModalComponent } from '@modals/containers-modal/containers-mo
 import { ConfirmModalComponent } from '@modals/confirm-modal/confirm-modal.component';
 import { RunContainerModalComponent } from '@modals/run-container-modal/run-container-modal.component';
 import { AboutComponent } from './components/about/about.component';
+import { PullImageComponent } from './core/pull-image/pull-image.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,7 @@ import { AboutComponent } from './components/about/about.component';
     RunContainerModalComponent,
     LogsComponent,
     AboutComponent,
+    PullImageComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,6 +92,7 @@ import { AboutComponent } from './components/about/about.component';
     ClipboardModule,
     ReactiveFormsModule,
     FormsModule,
+    NgSelectModule,
   ],
   providers: [
     {
