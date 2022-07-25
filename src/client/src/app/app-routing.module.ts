@@ -8,6 +8,9 @@ import { PullImagesComponent } from '@core/pull-images/pull-images.component';
 import { ImageComponent } from '@core/image/image.component';
 import { LogsComponent } from '@components/logs/logs.component';
 import { AboutComponent } from '@components/about/about.component';
+import { PullImageComponent } from '@core/pull-image/pull-image.component';
+
+import { repositoryUrlMatcher } from '@core/utils';
 
 const routes: Routes = [
   { path: '', component: MenuComponent },
@@ -15,6 +18,7 @@ const routes: Routes = [
   { path: 'images', component: ImagesComponent },
   { path: 'images/:id', component: ImageComponent },
   { path: 'pull-images', component: PullImagesComponent },
+  { matcher: repositoryUrlMatcher, component: PullImageComponent },
   { path: 'logs/:id', component: LogsComponent },
   { path: 'about', component: AboutComponent },
   { path: '**', component: NotFoundComponent },
