@@ -1,8 +1,11 @@
+import httpx
 import typing as t
+
 from docker import DockerClient
 from docker.models.images import Image
 from docker.models.containers import Container
 
+from natsort import natsorted
 
 NoneType = type(None)
 
@@ -10,6 +13,20 @@ NoneType = type(None)
 def parse_image_name(image: Image) -> str:
     image_name = str(image).split("'")[1].split(":")[0]
     return "<none>" if len(image_name) == 0 else image_name
+
+
+def sort_tag_versions(tags: list) -> list:
+    tags = tuple(tag["name"] for tag in tags)
+    return natsorted(tags, reverse=True)
+
+
+async def get_tags(repository: str) -> list:
+    async with httpx.AsyncClient() as client:
+        response: httpx.Response = await client.get(
+            f"https://registry.hub.docker.com/v1/repositories/{repository}/tags"
+        )
+
+    return response.json()
 
 
 def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
@@ -29,7 +46,7 @@ def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
 def image_as_dict(
     images: t.Union[t.List[Image], Image],
     client: DockerClient = None,
-    additional_info: bool = False
+    additional_info: bool = False,
 ) -> dict:
     def build_dict(image: Image):
         image_name = parse_image_name(image)
@@ -39,7 +56,8 @@ def image_as_dict(
         if len(image.tags) == 0:
             image_dict["name"] = image_name
         else:
-            image_dict["name"] = image.tags[0]
+            image_dict["name"] = image.tags[0].split(":")[0]
+            image_dict["tag"] = image.tags[0].split(":")[1]
 
         for attr in attrs:
             image_dict[attr] = getattr(image, attr)
