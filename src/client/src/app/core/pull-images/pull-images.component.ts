@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Image } from '@models/image';
@@ -11,67 +10,48 @@ import { ImageService } from '@services/image.service';
   styleUrls: ['./pull-images.component.scss'],
 })
 export class PullImagesComponent {
+  pulledImage!: Image;
+  searchForm!: FormGroup;
   searchResults!: Image[];
   pulledImages!: string[];
-  searchForm!: FormGroup;
-  pulledImage!: Image;
   isLoading: boolean = false;
 
-  constructor(
-    private imageService: ImageService,
-    private toastr: ToastrService
-  ) {
+  constructor(private imageService: ImageService) {
     this.searchForm = new FormGroup({
       searchTerm: new FormControl('', [
         Validators.required,
         Validators.minLength(3),
       ]),
+      limit: new FormControl(10, []),
     });
   }
 
   getSearchResults() {
     this.isLoading = true;
+    this.searchResults = [];
     let searchTerm = this.searchForm.getRawValue()['searchTerm'];
+    let limit = this.searchForm.getRawValue()['limit'];
 
-    this.imageService.getImages().subscribe((data: Image[]) => {
-      this.pulledImages = data.map((image: Image) => {
-        return image.name.split(':')[0];
+    this.imageService
+      .searchImages(searchTerm, limit)
+      .subscribe((data: Image[]) => {
+        this.searchResults = data;
+        this.isLoading = false;
       });
-    });
-
-    this.imageService.searchImages(searchTerm).subscribe((data: Image[]) => {
-      this.searchResults = this.prepareSearchResults(data);
-      this.isLoading = false;
-    });
   }
 
-  prepareSearchResults(results: Image[]) {
-    results.forEach((image: Image) => {
-      image.is_pulled = this.pulledImages.includes(image.name);
-    });
-
-    return results;
-  }
-
-  pullImage(image: Image) {
-    image.is_pulling = true;
-    this.toastr.warning('Image is pulling ...');
-    this.imageService.pullImage(image.name).subscribe((data: any) => {
-      this.markAsPulled(image.name);
-      image.is_pulling = false;
-    });
-  }
-
-  markAsPulled(repository: string) {
-    for (let image of this.searchResults) {
-      if (image.name == repository) {
-        image.is_pulled = true;
-      }
+  isValidLimit(): boolean {
+    let limit = parseInt(this.limit?.value);
+    if (0 < limit && limit <= 100) {
+      return Number.isInteger(parseInt(this.limit?.value));
     }
-    this.toastr.success('Image is pulled!');
+    return false;
   }
-
   get searchTerm() {
     return this.searchForm.get('searchTerm');
+  }
+
+  get limit() {
+    return this.searchForm.get('limit');
   }
 }

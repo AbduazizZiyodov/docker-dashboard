@@ -1,10 +1,22 @@
 <div class="container" data-aos="zoom-in" data-aos-duration="250">
   <h2 class="navbar-text text-center mt-3">
-    <i class="fas fa-cubes"></i> Pull Images
+    <i class="fas fa-cubes"></i> Search & Pull Images
   </h2>
 
   <form [formGroup]="searchForm">
     <div class="input-group mb-3 w-75 m-auto">
+      <div class="input-group auto" style="width: 17%; margin-right: 5px">
+        <small class="form-label m-1">Limit (results)</small>
+        <input
+          type="text"
+          class="form-control"
+          aria-label="limit"
+          formControlName="limit"
+          mdbValidate
+          mdbInput
+        />
+      </div>
+
       <input
         type="text"
         class="form-control"
@@ -22,7 +34,13 @@
         mdbRipple
         rippleColor="light"
         (click)="getSearchResults()"
-        [ngClass]="searchTerm?.invalid || !searchTerm ? 'disabled' : ''"
+        [ngClass]="
+          searchTerm?.invalid ||
+          searchTerm?.value.trim() == '' ||
+          !isValidLimit()
+            ? 'disabled'
+            : ''
+        "
       >
         <i class="fas fa-search"></i>
       </button>
@@ -37,12 +55,20 @@
 
   <div class="card w-75 m-auto mt-2" *ngIf="!searchResults && !isLoading">
     <div class="card-body">
-      <p class="note note-primary border text-center">Do search bro ...</p>
+      <p class="note note-primary border text-center">Search something ...</p>
     </div>
   </div>
 </div>
 
 <div class="flex-row-container p-3">
+  <div
+    *ngIf="searchResults.length == 0 && !isLoading"
+    class="card w-75 m-auto mt-2"
+  >
+    <div class="card-body">
+      <p class="note note-primary border text-center">No results found ...</p>
+    </div>
+  </div>
   <div
     class="flex-row-item"
     data-aos="zoom-out"
@@ -52,8 +78,8 @@
     <div class="card m-2 p-1">
       <div class="card-body">
         <h5 class="card-title">
-          <i *ngIf="image.is_official" class="fas fa-award"></i>
-          <i *ngIf="!image.is_official" class="fas fa-cube"></i>
+          <i *ngIf="image.is_official" class="fas fa-award dodger-blue"></i>
+          <i *ngIf="!image.is_official" class="fas fa-cube text-warning"></i>
           {{ image.name }}
         </h5>
         <p class="card-text">
@@ -62,22 +88,10 @@
         <button
           type="button"
           class="btn btn-warning text-capitalize"
-          [ngClass]="image.is_pulled ? 'disabled' : ''"
-          (click)="pullImage(image)"
+          routerLink="/pull/{{ image.name }}"
         >
           <i class="fas fa-fire-alt"></i>
-
-          <span *ngIf="image.is_pulling"> Pulling </span>
-          <span *ngIf="!image.is_pulling">
-            {{ image.is_pulled ? "Pulled" : "Pull" }}
-          </span>
-
-          <span
-            *ngIf="image.is_pulling"
-            class="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
+          Go
         </button>
       </div>
     </div>
