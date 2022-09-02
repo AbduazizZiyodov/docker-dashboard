@@ -1,11 +1,15 @@
+import json
 import httpx
 import typing as t
+from pydantic import ValidationError
 
 from docker import DockerClient
 from docker.models.images import Image
 from docker.models.containers import Container
 
 from natsort import natsorted
+
+from .schemas import DockerPullRequest
 
 NoneType = type(None)
 
@@ -18,15 +22,6 @@ def parse_image_name(image: Image) -> str:
 def sort_tag_versions(tags: list) -> list:
     tags = tuple(tag["name"] for tag in tags)
     return natsorted(tags, reverse=True)
-
-
-async def get_tags(repository: str) -> list:
-    async with httpx.AsyncClient() as client:
-        response: httpx.Response = await client.get(
-            f"https://registry.hub.docker.com/v1/repositories/{repository}/tags"
-        )
-
-    return response.json()
 
 
 def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
@@ -75,6 +70,18 @@ def image_as_dict(
     return build_dict(images)
 
 
+async def get_tags(repository: str, docker_client: DockerClient) -> list:
+    async with httpx.AsyncClient() as client:
+        response: httpx.Response = await client.get(
+            f"https://registry.hub.docker.com/v1/repositories/{repository}/tags"
+        )
+        print(response.content[:20], response.status_code)
+    if response.status_code != 200:
+        return []
+
+    return response.json()
+
+
 def filter_containers_by_image(image_id: str, client: DockerClient) -> t.List[Container]:
     filter_results = filter(
         lambda container: container.image.short_id == image_id,
@@ -82,3 +89,11 @@ def filter_containers_by_image(image_id: str, client: DockerClient) -> t.List[Co
     )
 
     return list(filter_results)
+
+
+async def validate_websocket_request(data: dict):
+    try:
+        body = DockerPullRequest(**data)
+        return body, None
+    except ValidationError as exc:
+        return None, {"detail": json.loads(exc.json())}
