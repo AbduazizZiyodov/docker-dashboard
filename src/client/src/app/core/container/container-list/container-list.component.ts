@@ -12,11 +12,11 @@ import { Subscription, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-containers',
-  templateUrl: './containers.component.html',
-  styleUrls: ['./containers.component.scss'],
+  selector: 'app-container-list',
+  templateUrl: './container-list.component.html',
+  styleUrls: ['./container-list.component.scss'],
 })
-export class ContainersComponent implements OnInit {
+export class ContainerListComponent implements OnInit {
   containers!: Container[];
   timerSubscription!: Subscription;
   subscription!: Subscription;
@@ -40,15 +40,11 @@ export class ContainersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.subscription = timer(0, 1000)
+    this.subscription = timer(0, 3000)
       .pipe(switchMap(() => this.containerService.getContainers()))
       .subscribe((data: Container[]) => {
         this.containers = data.reverse();
       });
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
   startContainer(container_id: string) {
@@ -87,19 +83,24 @@ export class ContainersComponent implements OnInit {
     });
   }
 
-  changeStatus(to: string, container_id: string) {
-    for (let container of this.containers) {
+  changeStatus(status: string, container_id: string) {
+    this.containers.forEach((container: Container) => {
       if (container.short_id == container_id) {
-        container.status = to;
+        container.status = status;
       }
-    }
+    });
   }
 
   getStatus(key: keyof Status) {
     return this.status[key];
   }
+
   copyId(content: string) {
     this.clipboardService.copyFromContent(content);
     this.toastr.success('Copied!');
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

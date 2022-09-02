@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PullImagesComponent } from './pull-images.component';
+import { ContainerListComponent } from './container-list.component';
 
-describe('PullImagesComponent', () => {
-  let component: PullImagesComponent;
-  let fixture: ComponentFixture<PullImagesComponent>;
+describe('ContainerListComponent', () => {
+  let component: ContainerListComponent;
+  let fixture: ComponentFixture<ContainerListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PullImagesComponent ]
+      declarations: [ ContainerListComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PullImagesComponent);
+    fixture = TestBed.createComponent(ContainerListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

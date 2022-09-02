@@ -10,11 +10,11 @@ import { ImageService } from '@services/image.service';
 import { ModalComponent } from '@components/modal/modal.component';
 
 @Component({
-  selector: 'app-image',
-  templateUrl: './image.component.html',
-  styleUrls: ['./image.component.scss'],
+  selector: 'app-image-detailed',
+  templateUrl: './image-detailed.component.html',
+  styleUrls: ['./image-detailed.component.scss'],
 })
-export class ImageComponent implements OnInit {
+export class ImageDetailedComponent implements OnInit {
   imageId: string = this.route.snapshot.params['id'];
   image!: Image;
   isLoading: boolean = true;

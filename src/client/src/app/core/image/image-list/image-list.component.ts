@@ -4,11 +4,11 @@ import { Image } from '@models/image';
 import { ImageService } from '@services/image.service';
 
 @Component({
-  selector: 'app-images',
-  templateUrl: './images.component.html',
-  styleUrls: ['./images.component.scss'],
+  selector: 'app-image-list',
+  templateUrl: './image-list.component.html',
+  styleUrls: ['./image-list.component.scss'],
 })
-export class ImagesComponent implements OnInit {
+export class ImageListComponent implements OnInit {
   images!: Image[];
   constructor(private imageService: ImageService) {}
 
