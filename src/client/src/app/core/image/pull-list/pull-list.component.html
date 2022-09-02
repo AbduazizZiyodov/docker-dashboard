@@ -1,0 +1,77 @@
+<div class="container">
+  <div class="card" data-aos="zoom-in">
+    <div class="card-body p-3">
+      <h2 class="text-center">
+        <i class="fas fa-tasks text-success"></i> Pulls
+      </h2>
+      <div class="form-check form-switch">
+        <input
+          mdbCheckbox
+          [(ngModel)]="multiplePullingEnabled"
+          class="form-check-input"
+          type="checkbox"
+          id="flexSwitchCheckDefault"
+          mdbTooltip="If checked, it will enable the pull of multiple images at the same time.
+          "
+        />
+        <label class="form-check-label" for="flexSwitchCheckDefault"
+          >Multiple images </label
+        ><br />
+        Total:
+        <span class="text-success fw-bold">{{ tasks.length }}</span> tasks
+      </div>
+
+      <blockquote
+        *ngIf="tasks.length == 0"
+        class="note w-75 m-auto text-center note-primary border mb-3"
+      >
+        No pending tasks yet ..
+      </blockquote>
+
+      <div
+        class="list-group-item p-3 m-auto mb-2"
+        style="width: 77%"
+        *ngFor="let task of tasks; let i = index"
+      >
+        <div class="mb-2">
+          <span class="fw-bold">{{ task.repository }}</span>
+
+          <span
+            class="mx-1 p-2 badge dodger-blue-bg rounded-pill text-lowercase"
+          >
+            {{ task.tag }}</span
+          >
+          <button
+            class="btn btn-sm btn-rounded btn-success text-capitalize"
+            (click)="start(task.repository, task.tag)"
+            mdbTooltip="Click for start || continue pulling"
+          >
+            <i class="fas fa-play"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-rounded btn-danger text-capitalize mx-2"
+            (click)="delete(task.repository, task.tag)"
+            [disabled]="task.stream.length != 0"
+          >
+            <i class="fas fa-trash"></i>
+          </button>
+          <button class="btn btn-sm btn-light text-capitalize btn-rounded">
+            {{ task.status }}
+          </button>
+        </div>
+
+        <div class="text-left">
+          <textarea
+            #textarea
+            cols="110"
+            rows="2"
+            disabled
+            [(ngModel)]="task.stream"
+            [scrollTop]="textarea.scrollHeight"
+          >
+          </textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
