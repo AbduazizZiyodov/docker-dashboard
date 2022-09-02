@@ -1,5 +1,5 @@
 builds/
-release/
+releases/
 create_release.sh
 # Byte-compiled / optimized / DLL files
 __pycache__/
