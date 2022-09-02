@@ -31,6 +31,7 @@ export class HttpInterceptorService implements HttpInterceptor {
               });
               handled = true;
               break;
+
             case 409:
               this.toastr.error(httpError.error.detail, 'Conflict');
               handled = true;
@@ -46,7 +47,7 @@ export class HttpInterceptorService implements HttpInterceptor {
             default:
               this.toastr.error(
                 httpError.error.detail,
-                `Error ${httpError.status}`
+                `Error: ${httpError.message} ${httpError.statusText}`
               );
               handled = true;
               break;
