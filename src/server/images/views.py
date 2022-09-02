@@ -1,14 +1,12 @@
 import docker
 import typing as t
 
-from starlette.routing import Route
-
 from docker.models.images import Image
 from docker.models.containers import Container
 
 import starlette.status as status
-
 from starlette.requests import Request
+from starlette.routing import Route, WebSocketRoute
 from starlette.responses import Response, JSONResponse
 
 from containers.utils import container_as_dict
@@ -17,9 +15,10 @@ from .utils import (
     image_as_dict,
     sort_tag_versions,
     filter_containers_by_image,
-)
-from .schemas import DockerSearchRequest, DockerPullRequest
 
+)
+from .websocket.endpoint import PullImages
+from .schemas import DockerSearchRequest, DockerPullRequest
 
 client = docker.from_env()
 
@@ -45,7 +44,7 @@ async def delete_image(request: Request) -> JSONResponse:
         request.path_params["image_id"]
     )
 
-    client.images.remove(image.short_id, force=True)
+    client.images.remove(image.short_id)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -81,7 +80,7 @@ async def get_all_tags(request: Request) -> JSONResponse:
     request_body: dict = await request.json()
     repository = request_body.get("repository")
 
-    tags = await get_tags(repository)
+    tags = await get_tags(repository, client)
 
     if not isinstance(tags, list):
         return JSONResponse(
@@ -106,6 +105,6 @@ image_routes = [
         get_containers_by_image, methods=["GET"]
     ),
     Route("/api/images/search", search_image, methods=["POST"]),
-    Route("/api/images/pull", pull_image, methods=["POST"]),
     Route("/api/images/get-tags", get_all_tags, methods=["POST"]),
+    WebSocketRoute("/api/images/pull", PullImages),
 ]
