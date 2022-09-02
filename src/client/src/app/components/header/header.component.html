@@ -3,14 +3,6 @@
     <h1 class="navbar-text fw-bold dodger-blue" routerLink="">
       <img src="assets/icons/Icon.svg" width="55px" /> Docker Dashboard
     </h1>
-    <button
-      [ngClass]="isRunning ? 'btn-success' : 'btn-danger'"
-      class="btn btn-sm btn-rounded text-capitalize fw-bold"
-      style="box-shadow: none"
-    >
-      <i class="fas fa-circle fa-beat"></i>
-      {{ isRunning ? "Running" : "Stopped" }}
-    </button>
   </div>
 </nav>
 
@@ -20,7 +12,7 @@
 
     <li
       class="pointer list-group-item"
-      style="border: none"
+
       routerLink="containers"
     >
       <span class="text-gray"><i class="fas fa-cube"></i> Containers</span>
@@ -28,11 +20,21 @@
     <hr />
     <li
       class="pointer list-group-item"
-      style="border: none"
       routerLink="images"
     >
       <span class="text-gray"> <i class="fas fa-box-open"></i> Images</span>
     </li>
+    <hr />
+    <li
+      class="pointer list-group-item"
+      routerLink="pull-list"
+    >
+      <span class="text-gray">
+        <i class="fas fa-cloud-download-alt"></i> Pulls </span
+      >
+      <span class="badge dodger-blue-bg">beta</span>
+    </li>
+
     <hr />
     <li class="pointer list-group-item" style="border: none" routerLink="about">
       <span class="text-gray"> <i class="fas fa-info-circle"></i> About</span>
