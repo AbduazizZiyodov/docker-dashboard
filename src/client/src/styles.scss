@@ -1,12 +1,13 @@
 @import "~ngx-toastr/toastr";
-@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+
+@import "~mdb-angular-ui-kit/assets/scss/mdb.scss";
+
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/regular.scss";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 
 @import "~@ng-select/ng-select/themes/default.theme.css";
-
-@import "~mdb-angular-ui-kit/assets/scss/mdb.scss";
 
 * {
   font-family: "Comfortaa", sans-serif;
@@ -44,4 +45,20 @@
   margin-top: 55px;
   margin-left: 200px;
   padding: 20px 20px;
+}
+
+textarea {
+  padding: 8px;
+  font-family: "Ubuntu Mono";
+  color: white;
+  white-space: pre-line;
+  border-radius: 5px;
+  background-color: #000;
+  border: 1px solid #000;
+  background-color: rgb(41, 41, 41);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  font-size: 15px;
+  resize: none;
 }
