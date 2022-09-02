@@ -1,27 +1,31 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { MenuComponent } from '@core/menu/menu.component';
-import { ContainersComponent } from '@core/containers/containers.component';
-import { ImagesComponent } from '@core/images/images.component';
-import { NotFoundComponent } from '@components/not-found/not-found.component';
-import { PullImagesComponent } from '@core/pull-images/pull-images.component';
-import { ImageComponent } from '@core/image/image.component';
+import { repositoryUrlMatcher } from '@core/url_matcher';
 import { LogsComponent } from '@components/logs/logs.component';
 import { AboutComponent } from '@components/about/about.component';
-import { PullImageComponent } from '@core/pull-image/pull-image.component';
-
-import { repositoryUrlMatcher } from '@core/utils';
+import { PullMenuComponent } from '@image/pull-menu/pull-menu.component';
+import { PullListComponent } from '@image/pull-list/pull-list.component';
+import { PullImageComponent } from '@image/pull-image/pull-image.component';
+import { ImageListComponent } from '@image/image-list/image-list.component';
+import { NotFoundComponent } from '@components/not-found/not-found.component';
+import { ImageDetailedComponent } from '@image/image-detailed/image-detailed.component';
+import { ContainerListComponent } from '@containers/container-list/container-list.component';
 
 const routes: Routes = [
   { path: '', component: MenuComponent },
-  { path: 'containers', component: ContainersComponent },
-  { path: 'images', component: ImagesComponent },
-  { path: 'images/:id', component: ImageComponent },
-  { path: 'pull-images', component: PullImagesComponent },
-  { matcher: repositoryUrlMatcher, component: PullImageComponent },
-  { path: 'logs/:id', component: LogsComponent },
   { path: 'about', component: AboutComponent },
+  { path: 'logs/:id', component: LogsComponent },
+  { path: 'images', component: ImageListComponent },
+  { path: 'pull-list', component: PullListComponent },
+  { path: 'pull-images', component: PullMenuComponent },
+  { path: 'images/:id', component: ImageDetailedComponent },
+  { path: 'containers', component: ContainerListComponent },
+  { matcher: repositoryUrlMatcher, component: PullImageComponent },
+
   { path: '**', component: NotFoundComponent },
+  
 ];
 
 @NgModule({
