@@ -1,0 +1,100 @@
+<div class="container" data-aos="zoom-in" data-aos-duration="250">
+  <h2 class="navbar-text text-center mt-3">
+    <i class="fas fa-cubes"></i> Search & Pull Images
+  </h2>
+
+  <form [formGroup]="searchForm">
+    <div class="input-group mb-3 w-75 m-auto">
+      <div class="input-group auto" style="width: 17%; margin-right: 5px">
+        <small class="form-label m-1">Limit (results)</small>
+        <input
+          type="text"
+          class="form-control"
+          aria-label="limit"
+          formControlName="limit"
+          (submit)="getSearchResults()"
+          mdbValidate
+          mdbInput
+        />
+      </div>
+
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Image name"
+        aria-label="Image name"
+        aria-describedby="search-button"
+        formControlName="searchTerm"
+        mdbValidate
+        mdbInput
+      />
+      <button
+        class="btn dodger-blue-bg text-white"
+        type="submit"
+        id="search-button"
+        mdbRipple
+        rippleColor="light"
+        (click)="getSearchResults()"
+        [ngClass]="
+          searchTerm?.invalid ||
+          searchTerm?.value.trim() == '' ||
+          !validateLimit()
+            ? 'disabled'
+            : ''
+        "
+      >
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+  </form>
+
+  <div class="text-center mt-3">
+    <div *ngIf="isLoading" class="spinner-grow dodger-blue" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div class="card w-75 m-auto mt-2" *ngIf="!searchResults && !isLoading">
+    <div class="card-body">
+      <p class="note note-primary border text-center">Search something ...</p>
+    </div>
+  </div>
+</div>
+
+<div class="flex-row-container p-3">
+  <div
+    *ngIf="searchResults.length == 0 && !isLoading"
+    class="card w-75 m-auto mt-2"
+  >
+    <div class="card-body">
+      <p class="note note-primary border text-center">No results found ...</p>
+    </div>
+  </div>
+  <div
+    class="flex-row-item"
+    data-aos="zoom-out"
+    data-aos-duration="500"
+    *ngFor="for; let image; of: searchResults"
+  >
+    <div class="card m-2 p-1">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i *ngIf="image.is_official" class="fas fa-award dodger-blue"></i>
+          <i *ngIf="!image.is_official" class="fas fa-cube text-warning"></i>
+          {{ image.name }}
+        </h5>
+        <p class="card-text">
+          {{ image.description }}
+        </p>
+        <button
+          type="button"
+          class="btn btn-warning text-capitalize"
+          routerLink="/pull/{{ image.name }}"
+        >
+          <i class="fas fa-fire-alt"></i>
+          Go
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
