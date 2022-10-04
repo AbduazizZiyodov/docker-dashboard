@@ -1,4 +1,4 @@
-<div class="container p-3">
+<div class="container">
   <h2 class="h2-responsive text-center fw-bold navbar-text">
     <i class="fas fa-cubes"></i> Containers
   </h2>
@@ -14,10 +14,7 @@
       >
         There are no containers <i class="fas fa-exclamation-circle"></i>
       </p>
-      <table
-        *ngIf="containers.length != 0"
-        class="table align-middle mb-0 bg-white"
-      >
+      <table *ngIf="containers.length != 0" class="table align-middle bg-white">
         <thead class="bg-light">
           <tr>
             <th></th>
@@ -37,7 +34,7 @@
                 (click)="copyId(container.short_id)"
                 class="btn btn-secondary btn-sm text-lowercase btn-rounded"
               >
-                <i class="fas fa-clone"></i> {{ container.short_id }}
+                {{ container.short_id }}
               </button>
             </td>
             <td>
@@ -65,41 +62,59 @@
               </button>
             </td>
 
-            <td>
-              <a
-                *ngIf="container.status == 'exited'"
-                class="btn btn-sm m-1 btn-success text-white"
-                (click)="startContainer(container.short_id)"
-                mdbTooltip="Start"
-              >
-                <i class="fas fa-play"></i
-              ></a>
+            <td class="text-center">
+              <div mdbDropdown class="dropdown">
+                <button
+                  class="btn btn-sm btn-rounded text-white dropdown-toggle"
+                  type="button"
+                  style="background-color: #ec4a89"
+                  id="dropdownMenuButton"
+                  aria-expanded="false"
+                  mdbDropdownToggle
+                ></button>
+                <ul
+                  mdbDropdownMenu
+                  class="dropdown-menu text-center"
+                  aria-labelledby="dropdownMenuButton"
+                >
+                  <li>
+                    <a
+                      *ngIf="container.status == 'exited'"
+                      class="dropdown-item m-1"
+                      (click)="startContainer(container.short_id)"
+                    >
+                      <i class="fas fa-play text-success"></i> Start</a
+                    >
+                  </li>
 
-              <a
-                *ngIf="container.status != 'exited'"
-                class="btn btn-sm m-1 btn-warning text-white"
-                (click)="stopContainer(container.short_id)"
-                mdbTooltip="Stop"
-              >
-                <i class="fas fa-stop"></i
-              ></a>
-
-              <a
-                class="btn btn-sm m-1 btn-danger text-white"
-                (click)="getConfirmModal(container)"
-                mdbTooltip="Delete"
-              >
-                <i class="fas fa-trash"></i
-              ></a>
-
-              <a
-                class="btn btn-sm m-1 btn-primary text-white"
-                style="background-color: #4c75a3"
-                [routerLink]="['/logs', container.short_id]"
-                mdbTooltip="Logs"
-              >
-                <i class="fas fa-file-alt"></i>
-              </a>
+                  <li>
+                    <a
+                      *ngIf="container.status != 'exited'"
+                      class="dropdown-item m-1"
+                      (click)="stopContainer(container.short_id)"
+                    >
+                      <i class="fas fa-stop text-warning"></i> Stop</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item m-1"
+                      (click)="getConfirmModal(container)"
+                    >
+                      <i class="fas fa-trash text-danger"></i> Delete</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item m-1"
+                      [routerLink]="['/logs', container.short_id]"
+                    >
+                      <i style="color: #4c75a3" class="fas fa-file-alt"></i>
+                      Logs
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </td>
           </tr>
         </tbody>
