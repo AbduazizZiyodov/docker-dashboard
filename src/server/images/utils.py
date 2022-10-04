@@ -1,13 +1,10 @@
 import json
-import httpx
 import typing as t
 from pydantic import ValidationError
 
 from docker import DockerClient
 from docker.models.images import Image
 from docker.models.containers import Container
-
-from natsort import natsorted
 
 from .schemas import DockerPullRequest
 
@@ -17,11 +14,6 @@ NoneType = type(None)
 def parse_image_name(image: Image) -> str:
     image_name = str(image).split("'")[1].split(":")[0]
     return "<none>" if len(image_name) == 0 else image_name
-
-
-def sort_tag_versions(tags: list) -> list:
-    tags = tuple(tag["name"] for tag in tags)
-    return natsorted(tags, reverse=True)
 
 
 def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
@@ -68,18 +60,6 @@ def image_as_dict(
         return list(map(build_dict, images))
 
     return build_dict(images)
-
-
-async def get_tags(repository: str, docker_client: DockerClient) -> list:
-    async with httpx.AsyncClient() as client:
-        response: httpx.Response = await client.get(
-            f"https://registry.hub.docker.com/v1/repositories/{repository}/tags"
-        )
-        print(response.content[:20], response.status_code)
-    if response.status_code != 200:
-        return []
-
-    return response.json()
 
 
 def filter_containers_by_image(image_id: str, client: DockerClient) -> t.List[Container]:

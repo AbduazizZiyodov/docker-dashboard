@@ -11,11 +11,8 @@ from starlette.responses import Response, JSONResponse
 
 from containers.utils import container_as_dict
 from .utils import (
-    get_tags,
     image_as_dict,
-    sort_tag_versions,
     filter_containers_by_image,
-
 )
 from .websocket.endpoint import PullImages
 from .schemas import DockerSearchRequest, DockerPullRequest
@@ -76,23 +73,6 @@ async def get_containers_by_image(request: Request) -> JSONResponse:
     return JSONResponse(container_as_dict(containers))
 
 
-async def get_all_tags(request: Request) -> JSONResponse:
-    request_body: dict = await request.json()
-    repository = request_body.get("repository")
-
-    tags = await get_tags(repository, client)
-
-    if not isinstance(tags, list):
-        return JSONResponse(
-            [],
-            status_code=status.HTTP_404_NOT_FOUND
-        )
-
-    tags = sort_tag_versions(tags)
-
-    return JSONResponse(tags)
-
-
 image_routes = [
     Route("/api/images", get_images, methods=["GET"]),
     Route("/api/images/{image_id:str}", get_image, methods=["GET"]),
@@ -105,6 +85,5 @@ image_routes = [
         get_containers_by_image, methods=["GET"]
     ),
     Route("/api/images/search", search_image, methods=["POST"]),
-    Route("/api/images/get-tags", get_all_tags, methods=["POST"]),
     WebSocketRoute("/api/images/pull", PullImages),
 ]
