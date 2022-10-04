@@ -37,14 +37,8 @@ export class PullImageComponent implements OnInit {
       this.pulledVersions = images.filter(
         (image: Image) => image.name == this.repository
       );
+      this.isLoading = false;
     });
-
-    this.imageService
-      .getAllTags(this.repository)
-      .subscribe((tags: string[]) => {
-        this.tags = tags;
-        this.isLoading = false;
-      });
   }
 
   addImageToTasks(): void {
