@@ -43,10 +43,4 @@ export class ImageService {
       tag: tag,
     });
   }
-
-  getAllTags(repository: string) {
-    return this.http.post<string[]>(`${this.api}/images/get-tags`, {
-      repository: repository,
-    });
-  }
 }
