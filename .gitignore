@@ -1,6 +1,6 @@
 builds/
 releases/
-create_release.sh
+scripts/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
