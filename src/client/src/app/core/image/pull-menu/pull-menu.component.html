@@ -4,12 +4,12 @@
   </h2>
 
   <form [formGroup]="searchForm">
-    <div class="input-group mb-3 w-75 m-auto">
-      <div class="input-group auto" style="width: 17%; margin-right: 5px">
-        <small class="form-label m-1">Limit (results)</small>
+    <div class="input-group mb-3 m-auto search-bar">
+      <div class="input-group auto" style="width: 10%; margin-right: 3px">
         <input
           type="text"
           class="form-control"
+          placeholder="Limit"
           aria-label="limit"
           formControlName="limit"
           (submit)="getSearchResults()"
