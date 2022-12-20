@@ -8,9 +8,9 @@ class DockerSearchRequest(BaseModel):
 
 
 class DockerPullRequest(BaseModel):
+    action: str
     repository: str
     tag: Optional[str] = "latest"
-    action: str
 
     @property
     def repo_with_tag(self):
