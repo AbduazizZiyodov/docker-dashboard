@@ -1,12 +1,11 @@
 import json
 import typing as t
+from pydantic import ValidationError
+from docker.errors import DockerException
 
 from starlette.responses import JSONResponse
 from starlette.exceptions import HTTPException
 
-from pydantic import ValidationError
-
-from docker.errors import DockerException
 
 
 async def http_exception_handler(

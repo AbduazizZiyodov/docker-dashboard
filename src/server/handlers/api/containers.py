@@ -1,20 +1,19 @@
-import docker
 import typing as t
 
-import starlette.status as status
-
-from starlette.routing import Route
-from starlette.requests import Request
-from starlette.responses import Response, JSONResponse
+import docker
 from docker.models.containers import Container
 
-from .utils import container_as_dict
-from .schemas import ContainerOptions
+import starlette.status as status
+from starlette.requests import Request
+from starlette.responses import Response, JSONResponse
+
+from server.utils.api import container_as_dict
+from server.schemas.container import ContainerOptions
 
 client = docker.from_env()
 
 
-async def get_containers(request: Request) -> JSONResponse:
+async def get_containers(_) -> JSONResponse:
     containers: t.List[Container] = client.containers.list(all=True)
     response = container_as_dict(containers)
 
@@ -79,31 +78,3 @@ async def get_logs(request: Request) -> JSONResponse:
     logs = container.logs().decode("utf-8")
 
     return JSONResponse({"logs": logs})
-
-container_routes = [
-    Route("/api/containers", get_containers, methods=["GET"]),
-    Route(
-        "/api/containers/{container_id:str}",
-        get_container, methods=["GET"]
-    ),
-    Route(
-        "/api/containers/run",
-        run_container, methods=["POST"]
-    ),
-    Route(
-        "/api/containers/{container_id:str}/start",
-        start_stopped_container, methods=["GET"]
-    ),
-    Route(
-        "/api/containers/{container_id:str}/stop",
-        stop_container, methods=["GET"]
-    ),
-    Route(
-        "/api/containers/{container_id:str}/delete",
-        delete_container, methods=["DELETE"]
-    ),
-    Route(
-        "/api/containers/{container_id:str}/logs",
-        get_logs, methods=["GET"]
-    ),
-]
