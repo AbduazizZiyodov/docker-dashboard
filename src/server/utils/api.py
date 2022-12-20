@@ -1,14 +1,8 @@
-import json
 import typing as t
-from pydantic import ValidationError
 
 from docker import DockerClient
 from docker.models.images import Image
 from docker.models.containers import Container
-
-from .schemas import DockerPullRequest
-
-NoneType = type(None)
 
 
 def parse_image_name(image: Image) -> str:
@@ -36,9 +30,9 @@ def image_as_dict(
     additional_info: bool = False,
 ) -> dict:
     def build_dict(image: Image):
+        image_dict: dict = dict()
         image_name = parse_image_name(image)
         attrs: list[str] = ["id", "short_id", "labels"]
-        image_dict: dict = dict()
 
         if len(image.tags) == 0:
             image_dict["name"] = image_name
@@ -62,18 +56,28 @@ def image_as_dict(
     return build_dict(images)
 
 
-def filter_containers_by_image(image_id: str, client: DockerClient) -> t.List[Container]:
+def filter_containers_by_image(image_short_id: str, client: DockerClient)\
+        -> t.List[Container]:
     filter_results = filter(
-        lambda container: container.image.short_id == image_id,
+        lambda container: container.image.short_id == image_short_id,
         client.containers.list(all=True)
     )
 
     return list(filter_results)
 
 
-async def validate_websocket_request(data: dict):
-    try:
-        body = DockerPullRequest(**data)
-        return body, None
-    except ValidationError as exc:
-        return None, {"detail": json.loads(exc.json())}
+def container_as_dict(containers: t.Union[t.List[Container], Container]) -> dict:
+    def convert(container: Container) -> dict:
+        return dict(
+            id=container.id,
+            name=container.name,
+            status=container.status,
+            short_id=container.short_id,
+            labels=container.labels,
+            image=image_as_dict(container.image)
+        )
+
+    if isinstance(containers, list):
+        return list(map(convert, containers))
+
+    return convert(containers)
