@@ -1,33 +1,35 @@
 import pytest
-
 from .client import *
 
 
-client = CustomAsyncTestClient()
-TEST_IMAGE_NAME = "nginx"
-TEST_PULL_IMAGE = "hello-world"
+def filter_images(images: list) -> dict:
+    return list(
+        filter(
+            lambda image: image["name"] == TEST_IMAGE_NAME, images
+        )
+    )
 
 
-async def test_get_images():
+async def test_get_images(client):
     response = await client.get("images")
 
     assert response.status_code == 200
     assert response.text is not None
 
-    pytest.IMAGE_ID = response.json()[0]["id"]
+    pytest.IMAGE_ID = filter_images(response.json())[0]["short_id"]
 
 
-async def test_get_image():
+async def test_get_image(client):
     response = await client.get(f"images/{pytest.IMAGE_ID}")
 
     assert response.status_code == 200
-    assert response.json()["id"] == pytest.IMAGE_ID
+    assert response.json()["short_id"] == pytest.IMAGE_ID
 
 
-async def test_search_image():
+async def test_search_image(client):
     response = await client.post(
-        f"images/search",
-        {"term": TEST_IMAGE_NAME}
+        "images/search",
+        json={"term": TEST_IMAGE_NAME}
     )
 
     assert response.status_code == 200
@@ -37,10 +39,10 @@ async def test_search_image():
     ]
 
 
-async def test_get_containers_by_image():
+async def test_get_containers_by_image(client):
     response = await client.post(
         "containers/run",
-        {"image": TEST_IMAGE_NAME}
+        json={"image": TEST_IMAGE_NAME}
     )
 
     assert response.status_code == 201
@@ -62,16 +64,8 @@ async def test_get_containers_by_image():
     assert response.status_code == 204
 
 
-async def test_pull_images():
-    response = await client.post(
-        "images/pull",
-        {"repository": TEST_PULL_IMAGE}
-    )
-    assert response.status_code == 200
-    assert response.json()["name"].startswith(TEST_PULL_IMAGE)
 
-
-async def test_delete_image():
+async def test_delete_image(client):
     response = await client.delete(
         f"images/{TEST_PULL_IMAGE}/delete"
     )

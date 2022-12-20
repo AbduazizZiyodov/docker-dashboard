@@ -1,65 +1,37 @@
-import httpx
-import typing as t
+import pytest
+from httpx import AsyncClient
+from server.asgi import application
+from starlette.testclient import TestClient, WebSocketTestSession
 
 
-class CustomAsyncTestClient:
-    API_URL: str = "http://127.0.0.1:2121/api"
-
-    async def send_request(
-        self,
-        method: str,
-        endpoint: str,
-        data: t.Optional[dict] = {},
-        headers: t.Optional[httpx.Headers] = httpx.Headers({})
-    ) -> httpx.Response:
-
-        url: str = f"{self.API_URL}/{endpoint}"
-
-        async with httpx.AsyncClient() as client:
-            response: httpx.Response = await client\
-                .request(method, url, json=data, headers=headers, timeout=60 * 5)
-
-        return response
-
-    async def get(
-        self,
-        endpoint: str,
-        data: t.Optional[dict] = {},
-        headers: t.Optional[httpx.Headers] = httpx.Headers({})
-    ) -> httpx.Response:
-        return await self.send_request("GET", endpoint, data, headers)
-
-    async def post(
-        self,
-        endpoint: str,
-        data: t.Optional[dict] = {},
-        headers: t.Optional[httpx.Headers] = httpx.Headers({})
-    ) -> httpx.Response:
-        return await self.send_request("POST", endpoint, data, headers)
-
-    async def put(
-        self,
-        endpoint: str,
-        data: t.Optional[dict] = {},
-        headers: t.Optional[httpx.Headers] = httpx.Headers({})
-    ) -> httpx.Response:
-        return await self.send_request("PUT", endpoint, data, headers)
-
-    async def patch(
-        self,
-        endpoint: str,
-        data: t.Optional[dict] = {},
-        headers: t.Optional[httpx.Headers] = httpx.Headers({})
-    ) -> httpx.Response:
-        return await self.send_request("PATCH", endpoint, data, headers)
-
-    async def delete(
-        self,
-        endpoint: str,
-        data: t.Optional[dict] = {},
-        headers: t.Optional[httpx.Headers] = httpx.Headers({})
-    ) -> httpx.Response:
-        return await self.send_request("DELETE", endpoint, data, headers)
+TEST_IMAGE_NAME: str = "nginx"
+TEST_PULL_IMAGE: str = "hello-world"
+TEST_IMAGE_FULLNAME: str = "nginx:1.18-alpine"
 
 
-__all__ = ["CustomAsyncTestClient", ]
+@pytest.fixture
+def client():
+    global application
+
+    return AsyncClient(
+        app=application,
+        timeout=60*2,  # seconds
+        base_url="http://127.0.0.1:2121/api/"
+    )
+
+
+@pytest.fixture
+def websocket_client() -> WebSocketTestSession:
+    global application
+    client = TestClient(application)
+    with client.websocket_connect('/websocket/images/pull') as websocket:
+        return websocket
+
+
+__all__ = [
+    "client",
+    "websocket_client",
+    "TEST_IMAGE_NAME",
+    "TEST_PULL_IMAGE",
+    "TEST_IMAGE_FULLNAME"
+]

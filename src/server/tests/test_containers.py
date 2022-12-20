@@ -1,24 +1,19 @@
 import pytest
-from rich import print
-
 from .client import *
 
-TEST_IMAGE_NAME: str = "nginx"
-client = CustomAsyncTestClient()
 
-
-async def test_get_containers():
+async def test_get_containers(client):
     response = await client.get("containers")
 
     assert response.status_code == 200
     assert response.text is not None
 
 
-async def test_run_container():
+async def test_run_container(client):
 
     response = await client.post(
         "containers/run",
-        {"image": TEST_IMAGE_NAME}
+        json={"image": TEST_IMAGE_NAME}
     )
     body = response.json()
 
@@ -29,14 +24,14 @@ async def test_run_container():
     pytest.CONTAINER_ID = body["id"]
 
 
-async def test_get_container():
+async def test_get_container(client):
     response = await client.get(f"containers/{pytest.CONTAINER_ID}")
 
     assert response.status_code == 200
     assert response.json()["id"] == pytest.CONTAINER_ID
 
 
-async def test_stop_container():
+async def test_stop_container(client):
     response = await client.get(f"containers/{pytest.CONTAINER_ID}/stop")
 
     assert response.status_code == 200
@@ -49,7 +44,7 @@ async def test_stop_container():
     assert body["status"] == "exited"
 
 
-async def test_start_container():
+async def test_start_container(client):
     response = await client.get(f"containers/{pytest.CONTAINER_ID}/start")
 
     assert response.status_code == 200
@@ -62,7 +57,7 @@ async def test_start_container():
     assert body["status"] == "running"
 
 
-async def test_delete_container():
+async def test_delete_container(client):
     response = await client.delete(f"containers/{pytest.CONTAINER_ID}/delete")
 
     assert response.status_code == 204
