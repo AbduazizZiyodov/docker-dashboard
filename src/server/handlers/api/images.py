@@ -6,21 +6,20 @@ from docker.models.containers import Container
 
 import starlette.status as status
 from starlette.requests import Request
-from starlette.routing import Route, WebSocketRoute
 from starlette.responses import Response, JSONResponse
 
-from containers.utils import container_as_dict
-from .utils import (
+from server.utils.api import (
     image_as_dict,
-    filter_containers_by_image,
+    container_as_dict,
+    filter_containers_by_image
 )
-from .websocket.endpoint import PullImages
-from .schemas import DockerSearchRequest, DockerPullRequest
+
+from server.schemas import DockerSearchRequest, DockerPullRequest
 
 client = docker.from_env()
 
 
-async def get_images(request: Request) -> JSONResponse:
+async def get_images(_) -> JSONResponse:
     images: t.List[Image] = client.images.list(all=True)
     response = image_as_dict(images, client)
 
@@ -41,7 +40,7 @@ async def delete_image(request: Request) -> JSONResponse:
         request.path_params["image_id"]
     )
 
-    client.images.remove(image.short_id)
+    client.images.remove(image.short_id, force=True)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -71,19 +70,3 @@ async def get_containers_by_image(request: Request) -> JSONResponse:
     )
 
     return JSONResponse(container_as_dict(containers))
-
-
-image_routes = [
-    Route("/api/images", get_images, methods=["GET"]),
-    Route("/api/images/{image_id:str}", get_image, methods=["GET"]),
-    Route(
-        "/api/images/{image_id:str}/delete",
-        delete_image, methods=["DELETE"]
-    ),
-    Route(
-        "/api/images/{image_id:str}/containers",
-        get_containers_by_image, methods=["GET"]
-    ),
-    Route("/api/images/search", search_image, methods=["POST"]),
-    WebSocketRoute("/api/images/pull", PullImages),
-]
