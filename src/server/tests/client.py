@@ -1,8 +1,6 @@
 import pytest
 from httpx import AsyncClient
 from server.asgi import application
-from starlette.testclient import TestClient, WebSocketTestSession
-
 
 TEST_IMAGE_NAME: str = "nginx"
 TEST_PULL_IMAGE: str = "hello-world"
@@ -20,17 +18,9 @@ def client():
     )
 
 
-@pytest.fixture
-def websocket_client() -> WebSocketTestSession:
-    global application
-    client = TestClient(application)
-    with client.websocket_connect('/websocket/images/pull') as websocket:
-        return websocket
-
-
 __all__ = [
     "client",
-    "websocket_client",
+    "application",
     "TEST_IMAGE_NAME",
     "TEST_PULL_IMAGE",
     "TEST_IMAGE_FULLNAME"
