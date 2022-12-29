@@ -5,6 +5,9 @@ from server.schemas.image import DockerPullRequest
 
 
 class Task:
+    """Simple class that represents tasks for pulling docker images.
+    """
+
     def __init__(self, repository: str, tag: str) -> None:
         self.repository, self.tag = repository, tag
         self.stream_data, self.status = "", ""
@@ -13,6 +16,8 @@ class Task:
         return super().__getattribute__(__name)
 
     def __eq__(self, __obj: t.Any) -> bool:
+        """Overload equality operator.
+        """
         if isinstance(type(__obj), (ModelMetaclass)):
             __obj = __obj.dict()
 
@@ -26,6 +31,8 @@ class Task:
         return False
 
     def to_dict(self) -> t.Dict[str, str]:
+        """From object to dictionary
+        """
         return dict(
             repository=self.repository,
             tag=self.tag,
@@ -35,16 +42,22 @@ class Task:
 
 
 class Manager:
-    tasks: t.List[Task] = []
+    tasks: t.List[Task] = list()
 
     def list(self) -> t.List[Task]:
-        return [task.to_dict() for task in self.tasks]
+        """Convert all tasks to python dict.
+        """
+        return list(map(lambda task: task.to_dict(), self.tasks))
 
     def create(self, body: DockerPullRequest) -> None:
         if not self.check_existence_of_task(body):
             self.tasks.append(Task(body.repository, body.tag))
 
     def update(self, body: DockerPullRequest, stream: dict) -> None:
+        """In the pulling progress, application should update
+        stream records. This method takes stream as an argument, 
+        adds it to the task's stream data by formatting it.
+        """
         for task in self.tasks:
             if task == body:
                 status, stream = self.format_stream_body(stream)
