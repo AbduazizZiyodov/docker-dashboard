@@ -14,7 +14,7 @@ from server.utils.api import (
     filter_containers_by_image
 )
 
-from server.schemas import DockerSearchRequest, DockerPullRequest
+from server.models import DockerSearchRequest, DockerPullRequest
 
 client = docker.from_env()
 

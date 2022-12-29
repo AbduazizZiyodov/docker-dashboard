@@ -1,7 +1,7 @@
 import typing as t
 from pydantic.main import ModelMetaclass
 
-from server.schemas.image import DockerPullRequest
+from server.models.image import DockerPullRequest
 
 
 class Task:

@@ -12,6 +12,3 @@ class DockerPullRequest(BaseModel):
     repository: str
     tag: Optional[str] = "latest"
 
-    @property
-    def repo_with_tag(self):
-        return f"{self.repository}:{self.tag}"

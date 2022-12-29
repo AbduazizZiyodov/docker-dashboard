@@ -6,7 +6,7 @@ from starlette.websockets import WebSocket
 from starlette.endpoints import WebSocketEndpoint
 
 from server.utils.tasks import Manager
-from server.schemas.image import DockerPullRequest
+from server.models.image import DockerPullRequest
 from server.utils.websocket import validate_websocket_request
 
 

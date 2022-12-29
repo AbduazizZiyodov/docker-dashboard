@@ -7,7 +7,7 @@ import starlette.status as status
 from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
 
-from server.schemas import ContainerOptions
+from server.models import ContainerOptions
 from server.utils.api import container_as_dict
 
 client = docker.from_env()
