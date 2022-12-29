@@ -1,3 +1,4 @@
+# All REST-API handlers
 from .containers import (
     get_container,
     get_containers,
@@ -5,13 +6,13 @@ from .containers import (
     run_container,
     start_stopped_container,
     stop_container,
-    delete_container
+    remove_container
 )
 
 from .images import (
     get_image,
     get_images,
-    delete_image,
+    remove_image,
     search_image,
     get_containers_by_image,
 )
@@ -25,11 +26,11 @@ __all__ = [
     "run_container",
     "start_stopped_container",
     "stop_container",
-    "delete_container",
+    "remove_container",
     # images
     "get_image",
     "get_images",
-    "delete_image",
+    "remove_image",
     "search_image",
     "get_containers_by_image",
 ]

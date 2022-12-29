@@ -1,5 +1,7 @@
+# Defined All API(websocket) routes
 from .api import *
 from .websockets import *
+
 from starlette.routing import (
     Route,
     WebSocketRoute
@@ -26,7 +28,7 @@ container_routes = [
     ),
     Route(
         "/api/containers/{container_id:str}/delete",
-        delete_container, methods=["DELETE"]
+        remove_container, methods=["DELETE"]
     ),
     Route(
         "/api/containers/{container_id:str}/logs",
@@ -39,7 +41,7 @@ image_routes = [
     Route("/api/images/{image_id:str}", get_image, methods=["GET"]),
     Route(
         "/api/images/{image_id:str}/delete",
-        delete_image, methods=["DELETE"]
+        remove_image, methods=["DELETE"]
     ),
     Route(
         "/api/images/{image_id:str}/containers",

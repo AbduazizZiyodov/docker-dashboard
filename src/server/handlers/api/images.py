@@ -20,6 +20,9 @@ client = docker.from_env()
 
 
 async def get_images(_) -> JSONResponse:
+    """Get list of all docker images.
+    * `docker images || docker image ls`
+    """
     images: t.List[Image] = client.images.list(all=True)
     response = image_as_dict(images, client)
 
@@ -27,6 +30,9 @@ async def get_images(_) -> JSONResponse:
 
 
 async def get_image(request: Request) -> JSONResponse:
+    """Get a specific docker image by IMAGE_ID.
+    * `docker images || docker image ls ... [FILTER OPTIONS]`
+    """
     image: Image = client.images.get(
         request.path_params["image_id"]
     )
@@ -35,7 +41,10 @@ async def get_image(request: Request) -> JSONResponse:
     return JSONResponse(response)
 
 
-async def delete_image(request: Request) -> JSONResponse:
+async def remove_image(request: Request) -> JSONResponse:
+    """Remove a specific docker image by IMAGE_ID (force mode!!!).
+    * `docker rmi -f`
+    """
     image: Image = client.images.get(
         request.path_params["image_id"]
     )
@@ -46,6 +55,10 @@ async def delete_image(request: Request) -> JSONResponse:
 
 
 async def search_image(request: Request) -> JSONResponse:
+    """Perform search for docker image. Search options defined
+    in the DockerSearchRequest pydantic model.
+    * `docker search [OPTIONS]`
+    """
     request_body: DockerSearchRequest = DockerSearchRequest(
         **await request.json()
     )
@@ -55,18 +68,12 @@ async def search_image(request: Request) -> JSONResponse:
     return JSONResponse(results)
 
 
-async def pull_image(request: Request) -> JSONResponse:
-    request_body = DockerPullRequest(**await request.json())
-    image: Image = client.images.pull(**request_body.dict())
-
-    return JSONResponse(image_as_dict(image))
-
-
 async def get_containers_by_image(request: Request) -> JSONResponse:
-    image_id: str = request.path_params["image_id"]
-
+    """Get list of containers by IMAGE_ID.
+    * `docker ps -a ... [FILTER OPTIONS]`
+    """
     containers: t.List[Container] = filter_containers_by_image(
-        image_id, client
+        request.path_params["image_id"], client
     )
 
     return JSONResponse(container_as_dict(containers))
