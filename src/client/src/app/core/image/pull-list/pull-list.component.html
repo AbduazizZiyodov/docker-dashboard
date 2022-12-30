@@ -28,50 +28,53 @@
         No pending tasks yet ..
       </blockquote>
 
-      <div
-        class="list-group-item p-3 m-auto mb-2"
-        style="width: 77%"
-        *ngFor="let task of tasks; let i = index"
-      >
-        <div class="mb-2">
-          <span class="fw-bold">{{ task.repository }}</span>
+      <ul class="list-group list-group-light">
+        <div class="list-group-item m-auto" *ngFor="let task of tasks">
+          <p>
+            <span class="fw-bold">{{ task.repository }}</span>
 
-          <span
-            class="mx-1 p-2 badge dodger-blue-bg rounded-pill text-lowercase"
-          >
-            {{ task.tag }}</span
-          >
-          <button
-            class="btn btn-sm btn-rounded btn-success text-capitalize"
-            (click)="start(task.repository, task.tag)"
-            mdbTooltip="Click for start || continue pulling"
-          >
-            <i class="fas fa-play"></i>
-          </button>
-          <button
-            class="btn btn-sm btn-rounded btn-danger text-capitalize mx-2"
-            (click)="delete(task.repository, task.tag)"
-            [disabled]="task.stream.length != 0"
-          >
-            <i class="fas fa-trash"></i>
-          </button>
-          <button class="btn btn-sm btn-light text-capitalize btn-rounded">
-            {{ task.status }}
-          </button>
-        </div>
+            <span
+              class="mx-1 p-2 badge dodger-blue-bg rounded-pill text-lowercase"
+            >
+              {{ task.tag }}</span
+            >
 
-        <div class="text-left">
-          <textarea
-            #textarea
-            cols="110"
-            rows="2"
-            disabled
-            [(ngModel)]="task.stream"
-            [scrollTop]="textarea.scrollHeight"
-          >
-          </textarea>
+            <button
+              class="btn btn-sm btn-rounded btn-success text-capitalize"
+              (click)="start(task.repository, task.tag)"
+              mdbTooltip="Click for start || continue pulling"
+            >
+              <i class="fas fa-play"></i>
+            </button>
+
+            <button
+              class="btn btn-sm btn-rounded btn-danger text-capitalize mx-2"
+              (click)="delete(task.repository, task.tag)"
+              [disabled]="task.stream_data.length != 0"
+            >
+              <i class="fas fa-trash"></i>
+            </button>
+
+            <button
+              class="btn btn-sm btn-light text-capitalize btn-rounded"
+              *ngIf="task.status"
+            >
+              {{ task.status }}
+            </button>
+          </p>
+          <div class="text-left">
+            <textarea
+              #textarea
+              cols="110"
+              rows="2"
+              disabled
+              [(ngModel)]="task.stream_data"
+              [scrollTop]="textarea.scrollHeight"
+            >
+            </textarea>
+          </div>
         </div>
-      </div>
+      </ul>
     </div>
   </div>
 </div>

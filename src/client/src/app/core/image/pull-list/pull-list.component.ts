@@ -21,36 +21,35 @@ export class PullListComponent implements OnInit {
   ngOnInit(): void {
     this.ws = webSocket(`${environment.wsUrl}/images/pull`);
 
-    this.ws.next({ repository: '', action: 'all' });
+    this.ws.next({ action: 'list' });
     this.ws.asObservable().subscribe((data: any) => {
       this.tasks = data;
     });
   }
   start(repository: string, tag: string): void {
-    this.toastr.warning("Creating & connecting websocket ...")
+    this.toastr.warning('Creating & connecting websocket ...');
     let ws = this.multiplePullingEnabled ? this.createNewSocket() : this.ws;
     ws.next({ repository: repository, tag: tag, action: 'start' });
     ws.asObservable().subscribe((data: any) => {
       this.tasks = data;
     });
-
   }
 
-  delete(repository: string, tag: string) {
+  delete(repository: string, tag: string): void {
     this.ws.next({ repository: repository, tag: tag, action: 'delete' });
     this.ws.asObservable().subscribe((data: any) => {
       this.tasks = data;
     });
   }
 
-  ngOnDestroy() {
-    this.ws.complete();
+  ngOnDestroy(): void {
     this.sockets.forEach((socket: WebSocketSubject<any>) => {
       socket.complete();
     });
+    this.ws.complete();
   }
 
-  createNewSocket() {
+  createNewSocket(): WebSocketSubject<any> {
     let socket = webSocket(`${environment.wsUrl}/images/pull`);
     this.sockets.push(socket);
     return socket;
