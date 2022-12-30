@@ -27,16 +27,15 @@ import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
 
 import { ToastrModule } from 'ngx-toastr';
 import { ClipboardModule } from 'ngx-clipboard';
-import { NgSelectModule } from '@ng-select/ng-select';
 
 import { HttpInterceptorService } from '@services/http-interceptor.service';
 
-import { MenuComponent } from '@core/menu/menu.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 import { LogsComponent } from '@components/logs/logs.component';
 import { AboutComponent } from '@components/about/about.component';
 import { ModalComponent } from '@components/modal/modal.component';
 import { FooterComponent } from '@components/footer/footer.component';
-import { HeaderComponent } from '@components/header/header.component';
+import { MenuComponent } from './core/menu/menu.component';
 import { PullMenuComponent } from '@image/pull-menu/pull-menu.component';
 import { PullImageComponent } from '@image/pull-image/pull-image.component';
 import { ImageListComponent } from '@image/image-list/image-list.component';
@@ -51,11 +50,11 @@ import { RunContainerModalComponent } from '@modals/run-container-modal/run-cont
 @NgModule({
   declarations: [
     AppComponent,
-    MenuComponent,
+    WelcomeComponent,
     LogsComponent,
     ModalComponent,
     FooterComponent,
-    HeaderComponent,
+    MenuComponent,
     NotFoundComponent,
     ContainersModalComponent,
     ConfirmModalComponent,
@@ -95,7 +94,6 @@ import { RunContainerModalComponent } from '@modals/run-container-modal/run-cont
     ClipboardModule,
     ReactiveFormsModule,
     FormsModule,
-    NgSelectModule,
   ],
   providers: [
     {

@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MenuComponent } from '@core/menu/menu.component';
+
 import { repositoryUrlMatcher } from '@core/url_matcher';
 import { LogsComponent } from '@components/logs/logs.component';
 import { AboutComponent } from '@components/about/about.component';
 import { PullMenuComponent } from '@image/pull-menu/pull-menu.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 import { PullListComponent } from '@image/pull-list/pull-list.component';
 import { PullImageComponent } from '@image/pull-image/pull-image.component';
 import { ImageListComponent } from '@image/image-list/image-list.component';
@@ -14,7 +15,7 @@ import { ImageDetailedComponent } from '@image/image-detailed/image-detailed.com
 import { ContainerListComponent } from '@containers/container-list/container-list.component';
 
 const routes: Routes = [
-  { path: '', component: MenuComponent },
+  { path: '', component: WelcomeComponent },
   { path: 'about', component: AboutComponent },
   { path: 'logs/:id', component: LogsComponent },
   { path: 'images', component: ImageListComponent },
