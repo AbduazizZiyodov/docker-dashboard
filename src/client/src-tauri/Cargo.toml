@@ -1,23 +1,23 @@
 [package]
-name = "app"
+name = "docker-dashboard"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "Simple lightweight GUI application for working with Docker"
+authors = ["abduaziz.ziyodov@mail.ru"]
 license = ""
 repository = ""
-default-run = "app"
+default-run = "docker-dashboard"
 edition = "2021"
-rust-version = "1.57"
+rust-version = "1.59"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.1.1", features = [] }
+tauri-build = { version = "1.2.1", features = [] }
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.1.1", features = ["api-all"] }
+tauri = { version = "1.2.2", features = ["system-tray"] }
 
 [features]
 # by default Tauri runs in production mode
@@ -26,3 +26,7 @@ default = [ "custom-protocol" ]
 # this feature is used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = [ "tauri/custom-protocol" ]
+
+[profile.release.package.wry]
+debug = false
+debug-assertions = false
