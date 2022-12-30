@@ -14,7 +14,7 @@ export interface Task {
   tag: string;
   repository: string;
 
-  stream: string;
+  stream_data: string;
   status: string;
   action?: string;
 }
