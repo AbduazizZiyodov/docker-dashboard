@@ -1,32 +1,59 @@
-<div class="container mt-1">
-  <div
-    class="row"
-    data-aos="fade-up"
-    data-aos-duration="500"
-    data-aos-anchor-placement="top-bottom"
-  >
-    <div class="card">
-      <div class="card-body">
-        <h4 class="navbar-text dodger-blue card-title">Welcome!</h4>
-        <div class="text-center">
-          <img
-            src="assets/images/docker.png"
-            class="img-fluid rounded-pill img-thumbnail"
-            width="500px"
-            alt=""
-          />
-        </div>
+<nav class="navbar navbar-expand-lg fixed-top bg-light shadow-1-strong">
+  <div class="container">
+    <h1 class="navbar-text fw-bold dodger-blue" routerLink="">
+      <img src="assets/icons/Icon.svg" width="55px" /> Docker Dashboard
+    </h1>
+  </div>
+</nav>
 
-        <div class="border p-2">
-          <p>
-            Thanks for using <strong>Docker Dashboard!</strong> I hope this
-            application will help with your development process. I opened a
-            discussion on GitHub. I would be very happy if you write any ideas,
-            feedback & suggestions.
-          </p>
-          <figcaption class="blockquote-footer">Abduaziz Ziyodov</figcaption>
-        </div>
-      </div>
+<div class="sidebar fixed" #sidebar>
+  <span class="hide-btn" (click)="hideOrShow(sidebar, content)">
+    <i class="far fa-eye" *ngIf="isHidden"></i>
+    <i class="far fa-eye-slash" *ngIf="!isHidden"></i>
+  </span>
+
+  <ul class="list-group text-center p-2">
+    <hr />
+    <li class="pointer list-group-item" routerLink="containers">
+      <span class="text-gray"><i class="fas fa-cube"></i> Containers</span>
+    </li>
+    <hr />
+    <li class="pointer list-group-item" routerLink="images">
+      <span class="text-gray"> <i class="fas fa-box-open"></i> Images</span>
+    </li>
+    <hr />
+    <li class="pointer list-group-item" routerLink="pull-list">
+      <span class="text-gray">
+        <i class="fas fa-cloud-download-alt"></i> Pulls
+      </span>
+      <span class="badge dodger-blue-bg">beta</span>
+    </li>
+
+    <hr />
+
+    <li class="pointer list-group-item" style="border: none" routerLink="about">
+      <span class="text-gray"> <i class="fas fa-info-circle"></i> About</span>
+    </li>
+    <hr />
+  </ul>
+</div>
+
+<div class="content" #content>
+  <div class="row">
+    <div class="col">
+      <button
+        class="btn btn-sm btn-success float-start rounded m-3"
+        (click)="back()"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button
+        class="btn btn-sm btn-success float-end rounded m-3"
+        (click)="next()"
+      >
+        <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
   </div>
+  <router-outlet></router-outlet>
 </div>

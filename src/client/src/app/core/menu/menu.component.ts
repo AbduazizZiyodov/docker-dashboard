@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -6,5 +8,25 @@ import { Component } from '@angular/core';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent {
-  constructor() {}
+  hideSize: string = '30px';
+  showSize: string = '250px';
+  isHidden: boolean = false;
+
+  constructor(private location: Location, private router: Router) {}
+
+  back() {
+    this.location.back();
+  }
+  next() {
+    this.location.forward();
+  }
+
+  hideOrShow(sidebar: HTMLDivElement, content: HTMLDivElement): void {
+    if (this.isHidden) {
+      sidebar.style.width = content.style.marginLeft = this.showSize;
+    } else {
+      sidebar.style.width = content.style.marginLeft = this.hideSize;
+    }
+    this.isHidden = !this.isHidden;
+  }
 }
