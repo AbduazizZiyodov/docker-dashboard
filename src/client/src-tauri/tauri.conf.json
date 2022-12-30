@@ -1,22 +1,26 @@
 {
   "build": {
-    "beforeBuildCommand": "npm run build",
+    "beforeBuildCommand": "npm build",
     "beforeDevCommand": "npm start",
     "devPath": "http://localhost:4200",
     "distDir": "../dist"
   },
   "package": {
-    "productName": "Docker Dashboard",
-    "version": "2.0.0"
+    "productName": "docker-dashboard",
+    "version": "1.4.0"
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "all": false
+    },
+    "systemTray": {
+      "iconPath": "icons/32x32.png",
+      "iconAsTemplate": true
     },
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "2022 Abduaziz Ziyodov",
+      "copyright": "Abduaziz Ziyodov",
       "deb": {
         "depends": []
       },
@@ -27,8 +31,8 @@
         "icons/128x128.png",
         "icons/256x256.png"
       ],
-      "identifier": "uz.abduaziz",
-      "longDescription": "A simple lightweight application that makes managing containers & images on Docker easy!",
+      "identifier": "com.tauri.dev",
+      "longDescription": "",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -37,7 +41,7 @@
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "GUI for docker",
+      "shortDescription": "Simple lightweight GUI application for working with Docker",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
@@ -54,10 +58,11 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 550,
+        "height": 600,
         "resizable": false,
         "title": "Docker Dashboard",
-        "width": 1060
+        "width": 1050,
+        "center": true
       }
     ]
   }
