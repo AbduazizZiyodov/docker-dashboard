@@ -1,75 +1,30 @@
 # 🐳 **Docker Dashboard**
 
-**Demo**: https://www.youtube.com/watch?v=iX0J5rDwA5k
-
-> _A simple lightweight application that makes managing containers & images on Docker easy!_
+> **_Simple lightweight GUI application for working with Docker!_**
 
 Perhaps it can be a good alternative to Docker Desktop in the future 😂
 
-**Requirements**:
+## **📄 Requirements**:
 
-- Python +3.8
-- Operating system: `ubuntu` (tested +20.04 LTS).
+- Python **+3.8**
+- Operating system: `ubuntu` (tested `20.04 LTS`, `22.04 LTS`).
 
-## **Installation**
+## **📦 Installation**
 
 Go to the [releases](https://github.com/AbduazizZiyodov/docker-dashboard/releases). Download the latest version (`docker-dashboard-*.tar.gz`) and extract archive.
 
 ```bash
 $ mkdir docker-dashboard/
-$ tar -xf docker-dashboard-*.tar.gz  -C docker-dashboard/
+$ tar -xf docker-dashboard-*.tar.gz -C docker-dashboard/
 ```
 
 Open the directory on the terminal and run this command:
 
 ```bash
 $ cd docker-dashboard/
-$ pip3 install -U rich && sudo python3 install.py
+$ sudo ./install.sh
 ```
-
-![](assets/install.png)
-
-## **Development**
-
-Clone this repository
-
-```bash
-$ git clone https://github.com/AbduazizZiyodov/docker-dashboard
-```
-
-Running:
-
-- `backend` (src/server):
-  ```bash
-  $ python3 manage.py serve
-  ```
-- `tests` (src/server/tests)
-  ```bash
-  $ pytest
-  ```
-- `frontend` (src/client)
-  ```bash
-  $ ng serve
-  ```
-
-### **Build**
-
-Building debian package:
-
-```bash
-$ cd docker-dashboard/src/client
-$ sudo ./build_linux.sh
-```
-
-![](/assets/build.png)
-
-Then, for full installation run `install.py`
-
-```bash
-$ sudo python3 install.py
-```
-
-![](/assets/install_2.png)
+![](/assets/install.png)
 
 - **Supervisor status**:
   ![](/assets/supervisor_status.png)
@@ -77,7 +32,76 @@ $ sudo python3 install.py
 - **API status**:
   ![](/assets/api_status.png)
 
-## **Testing**
+
+
+## **🔧 Development**
+
+Clone this repository
+
+```bash
+$ git clone https://github.com/AbduazizZiyodov/docker-dashboard
+```
+
+**Running 🚀**
+
+- `backend` (from src/):
+  ```bash
+  $ uvicorn server.asgi:application --reload --port 2121 # install dependencies from requirements.txt
+  ```
+- `tests` (from src/server/)
+  ```bash
+  $ pytest # test_requirements.txt
+  ```
+- `frontend` (from src/client)
+  ```bash
+  $ npm start # or ng serve (global)
+  ```
+
+## **🏗️ Build**
+
+First, you have to install some system dependencies,`rust` and `cargo`
+
+**Install system dependencies**
+
+```bash
+$ sudo apt update
+$ sudo apt install libwebkit2gtk-4.0-dev \
+    build-essential \
+    curl \
+    libssl-dev \
+    libgtk-3-dev \
+    libayatana-appindicator3-dev \
+    librsvg2-dev
+```
+
+**Install rust 🦀**
+
+```bash
+$ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+$ rustup update # for updating
+```
+
+**Install cargo📦**
+
+```bash
+$ sudo apt install cargo
+```
+
+### **🧮 Commands**
+
+For testing client-side. You can view, or fix something.
+
+```bash
+$ cargo tauri dev
+```
+
+Build client-side. You should check `src/client/src-tauri/target` folder.
+
+```bash
+$ cargo tauri build
+```
+
+## **🧪 Testing**
 
 Used `pytest`, (tests -> src/server/tests)
 
