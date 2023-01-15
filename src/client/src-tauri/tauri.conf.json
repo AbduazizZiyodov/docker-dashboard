@@ -1,13 +1,13 @@
 {
   "build": {
-    "beforeBuildCommand": "npm build",
+    "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm start",
     "devPath": "http://localhost:4200",
     "distDir": "../dist"
   },
   "package": {
     "productName": "docker-dashboard",
-    "version": "1.4.0"
+    "version": "2.0.0"
   },
   "tauri": {
     "allowlist": {
@@ -31,7 +31,7 @@
         "icons/128x128.png",
         "icons/256x256.png"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "abduaziz.ziyodov",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
