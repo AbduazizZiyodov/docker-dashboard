@@ -13,7 +13,7 @@ import { Observable, of, throwError } from 'rxjs';
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
-  constructor(private router: Router, private toastr: ToastrService) {}
+  constructor(private router: Router, private toastr: ToastrService) { }
 
   intercept(
     request: HttpRequest<any>,
@@ -53,11 +53,10 @@ export class HttpInterceptorService implements HttpInterceptor {
               break;
           }
         }
-        if (handled) {
-          return of(httpError);
-        } else {
-          return throwError(httpError);
-        }
+
+        return handled ?
+          of(httpError) : throwError(httpError);
+
       })
     );
   }

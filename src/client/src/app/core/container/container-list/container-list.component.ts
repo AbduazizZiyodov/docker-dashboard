@@ -17,9 +17,8 @@ import { switchMap } from 'rxjs/operators';
   styleUrls: ['./container-list.component.scss'],
 })
 export class ContainerListComponent implements OnInit {
-  containers!: Container[];
+  containers$ = new Observable<Container[]>();
   timerSubscription!: Subscription;
-  subscription!: Subscription;
   modalRef: MdbModalRef<ModalComponent> | null = null;
 
   status: Status = {
@@ -40,7 +39,7 @@ export class ContainerListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.subscription = timer(0, 3000)
+    this.timerSubscription = timer(0, 3000)
       .pipe(switchMap(() => this.containerService.getContainers()))
       .subscribe((data: Container[]) => {
         this.containers = data.reverse();
