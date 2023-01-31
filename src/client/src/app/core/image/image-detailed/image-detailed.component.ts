@@ -12,7 +12,6 @@ import { ModalComponent } from '@components/modal/modal.component';
 @Component({
   selector: 'app-image-detailed',
   templateUrl: './image-detailed.component.html',
-  styleUrls: ['./image-detailed.component.scss'],
 })
 export class ImageDetailedComponent implements OnInit {
   imageId: string = this.route.snapshot.params['id'];

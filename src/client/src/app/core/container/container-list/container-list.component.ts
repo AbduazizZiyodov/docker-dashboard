@@ -17,7 +17,7 @@ import { switchMap } from 'rxjs/operators';
   styleUrls: ['./container-list.component.scss'],
 })
 export class ContainerListComponent implements OnInit {
-  containers$ = new Observable<Container[]>();
+  containers!: Container[];
   timerSubscription!: Subscription;
   modalRef: MdbModalRef<ModalComponent> | null = null;
 
@@ -47,7 +47,7 @@ export class ContainerListComponent implements OnInit {
   }
 
   startContainer(container_id: string) {
-    return this.containerService
+    this.containerService
       .startStoppedContainer(container_id)
       .subscribe((res: any) => {
         this.changeStatus('running', container_id);
@@ -56,12 +56,10 @@ export class ContainerListComponent implements OnInit {
   }
 
   stopContainer(container_id: string) {
-    return this.containerService
-      .stopContainer(container_id)
-      .subscribe((res: any) => {
-        this.changeStatus('exited', container_id);
-        this.toastr.warning(`Container ${container_id} stopped!`);
-      });
+    this.containerService.stopContainer(container_id).subscribe((res: any) => {
+      this.changeStatus('exited', container_id);
+      this.toastr.warning(`Container ${container_id} stopped!`);
+    });
   }
 
   getConfirmModal(container: Container) {
@@ -100,6 +98,6 @@ export class ContainerListComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.timerSubscription.unsubscribe();
   }
 }
