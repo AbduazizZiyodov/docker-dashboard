@@ -47,24 +47,6 @@ import { ContainerListComponent } from '@containers/container-list/container-lis
 import { ContainersModalComponent } from '@modals/containers-modal/containers-modal.component';
 import { RunContainerModalComponent } from '@modals/run-container-modal/run-container-modal.component';
 
-const mdbModules = [
-  MdbAccordionModule,
-  MdbCarouselModule,
-  MdbCheckboxModule,
-  MdbCollapseModule,
-  MdbDropdownModule,
-  MdbFormsModule,
-  MdbModalModule,
-  MdbPopoverModule,
-  MdbRadioModule,
-  MdbRangeModule,
-  MdbRippleModule,
-  MdbScrollspyModule,
-  MdbTabsModule,
-  MdbTooltipModule,
-  MdbValidationModule,
-]
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -89,6 +71,21 @@ const mdbModules = [
     BrowserModule,
     AppRoutingModule,
     RouterModule,
+    MdbAccordionModule,
+    MdbCarouselModule,
+    MdbCheckboxModule,
+    MdbCollapseModule,
+    MdbDropdownModule,
+    MdbFormsModule,
+    MdbModalModule,
+    MdbPopoverModule,
+    MdbRadioModule,
+    MdbRangeModule,
+    MdbRippleModule,
+    MdbScrollspyModule,
+    MdbTabsModule,
+    MdbTooltipModule,
+    MdbValidationModule,
     BrowserAnimationsModule,
     HttpClientModule,
     ToastrModule.forRoot({
@@ -97,7 +94,6 @@ const mdbModules = [
     ClipboardModule,
     ReactiveFormsModule,
     FormsModule,
-    ...mdbModules
   ],
   providers: [
     {
@@ -108,4 +104,4 @@ const mdbModules = [
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

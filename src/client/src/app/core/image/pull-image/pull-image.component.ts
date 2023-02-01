@@ -8,6 +8,7 @@ import { ImageService } from '@services/image.service';
 @Component({
   selector: 'app-pull-image',
   templateUrl: './pull-image.component.html',
+  styleUrls: ['./pull-image.component.scss'],
 })
 export class PullImageComponent implements OnInit {
   tags: string[] = [];

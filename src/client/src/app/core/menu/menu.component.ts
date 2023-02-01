@@ -22,10 +22,11 @@ export class MenuComponent {
   }
 
   hideOrShow(sidebar: HTMLDivElement, content: HTMLDivElement): void {
-    sidebar.style.width = content.style.marginLeft = this.isHidden
-      ? this.showSize
-      : this.hideSize;
-
+    if (this.isHidden) {
+      sidebar.style.width = content.style.marginLeft = this.showSize;
+    } else {
+      sidebar.style.width = content.style.marginLeft = this.hideSize;
+    }
     this.isHidden = !this.isHidden;
   }
 }

@@ -14,10 +14,11 @@ interface Status {
 @Component({
   selector: 'app-containers-modal',
   templateUrl: './containers-modal.component.html',
+  styleUrls: ['./containers-modal.component.scss'],
 })
-export class ContainersModalComponent {
+export class ContainersModalComponent implements OnInit {
   @Input() data!: ModalData;
-
+  
   status: Status = {
     created: 'success',
     restarting: 'warning',
@@ -27,6 +28,9 @@ export class ContainersModalComponent {
     exited: 'danger',
     dead: 'danger',
   };
+  constructor(private containerService: ContainerService) {}
+
+  ngOnInit(): void {}
 
   getStatus(key: keyof Status) {
     return this.status[key];

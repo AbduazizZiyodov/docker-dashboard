@@ -4,11 +4,12 @@ import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  template: `<app-menu></app-menu>`,
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   title = 'client';
-  constructor(private location: Location) { }
+  constructor(private location: Location) {}
   ngOnInit(): void {
     AOS.init();
   }

@@ -9,6 +9,7 @@ import { ContainerService } from '@services/container.service';
 @Component({
   selector: 'app-confirm-modal',
   templateUrl: './confirm-modal.component.html',
+  styleUrls: ['./confirm-modal.component.scss'],
 })
 export class ConfirmModalComponent {
   @Input() data!: ModalData | undefined;
@@ -29,7 +30,7 @@ export class ConfirmModalComponent {
   }
 
   deleteContainer(container_id: string | any) {
-    this.containerService
+    return this.containerService
       .deleteContainer(container_id)
       .subscribe((res: any) => {
         this.toastr.error(`Container ${container_id} deleted!`);

@@ -1,21 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContainerService } from '@services/container.service';
-import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-logs-modal',
-  template: `
-    <div class="text-center" data-aos="flip-up" data-aos-duration="500">
-      <h1 class="fw-bold m-1">Logs</h1>
-      <textarea name="" id="" cols="80" rows="10" disabled>
-    {{ logs$ | asynс }}
-  </textarea>
-    </div>
-  `,
+  templateUrl: './logs.component.html',
+  styleUrls: ['./logs.component.scss'],
 })
 export class LogsComponent implements OnInit {
-  logs$ = new Observable<string>();
+  logs: string = '';
   container_id: string = this.route.snapshot.params['id'];
   constructor(
     private containerService: ContainerService,
@@ -23,8 +16,10 @@ export class LogsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.logs$ = this.containerService
+    this.containerService
       .getLogs(this.container_id)
-      .pipe(map((response: any) => response['logs']));
+      .subscribe((response: any) => {
+        this.logs = response['logs'];
+      });
   }
 }

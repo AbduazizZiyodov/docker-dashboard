@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-pull-list',
   templateUrl: './pull-list.component.html',
+  styleUrls: ['./pull-list.component.scss'],
 })
 export class PullListComponent implements OnInit {
   tasks!: Task[];
@@ -28,23 +29,17 @@ export class PullListComponent implements OnInit {
   start(repository: string, tag: string): void {
     this.toastr.warning('Creating & connecting websocket ...');
     let ws = this.multiplePullingEnabled ? this.createNewSocket() : this.ws;
-    ws.next({ repository, tag, action: 'start' });
+    ws.next({ repository: repository, tag: tag, action: 'start' });
     ws.asObservable().subscribe((data: any) => {
       this.tasks = data;
     });
   }
 
   delete(repository: string, tag: string): void {
-    this.ws.next({ repository, tag, action: 'delete' });
+    this.ws.next({ repository: repository, tag: tag, action: 'delete' });
     this.ws.asObservable().subscribe((data: any) => {
       this.tasks = data;
     });
-  }
-
-  createNewSocket(): WebSocketSubject<any> {
-    let socket = webSocket(`${environment.wsUrl}/images/pull`);
-    this.sockets.push(socket);
-    return socket;
   }
 
   ngOnDestroy(): void {
@@ -52,5 +47,11 @@ export class PullListComponent implements OnInit {
       socket.complete();
     });
     this.ws.complete();
+  }
+
+  createNewSocket(): WebSocketSubject<any> {
+    let socket = webSocket(`${environment.wsUrl}/images/pull`);
+    this.sockets.push(socket);
+    return socket;
   }
 }
