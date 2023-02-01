@@ -12,7 +12,7 @@
   </button>
 </h1>
 
-<div *ngIf="images.length == 0" class="card m-auto w-50">
+<div *ngIf="(images$ | async).length == 0" class="card m-auto w-50">
   <div class="card-body">
     <p
       data-aos="zoom-in"
@@ -30,10 +30,11 @@
     <div class="card-body">
       <div class="total-images p-1">
         <strong>Total</strong>:
-        <span class="text-success fw-bold">{{ images.length }}</span> images
+        <span class="text-success fw-bold">{{ (images$ | async).length }}</span>
+        images
       </div>
       <table
-        *ngIf="images.length != 0"
+        *ngIf="(images$ | async).length != 0"
         class="table align-middle mb-0 bg-white"
       >
         <thead class="bg-light">
@@ -43,7 +44,7 @@
             <th><i class="fas fa-cogs"></i> Action</th>
           </tr>
         </thead>
-        <tbody *ngFor="for; let image; of: images">
+        <tbody *ngFor="for; let image; of: images$ | async">
           <tr>
             <td>
               {{ image.name }}

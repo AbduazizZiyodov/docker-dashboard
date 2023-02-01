@@ -10,11 +10,10 @@ import { Container } from '@models/container';
 @Component({
   selector: 'app-run-container-modal',
   templateUrl: './run-container-modal.component.html',
-  styleUrls: ['./run-container-modal.component.scss'],
 })
 export class RunContainerModalComponent implements OnInit {
-  runContainerForm!: FormGroup;
   @Input() data!: ModalData;
+  runContainerForm!: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,7 +34,7 @@ export class RunContainerModalComponent implements OnInit {
   }
 
   formSubmit() {
-    this.toastr.warning("Running ...")
+    this.toastr.warning('Running ...');
     this.containerService
       .runContainer(this.getContainerData())
       .subscribe((container: Container) => {

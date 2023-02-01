@@ -19,7 +19,6 @@ import { switchMap } from 'rxjs/operators';
 export class ContainerListComponent implements OnInit {
   containers!: Container[];
   timerSubscription!: Subscription;
-  subscription!: Subscription;
   modalRef: MdbModalRef<ModalComponent> | null = null;
 
   status: Status = {
@@ -40,7 +39,7 @@ export class ContainerListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.subscription = timer(0, 3000)
+    this.timerSubscription = timer(0, 3000)
       .pipe(switchMap(() => this.containerService.getContainers()))
       .subscribe((data: Container[]) => {
         this.containers = data.reverse();
@@ -48,7 +47,7 @@ export class ContainerListComponent implements OnInit {
   }
 
   startContainer(container_id: string) {
-    return this.containerService
+    this.containerService
       .startStoppedContainer(container_id)
       .subscribe((res: any) => {
         this.changeStatus('running', container_id);
@@ -57,12 +56,10 @@ export class ContainerListComponent implements OnInit {
   }
 
   stopContainer(container_id: string) {
-    return this.containerService
-      .stopContainer(container_id)
-      .subscribe((res: any) => {
-        this.changeStatus('exited', container_id);
-        this.toastr.warning(`Container ${container_id} stopped!`);
-      });
+    this.containerService.stopContainer(container_id).subscribe((res: any) => {
+      this.changeStatus('exited', container_id);
+      this.toastr.warning(`Container ${container_id} stopped!`);
+    });
   }
 
   getConfirmModal(container: Container) {
@@ -101,6 +98,6 @@ export class ContainerListComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.timerSubscription.unsubscribe();
   }
 }
