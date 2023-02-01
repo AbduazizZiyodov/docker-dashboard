@@ -1,0 +1,40 @@
+name: Test and Build
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "src/**"
+      - "configs/**"
+      - ".github/workflows/ci.yml"
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          cd src/
+          python -m pip install -U pip
+          pip install -r server/requirements.txt
+          pip install -r server/test_requirements.txt
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pull docker image for testing
+        run: docker pull hello-world
+
+      - name: Run dependencies
+        run: |
+          cd src/
+          pytest ./server/
