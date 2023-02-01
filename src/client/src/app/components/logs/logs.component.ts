@@ -9,7 +9,7 @@ import { map, Observable } from 'rxjs';
     <div class="text-center" data-aos="flip-up" data-aos-duration="500">
       <h1 class="fw-bold m-1">Logs</h1>
       <textarea name="" id="" cols="80" rows="10" disabled>
-    {{ logs$ | asynс }}
+    {{ logs$ | async }}
   </textarea>
     </div>
   `,
