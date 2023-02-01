@@ -10,7 +10,7 @@ on:
       - ".github/workflows/ci.yml"
 
 jobs:
-  setup:
+  setup-tests-backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,14 +27,10 @@ jobs:
           pip install -r server/requirements.txt
           pip install -r server/test_requirements.txt
 
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Pull docker image for testing
         run: docker pull hello-world
 
-      - name: Run dependencies
+      - name: Run tests
         run: |
           cd src/
           pytest ./server/
