@@ -1,4 +1,3 @@
-# All rest-api utils included
 import typing as t
 
 from docker import DockerClient
@@ -6,35 +5,33 @@ from docker.models.images import Image
 from docker.models.containers import Container
 
 
-def parse_image_name(image: Image) -> str:
-    """Function for getting name of image from image model.
-    Note: str(image) is equvalient to image.__str__.
-    By using this we can extract name of image.
-    e.g str(<docker.Image>) will print <Image: 'nginx:latest'>
-
-    If image is pulled wrong way, this image
-    may not have correct name (or name could be like a null). 
-    For these kind of cases we will return <none> (docker CLI).
+def get_image_name_tag(image: Image) -> t.Tuple[str,str]:
+    """Get image's name from model.
+    Attrs dictionary of image model:
+        e.g. RepoTags: ['python:latest']
+    
+    Returns tuple, first element is image_name
+    second is image_tag
     """
-    image_name = str(image).split("'")[1].split(":")[0]
-    return "<none>" if len(image_name) == 0 else image_name
+    attrs = image.attrs
+
+    if attrs.get("RepoTags") == []:
+        return "<none>","<none_tag>"
+
+    repo_tag:str = attrs.get("RepoTags")[0].split(":")
+    return repo_tag[0], repo_tag[1]
 
 
 def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
-    """This function helps us to extract additional info from docker hub.
-    We will use it in case of details of pulled image are not enough.
-    e.g If you pulled nginx image, you can't get information about `repository stars`.
-
-    Function sends search request to dockerhub, and manipulates response data.
-    Name of images could be like this:
-    * nginx (length of slashes = 0)
-    * username/repository (length of slashes = 1)
-    * gcr.io/k8s-minikube/kicbase ((length of slashes > 1)  # spec.case
+    """Function fetches additional info from dockerhub (stars...)
+    Terms may have different pattern.
+    * nginx (slashes = 0)
+    * username/repository (slashes = 1)
+    * gcr.io/k8s-minikube/kicbase (slashes > 1) ! edge case
     """
     term_original = term
 
-    if len(term_split := term.split("/")) > 1:  # spec.case
-        # from the example above: gcr.io/k8s-minikube/kicbase -> k8s-minikube (first index, second element)
+    if len(term_split := term.split("/")) > 1:
         term = term_split[1]
 
     results: list[dict] = client.images.search(term=term, limit=10)
@@ -42,6 +39,7 @@ def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
     for result in results:
         if result["name"] == term_original:
             return result
+
     return None
 
 
@@ -53,37 +51,73 @@ def image_as_dict(
 ) -> dict:
     def build_dict(image: Image):
         image_dict: dict = dict()
-        image_name = parse_image_name(image)
 
-        # basic attrs that we need
-        attrs: list[str] = ["id", "short_id", "labels"]
+        # retrieve basic info from attrs
+        image_dict['id'] = getattr(image, 'id')
+        image_dict['labels'] = getattr(image, 'labels')
+        image_dict['short_id'] = format_id(getattr(image, 'short_id'))
+        image_dict['size'] = human_readable_size(image.attrs.get('Size'))
+        image_dict['name'], image_dict['tag'] = get_image_name_tag(image)
 
-        if len(image.tags) == 0:  # if you saw SDK docs, image.tag == image.name
-            image_dict["name"] = image_name
-        else:
-            # e.g If tag is nginx:latest. [0] -> nginx and [1] -> latest
-            image_dict["name"] = image.tags[0].split(":")[0]
-            image_dict["tag"] = image.tags[0].split(":")[1]
-
-        for attr in attrs:
-            # retrieve basic info from attrs
-            image_dict[attr] = getattr(image, attr)
-
-        if additional_info and image_name != "<none>" and len(image.tags) > 0:
+        if additional_info and image_dict['name'] != "<none>" and len(image.tags) > 0:
             # check if we need additional info, then reuse util function.
-            if (info := get_additional_info(client, image_name)) is not None:
+            if (info := get_additional_info(client, image_dict['name'])) is not None:
                 # if there are some info (!None), update our image_dict
                 # we will not need name attr from add. info, because we already have this
                 info.pop("name")
                 image_dict = {**image_dict, **info}
 
         return image_dict
-    # If there are many images, apply function all of them
+
     if isinstance(images, list):
         return list(map(build_dict, images))
 
     return build_dict(images)
 
+
+def container_as_dict(containers: t.Union[t.List[Container], Container]) -> dict:
+    """Convert container model to python dictionary.
+    """
+    def build_dict(container: Container) -> dict:
+        return dict(
+            id=container.id,
+            name=container.name,
+            status=container.status,
+            short_id=container.short_id,
+            labels=container.labels,
+            image=image_as_dict(container.image)
+        )
+    # If there are many container models, apply function all of them
+    if isinstance(containers, list):
+        return list(map(build_dict, containers))
+
+    return build_dict(containers)
+
+
+def human_readable_size(size,precision:int=1,system:str = 'decimal')->str:
+    """Converts size (in bytes) to human readable system.
+    It can be used with 2 system, docker CLI uses decimal (10's power).
+    """
+    suffixIndex = 0
+    decimal_suffixes=['Byte','KB','MB','GB','TB']
+    binary_suffixes=['Byte','KiB','MiB','GiB','TiB']
+
+    if system == 'decimal':
+        divisor = min_size = 10**3
+        suffixes = decimal_suffixes 
+    else:
+        divisor = min_size = 2**5
+        suffixes = binary_suffixes 
+
+    while size > min_size and suffixIndex < 4:
+        suffixIndex += 1
+        size = size/divisor
+
+    return "%.*f%s"%(precision,size,suffixes[suffixIndex])
+
+
+def format_id(element_id:str)->str:
+    return element_id.split(":")[1]
 
 def filter_containers_by_image(image_short_id: str, client: DockerClient)\
         -> t.List[Container]:
@@ -95,22 +129,3 @@ def filter_containers_by_image(image_short_id: str, client: DockerClient)\
     )
 
     return list(filter_results)
-
-
-def container_as_dict(containers: t.Union[t.List[Container], Container]) -> dict:
-    """Convert container model to python dictionary.
-    """
-    def convert(container: Container) -> dict:
-        return dict(
-            id=container.id,
-            name=container.name,
-            status=container.status,
-            short_id=container.short_id,
-            labels=container.labels,
-            image=image_as_dict(container.image)
-        )
-    # If there are many container models, apply function all of them
-    if isinstance(containers, list):
-        return list(map(convert, containers))
-
-    return convert(containers)
