@@ -1,4 +1,6 @@
 import pytest
+from httpx import AsyncClient
+
 from .client import *
 
 
@@ -10,7 +12,7 @@ def filter_images(images: list) -> dict:
     )
 
 
-async def test_get_images(client):
+async def test_get_images(client: AsyncClient):
     response = await client.get("images")
 
     assert response.status_code == 200
@@ -19,14 +21,14 @@ async def test_get_images(client):
     pytest.IMAGE_ID = filter_images(response.json())[0]["short_id"]
 
 
-async def test_get_image(client):
+async def test_get_image(client: AsyncClient):
     response = await client.get(f"images/{pytest.IMAGE_ID}")
 
     assert response.status_code == 200
     assert response.json()["short_id"] == pytest.IMAGE_ID
 
 
-async def test_search_image(client):
+async def test_search_image(client: AsyncClient):
     response = await client.post(
         "images/search",
         json={"term": TEST_IMAGE_NAME}
@@ -39,7 +41,7 @@ async def test_search_image(client):
     ]
 
 
-async def test_get_containers_by_image(client):
+async def test_get_containers_by_image(client: AsyncClient):
     response = await client.post(
         "containers/run",
         json={"image": TEST_IMAGE_NAME}
@@ -64,8 +66,7 @@ async def test_get_containers_by_image(client):
     assert response.status_code == 204
 
 
-
-async def test_delete_image(client):
+async def test_delete_image(client: AsyncClient):
     response = await client.delete(
         f"images/{TEST_PULL_IMAGE}/delete"
     )
