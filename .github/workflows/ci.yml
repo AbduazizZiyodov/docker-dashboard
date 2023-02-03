@@ -27,9 +27,6 @@ jobs:
           pip install -r server/requirements.txt
           pip install -r server/test_requirements.txt
 
-      - name: Pull docker image for testing
-        run: docker pull hello-world
-
       - name: Run tests
         run: |
           cd src/
