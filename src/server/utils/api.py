@@ -4,22 +4,10 @@ from docker import DockerClient
 from docker.models.images import Image
 from docker.models.containers import Container
 
-
-def get_image_name_tag(image: Image) -> t.Tuple[str,str]:
-    """Get image's name from model.
-    Attrs dictionary of image model:
-        e.g. RepoTags: ['python:latest']
-    
-    Returns tuple, first element is image_name
-    second is image_tag
-    """
-    attrs = image.attrs
-
-    if attrs.get("RepoTags") == []:
-        return "<none>","<none_tag>"
-
-    repo_tag:str = attrs.get("RepoTags")[0].split(":")
-    return repo_tag[0], repo_tag[1]
+from server.utils.stats import (
+    human_readable_size, 
+    get_image_name_tag
+)
 
 
 def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
@@ -55,8 +43,8 @@ def image_as_dict(
         # retrieve basic info from attrs
         image_dict['id'] = getattr(image, 'id')
         image_dict['labels'] = getattr(image, 'labels')
+        image_dict['size'] = human_readable_size(image=image)
         image_dict['short_id'] = format_id(getattr(image, 'short_id'))
-        image_dict['size'] = human_readable_size(image.attrs.get('Size'))
         image_dict['name'], image_dict['tag'] = get_image_name_tag(image)
 
         if additional_info and image_dict['name'] != "<none>" and len(image.tags) > 0:
@@ -94,30 +82,9 @@ def container_as_dict(containers: t.Union[t.List[Container], Container]) -> dict
     return build_dict(containers)
 
 
-def human_readable_size(size,precision:int=1,system:str = 'decimal')->str:
-    """Converts size (in bytes) to human readable system.
-    It can be used with 2 system, docker CLI uses decimal (10's power).
-    """
-    suffixIndex = 0
-    decimal_suffixes=['Byte','KB','MB','GB','TB']
-    binary_suffixes=['Byte','KiB','MiB','GiB','TiB']
-
-    if system == 'decimal':
-        divisor = min_size = 10**3
-        suffixes = decimal_suffixes 
-    else:
-        divisor = min_size = 2**5
-        suffixes = binary_suffixes 
-
-    while size > min_size and suffixIndex < 4:
-        suffixIndex += 1
-        size = size/divisor
-
-    return "%.*f%s"%(precision,size,suffixes[suffixIndex])
-
-
-def format_id(element_id:str)->str:
+def format_id(element_id: str) -> str:
     return element_id.split(":")[1]
+
 
 def filter_containers_by_image(image_short_id: str, client: DockerClient)\
         -> t.List[Container]:
