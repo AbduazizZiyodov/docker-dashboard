@@ -1,4 +1,4 @@
-from .client import *
+from server.tests.settings import *
 
 from starlette.testclient import (
     TestClient,

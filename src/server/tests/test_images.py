@@ -1,7 +1,7 @@
 import pytest
 from httpx import AsyncClient
 
-from .client import *
+from server.tests.settings import *
 
 
 def filter_images(images: list) -> dict:
@@ -68,7 +68,7 @@ async def test_get_containers_by_image(client: AsyncClient):
 
 async def test_delete_image(client: AsyncClient):
     response = await client.delete(
-        f"images/{TEST_PULL_IMAGE}/delete"
+        f"images/{TEST_IMAGE_NAME}/delete"
     )
 
     assert response.status_code == 204

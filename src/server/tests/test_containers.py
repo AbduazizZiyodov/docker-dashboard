@@ -1,5 +1,5 @@
 import pytest
-from .client import *
+from server.tests.settings import *
 
 
 async def test_get_containers(client):
