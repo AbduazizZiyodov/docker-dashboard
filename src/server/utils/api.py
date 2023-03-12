@@ -1,21 +1,16 @@
-import typing as t
-
 from docker import DockerClient
 from docker.models.images import Image
 from docker.models.containers import Container
 
+import server.types as types
 from server.utils.stats import (
-    human_readable_size, 
+    human_readable_size,
     get_image_name_tag
 )
 
 
-def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
-    """Function fetches additional info from dockerhub (stars...)
-    Terms may have different pattern.
-    * nginx (slashes = 0)
-    * username/repository (slashes = 1)
-    * gcr.io/k8s-minikube/kicbase (slashes > 1) ! edge case
+def get_additional_info(client: DockerClient, term: str) -> types.Union[dict, None]:
+    """Fetch additional info from docker registry.
     """
     term_original = term
 
@@ -32,39 +27,38 @@ def get_additional_info(client: DockerClient, term: str) -> t.Union[dict, None]:
 
 
 def image_as_dict(
-    images: t.Union[t.List[Image], Image],
+    images: types.Union[types.Images, Image],
     client: DockerClient = None,
-    # in some cases we may not want to get additional information
-    additional_info: bool = False,
+    additional_info: types.Optional[bool] = False, 
 ) -> dict:
+    """Convert docker Image model to python dictionary object
+    """
     def build_dict(image: Image):
         image_dict: dict = dict()
 
-        # retrieve basic info from attrs
-        image_dict['id'] = getattr(image, 'id')
+        # basic info
         image_dict['labels'] = getattr(image, 'labels')
         image_dict['size'] = human_readable_size(image=image)
+        image_dict['long_id'] = format_id(getattr(image, 'id'))
         image_dict['short_id'] = format_id(getattr(image, 'short_id'))
         image_dict['name'], image_dict['tag'] = get_image_name_tag(image)
 
-        if additional_info and image_dict['name'] != "<none>" and len(image.tags) > 0:
-            # check if we need additional info, then reuse util function.
+        if additional_info and image_dict['name'] != "<none>":
             if (info := get_additional_info(client, image_dict['name'])) is not None:
-                # if there are some info (!None), update our image_dict
-                # we will not need name attr from add. info, because we already have this
-                info.pop("name")
+                info.pop("name") # pop duplicates
                 image_dict = {**image_dict, **info}
 
         return image_dict
-
+    
+    # for multiple instances
     if isinstance(images, list):
         return list(map(build_dict, images))
 
     return build_dict(images)
 
 
-def container_as_dict(containers: t.Union[t.List[Container], Container]) -> dict:
-    """Convert container model to python dictionary.
+def container_as_dict(containers: types.Union[types.Containers, Container]) -> dict:
+    """Convert docker Container model to python dictionary object
     """
     def build_dict(container: Container) -> dict:
         return dict(
@@ -75,7 +69,8 @@ def container_as_dict(containers: t.Union[t.List[Container], Container]) -> dict
             labels=container.labels,
             image=image_as_dict(container.image)
         )
-    # If there are many container models, apply function all of them
+    
+    # for multiple instances
     if isinstance(containers, list):
         return list(map(build_dict, containers))
 
@@ -83,11 +78,13 @@ def container_as_dict(containers: t.Union[t.List[Container], Container]) -> dict
 
 
 def format_id(element_id: str) -> str:
+    """Get long ID.
+    """
     return element_id.split(":")[1]
 
 
 def filter_containers_by_image(image_short_id: str, client: DockerClient)\
-        -> t.List[Container]:
+        -> types.Containers:
     """Filter by image short ID (simple)
     """
     filter_results = filter(
