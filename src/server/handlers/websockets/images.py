@@ -1,3 +1,4 @@
+import asyncio
 import aiodocker
 import typing as t
 import nest_asyncio
@@ -5,13 +6,14 @@ import nest_asyncio
 from starlette.websockets import WebSocket
 from starlette.endpoints import WebSocketEndpoint
 
-from server.utils.tasks import Manager
+from server.utils import (
+    tasks as task_utils,
+    api as api_utils,
+    websocket as websocket_utils,
+)
 from server.models.image import DockerPullRequest
-from server.utils.websocket import validate_websocket_request
 
-
-NoneType = type(None)  # null type
-client, task_manager = aiodocker.Docker(), Manager()
+client, task_manager = aiodocker.Docker(), task_utils.Manager()
 
 nest_asyncio.apply()
 
@@ -19,10 +21,10 @@ nest_asyncio.apply()
 class PullImages(WebSocketEndpoint):
     encoding: str = "json"
 
-    async def on_connect(self, ws: WebSocket) -> NoneType:
+    async def on_connect(self, ws: WebSocket) -> t.NoReturn:
         await ws.accept()
 
-    async def match_and_perform_action(self, ws: WebSocket, data: t.Any) -> NoneType:
+    async def match_and_perform_action(self, ws: WebSocket, data: t.Any) -> t.NoReturn:
         """Handle websocket request, perform action.
         [task - image for pulling from dockerhub]
         """
@@ -37,24 +39,26 @@ class PullImages(WebSocketEndpoint):
             await self.delete_task(data)
         else:
             await ws.send_json({"status": None})
+
         await ws.send_json(task_manager.list())
 
-    async def on_receive(self, ws: WebSocket, data: t.Any) -> NoneType:
-        body, error = await validate_websocket_request(data)
+    async def on_receive(self, ws: WebSocket, data: t.Any) -> t.NoReturn:
+        body, error = await websocket_utils.validate_websocket_request(data)
 
         if error:
             await ws.send_json(error)
             return
+
         # If there are no any errors, we should handle this request
         await self.match_and_perform_action(ws, body)
 
-    async def create_task(self, body: DockerPullRequest) -> NoneType:
+    async def create_task(self, body: DockerPullRequest) -> t.NoReturn:
         task_manager.create(body)
 
-    async def delete_task(self, body: DockerPullRequest) -> NoneType:
+    async def delete_task(self, body: DockerPullRequest) -> t.NoReturn:
         task_manager.delete(body)
 
-    async def start_task(self, ws: WebSocket, body: DockerPullRequest) -> NoneType:
+    async def start_task(self, ws: WebSocket, body: DockerPullRequest) -> t.NoReturn:
         """Pull image from dockerhub. image.pulled = task.completed.
         Handler streams pulling progress, nest_asyncio allows us
         to pull many images at the same time.
@@ -65,9 +69,7 @@ class PullImages(WebSocketEndpoint):
 
         try:
             async for stream_body in client.images.pull(
-                body.repository,
-                tag=body.tag,
-                stream=True
+                body.repository, tag=body.tag, stream=True
             ):
                 task_manager.update(body, stream_body)
                 await ws.send_json(task_manager.list())
