@@ -8,7 +8,6 @@ class DockerSearchRequest(BaseModel):
 
 
 class DockerPullRequest(BaseModel):
-    action: str
     repository: str
     tag: Optional[str] = "latest"
 
