@@ -1,4 +1,3 @@
-# All pydantic schemas defined
 from .container import ContainerOptions
 from .image import DockerPullRequest, DockerSearchRequest
 
