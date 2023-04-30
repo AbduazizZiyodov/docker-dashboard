@@ -1,4 +1,3 @@
-import rich
 import aiodocker
 import typing as t
 

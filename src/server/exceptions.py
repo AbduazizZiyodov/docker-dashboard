@@ -25,8 +25,15 @@ async def http_exception_handler(_, exc: HttpDockerException) -> JSONResponse:
 
 async def pydantic_exception_handler(_, exc: ValidationError) -> JSONResponse:
     """Handling pydantic validation exceptions"""
-    detail: dict = json.loads(exc.json())
-    return JSONResponse(detail, status_code=error.HTTP_422_UNPROCESSABLE_ENTITY)
+    return JSONResponse(
+        content=json.load(exc.json()), status_code=error.HTTP_422_UNPROCESSABLE_ENTITY
+    )
+
+
+async def json_exception_handler(_, exc: json.decoder.JSONDecodeError) -> JSONResponse:
+    return JSONResponse(
+        status_code=error.HTTP_400_BAD_REQUEST, content={"error": "JSON decode error"}
+    )
 
 
 def websocket_request_handler(data: Any, Model: BaseModel) -> Any:
@@ -40,4 +47,5 @@ exception_handlers = {
     HTTPException: http_exception_handler,
     DockerException: http_exception_handler,
     ValidationError: pydantic_exception_handler,
+    json.decoder.JSONDecodeError: json_exception_handler,
 }
