@@ -57,10 +57,10 @@ async def stop_container(request: Request) -> JSONResponse:
 
 async def remove_container(request: Request) -> JSONResponse:
     """Remove container by its ID."""
-    request_body = await request.json()
+    force_remove: bool = request.query_params.get("force", False)
 
     container: Container = client.containers.get(request.path_params["container_id"])
-    container.remove(force=request_body.get("force", True))
+    container.remove(force=force_remove)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
