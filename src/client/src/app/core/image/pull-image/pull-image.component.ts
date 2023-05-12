@@ -1,5 +1,5 @@
-import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { environment } from '@env';
 import { Image } from '@models/image';
@@ -25,19 +25,26 @@ export class PullImageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    let limit: number = 1;
-    this.imageService
-      .searchImages(this.repository, limit)
-      .subscribe((image: Image[]) => {
-        this.imageInfo = image ? image[0] : null;
-      });
+    this.performSearch();
+    this.fetchImages();
+  }
 
+  fetchImages(): void {
     this.imageService.getImages().subscribe((images: Image[]) => {
       this.pulledVersions = images.filter(
         (image: Image) => image.name == this.repository
       );
       this.isLoading = false;
     });
+  }
+
+  performSearch(): void {
+    let limit: number = 1;
+    this.imageService
+      .searchImages(this.repository, limit)
+      .subscribe((image: Image[]) => {
+        this.imageInfo = image ? image[0] : null;
+      });
   }
 
   addImageToTasks(): void {
