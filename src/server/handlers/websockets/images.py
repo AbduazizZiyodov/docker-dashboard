@@ -17,6 +17,7 @@ class PullImages(WebSocketEndpoint):
 
     async def on_connect(self, ws: WebSocket) -> None:
         await ws.accept()
+        await ws.send_text("Connection established")
 
     async def pull(self, ws: WebSocket, data: DockerPullRequest) -> None:
         stream_data: dict
@@ -60,3 +61,6 @@ class PullImages(WebSocketEndpoint):
 
         elif pull_data.action == "clear":
             self.tasks.clear()
+
+        else:
+            await ws.send_json({"error": "You picked wrong action!"})
