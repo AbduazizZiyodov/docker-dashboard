@@ -2,46 +2,82 @@ import { Component, OnInit } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
 import { environment } from '@env';
-import { Task } from '@models/image';
 import { ToastrService } from 'ngx-toastr';
+
+type Data = {
+  tag: string;
+  status: string;
+  repository: string;
+  stream_data: string;
+};
 
 @Component({
   selector: 'app-pull-list',
   templateUrl: './pull-list.component.html',
 })
 export class PullListComponent implements OnInit {
-  tasks!: Task[];
-  ws!: WebSocketSubject<any>;
+  tasks: { [key: string]: Data } = {};
   sockets: WebSocketSubject<any>[] = [];
   multiplePullingEnabled: boolean = false;
+  ws: WebSocketSubject<any> = webSocket(`${environment.wsUrl}/images/pull`);
 
   constructor(private toastr: ToastrService) {}
 
   ngOnInit(): void {
-    this.ws = webSocket(`${environment.wsUrl}/images/pull`);
+    this.fetchRepositories();
+  }
 
-    this.ws.next({ action: 'list' });
+  fetchRepositories(): void {
+    this.ws.next({ repository: '', action: 'list' });
+
     this.ws.asObservable().subscribe((data: any) => {
-      this.tasks = data;
+      this.createTasks(data);
     });
   }
+
+  createTasks(images: string[]): void {
+    for (let task of images) {
+      const [repository, tag] = this.splitRepositoryAndTag(task);
+
+      this.tasks[task] = {
+        stream_data: '',
+        status: '',
+        tag: tag,
+        repository: repository,
+      };
+    }
+  }
+
   start(repository: string, tag: string): void {
     this.toastr.warning('Creating & connecting websocket ...');
-    let ws = this.multiplePullingEnabled ? this.createNewSocket() : this.ws;
+    let full_repository_name = `${repository}:${tag}`;
+
+    let ws = this.multiplePullingEnabled ? this.createWebSocket() : this.ws;
+
     ws.next({ repository, tag, action: 'start' });
+
     ws.asObservable().subscribe((data: any) => {
-      this.tasks = data;
+      this.tasks[full_repository_name].status = data.status;
+      if (data.progress.length) {
+        this.tasks[full_repository_name].stream_data = this.tasks[
+          full_repository_name
+        ].stream_data
+          .concat('\n')
+          .concat(`[${data.id}] -> ${data.progress}`);
+      }
     });
   }
 
   delete(repository: string, tag: string): void {
+    let full_repository_name = `${repository}:${tag}`;
+
     this.ws.next({ repository, tag, action: 'delete' });
-    this.ws.asObservable().subscribe((data: any) => {
-      this.tasks = data;
+    this.ws.asObservable().subscribe((data: string[]) => {
+      delete this.tasks[full_repository_name];
     });
   }
 
-  createNewSocket(): WebSocketSubject<any> {
+  createWebSocket(): WebSocketSubject<any> {
     let socket = webSocket(`${environment.wsUrl}/images/pull`);
     this.sockets.push(socket);
     return socket;
@@ -52,5 +88,16 @@ export class PullListComponent implements OnInit {
       socket.complete();
     });
     this.ws.complete();
+  }
+
+  splitRepositoryAndTag(full_repository_name: string): string[] {
+    return full_repository_name.split(':');
+  }
+  numberOfTasks(): number {
+    return Object.keys(this.tasks).length;
+  }
+
+  getTaskKeys(): string[] {
+    return Object.keys(this.tasks);
   }
 }

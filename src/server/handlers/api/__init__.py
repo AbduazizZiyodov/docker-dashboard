@@ -4,7 +4,7 @@ from .containers import (
     get_containers,
     get_logs,
     run_container,
-    start_stopped_container,
+    unpause_container,
     stop_container,
     remove_container
 )
@@ -24,7 +24,7 @@ __all__ = [
     "get_containers",
     "get_logs",
     "run_container",
-    "start_stopped_container",
+    "unpause_container",
     "stop_container",
     "remove_container",
     # images

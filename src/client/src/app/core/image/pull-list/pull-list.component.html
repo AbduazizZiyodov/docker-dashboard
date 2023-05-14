@@ -18,48 +18,47 @@
           >Multiple images </label
         ><br />
         Total:
-        <span class="text-success fw-bold">{{ tasks.length }}</span> tasks
+        <span class="text-success fw-bold">{{ numberOfTasks() }}</span> tasks
       </div>
 
       <blockquote
-        *ngIf="tasks.length == 0"
+        *ngIf="numberOfTasks() == 0"
         class="note w-75 m-auto text-center note-primary border mb-3"
       >
         No pending tasks yet ..
       </blockquote>
 
       <ul class="list-group list-group-light">
-        <li class="list-group-item m-auto" *ngFor="let task of tasks">
+        <li class="list-group-item m-auto" *ngFor="let key of getTaskKeys()">
           <p>
-            <span class="fw-bold">{{ task.repository }}</span>
-
+            <span class="fw-bold">{{ tasks[key].repository }}</span>
             <span
               class="mx-1 p-2 badge dodger-blue-bg rounded-pill text-lowercase"
             >
-              {{ task.tag }}</span
+              {{ tasks[key].tag }}</span
             >
-
             <button
               class="btn btn-sm btn-rounded btn-success text-capitalize"
-              (click)="start(task.repository, task.tag)"
+              (click)="start(tasks[key].repository, tasks[key].tag)"
               mdbTooltip="Click for start || continue pulling"
+              [disabled]="this.tasks[key].stream_data.length"
             >
               <i class="fas fa-play"></i>
             </button>
 
             <button
               class="btn btn-sm btn-rounded btn-danger text-capitalize mx-2"
-              (click)="delete(task.repository, task.tag)"
-              [disabled]="task.stream_data.length != 0"
+              (click)="delete(tasks[key].repository, tasks[key].tag)"
+              [disabled]="tasks[key].stream_data.length != 0"
             >
               <i class="fas fa-trash"></i>
             </button>
 
             <button
               class="btn btn-sm btn-light text-capitalize btn-rounded"
-              *ngIf="task.status"
+              *ngIf="tasks[key].status"
             >
-              {{ task.status }}
+              {{ tasks[key].status }}
             </button>
           </p>
           <div class="text-left">
@@ -68,7 +67,7 @@
               cols="110"
               rows="2"
               disabled
-              [(ngModel)]="task.stream_data"
+              [(ngModel)]="tasks[key].stream_data"
               [scrollTop]="textarea.scrollHeight"
             >
             </textarea>

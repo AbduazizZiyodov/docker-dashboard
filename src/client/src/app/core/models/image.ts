@@ -10,11 +10,3 @@ export interface Image {
   is_pulling?: boolean;
   tag: string;
 }
-export interface Task {
-  tag: string;
-  repository: string;
-
-  stream_data: string;
-  status: string;
-  action?: string;
-}

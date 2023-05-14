@@ -10,5 +10,5 @@ ModelOrDict: TypeAlias = Tuple[BaseModel, Union[None, Dict[str, dict]]]
 
 HttpDockerException = Union[HTTPException, DockerException]
 
-Images:TypeAlias = List[Image]
-Containers:TypeAlias = List[Container]
+Images: TypeAlias = List[Image]
+Containers: TypeAlias = List[Container]

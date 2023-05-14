@@ -1,12 +1,12 @@
 import docker
-import typing as t
 
 from docker.models.images import Image
-from docker.models.containers import Container
 
 import starlette.status as status
 from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
+
+from server import types
 
 from server.utils.api import (
     image_as_dict,
@@ -14,7 +14,7 @@ from server.utils.api import (
     filter_containers_by_image
 )
 
-from server.models import DockerSearchRequest, DockerPullRequest
+from server.models import DockerSearchRequest
 
 client = docker.from_env()
 
@@ -23,7 +23,7 @@ async def get_images(_) -> JSONResponse:
     """Get list of all docker images.
     * `docker images || docker image ls`
     """
-    images: t.List[Image] = client.images.list(all=True)
+    images: types.Images = client.images.list(all=True)
     response = image_as_dict(images, client)
 
     return JSONResponse(response)
@@ -72,7 +72,7 @@ async def get_containers_by_image(request: Request) -> JSONResponse:
     """Get list of containers by IMAGE_ID.
     * `docker ps -a ... [FILTER OPTIONS]`
     """
-    containers: t.List[Container] = filter_containers_by_image(
+    containers: types.Containers = filter_containers_by_image(
         request.path_params["image_id"], client
     )
 

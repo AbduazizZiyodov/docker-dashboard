@@ -1,80 +1,65 @@
-import asyncio
 import aiodocker
 import typing as t
-import nest_asyncio
+from docker.errors import DockerException
 
 from starlette.websockets import WebSocket
 from starlette.endpoints import WebSocketEndpoint
 
-from server.utils import (
-    tasks as task_utils,
-    api as api_utils,
-    websocket as websocket_utils,
-)
 from server.models.image import DockerPullRequest
+from server.exceptions import websocket_request_handler
 
-client, task_manager = aiodocker.Docker(), task_utils.Manager()
-
-nest_asyncio.apply()
+client = aiodocker.Docker()
 
 
 class PullImages(WebSocketEndpoint):
+    tasks: set = set({})
     encoding: str = "json"
 
-    async def on_connect(self, ws: WebSocket) -> t.NoReturn:
+    async def on_connect(self, ws: WebSocket) -> None:
         await ws.accept()
 
-    async def match_and_perform_action(self, ws: WebSocket, data: t.Any) -> t.NoReturn:
-        """Handle websocket request, perform action.
-        [task - image for pulling from dockerhub]
-        """
-        if data.action == "list":
-            await ws.send_json(task_manager.list())
-            return
-        elif data.action == "create":
-            await self.create_task(data)
-        elif data.action == "start":
-            await self.start_task(ws, data)
-        elif data.action == "delete":
-            await self.delete_task(data)
-        else:
-            await ws.send_json({"status": None})
+    async def pull(self, ws: WebSocket, data: DockerPullRequest) -> None:
+        stream_data: dict
+        async for stream_data in client.images.pull(
+            from_image=data.repository, tag=data.tag, stream=True
+        ):
+            await ws.send_json(stream_data)
 
-        await ws.send_json(task_manager.list())
-
-    async def on_receive(self, ws: WebSocket, data: t.Any) -> t.NoReturn:
-        body, error = await websocket_utils.validate_websocket_request(data)
+    async def on_receive(self, ws: WebSocket, data: t.Any) -> None:
+        """Handle `on_receive` event and errors, establish websocket session."""
+        pull_data: DockerPullRequest
+        pull_data, error = websocket_request_handler(data, DockerPullRequest)
 
         if error:
             await ws.send_json(error)
             return
 
-        # If there are no any errors, we should handle this request
-        await self.match_and_perform_action(ws, body)
+        if pull_data.action == "start":
+            if pull_data.to_string() in self.tasks:
+                try:
+                    await self.pull(ws, pull_data)
+                    self.tasks.remove(pull_data.to_string())  # remove after pulling
+                except (DockerException, aiodocker.exceptions.DockerError) as exc:
+                    await ws.send_json({"error": exc.__str__()})
+            else:
+                await ws.send_json({"error": "Before pulling process, create task!"})
 
-    async def create_task(self, body: DockerPullRequest) -> t.NoReturn:
-        task_manager.create(body)
+        elif pull_data.action == "add":
+            self.tasks.add(pull_data.to_string())
+            await ws.send_json(
+                {"message": f"Image {pull_data.to_string() } is added to tasks!"}
+            )
 
-    async def delete_task(self, body: DockerPullRequest) -> t.NoReturn:
-        task_manager.delete(body)
+        elif pull_data.action == "list":
+            await ws.send_json(list(self.tasks))
 
-    async def start_task(self, ws: WebSocket, body: DockerPullRequest) -> t.NoReturn:
-        """Pull image from dockerhub. image.pulled = task.completed.
-        Handler streams pulling progress, nest_asyncio allows us
-        to pull many images at the same time.
-        """
-        if not task_manager.check_existence_of_task(body):
-            await ws.send_json({"detail": "First, you need to create a task."})
-            return
+        elif pull_data.action == "delete":
+            if pull_data.to_string() in self.tasks:
+                self.tasks.remove(pull_data.to_string())
+                await ws.send_json(list(self.tasks))
 
-        try:
-            async for stream_body in client.images.pull(
-                body.repository, tag=body.tag, stream=True
-            ):
-                task_manager.update(body, stream_body)
-                await ws.send_json(task_manager.list())
-            # if task.completed, then delete it.
-            task_manager.delete(body)
+        elif pull_data.action == "clear":
+            self.tasks.clear()
 
-        except aiodocker.exceptions.DockerError as exc:
-            await ws.send_json({"error": exc.message})
+        else:
+            await ws.send_json({"error": "You picked wrong action!"})

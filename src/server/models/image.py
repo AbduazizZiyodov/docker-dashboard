@@ -8,7 +8,9 @@ class DockerSearchRequest(BaseModel):
 
 
 class DockerPullRequest(BaseModel):
-    action: str
     repository: str
     tag: Optional[str] = "latest"
+    action: str
 
+    def to_string(self) -> str:
+        return f"{self.repository}:{self.tag}"
