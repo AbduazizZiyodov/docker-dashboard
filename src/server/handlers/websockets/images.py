@@ -17,7 +17,6 @@ class PullImages(WebSocketEndpoint):
 
     async def on_connect(self, ws: WebSocket) -> None:
         await ws.accept()
-        await ws.send_text("Connection established")
 
     async def pull(self, ws: WebSocket, data: DockerPullRequest) -> None:
         stream_data: dict

@@ -3,3 +3,6 @@ run:
 
 test:
 	@cd src/ && pytest -s server/
+
+testws:
+	@cd src/ && pytest -s server/tests/test_websockets.py
