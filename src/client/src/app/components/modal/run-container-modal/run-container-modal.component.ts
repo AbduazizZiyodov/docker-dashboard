@@ -67,9 +67,6 @@ export class RunContainerModalComponent implements OnInit {
     for (let key of ['env', 'firstPort', 'secondPort']) {
       delete containerData[key];
     }
-
-    console.log(containerData);
-
     return containerData;
   }
 
