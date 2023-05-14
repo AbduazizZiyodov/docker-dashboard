@@ -51,7 +51,7 @@ export class PullImageComponent implements OnInit {
     this.ws.next({
       repository: this.repository,
       tag: this.selectedTag,
-      action: 'create',
+      action: 'add',
     });
 
     this.ws.asObservable().subscribe((data: any) => {
