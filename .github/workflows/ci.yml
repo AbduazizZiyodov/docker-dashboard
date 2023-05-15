@@ -1,4 +1,4 @@
-name: Test and Build
+name: Test and Build (server)
 
 on:
   push:
@@ -20,14 +20,14 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install dependencies
+      - name: Install dependencies 📦
         run: |
           cd src/
           python -m pip install -U pip
           pip install -r server/requirements.txt
           pip install -r server/test_requirements.txt
 
-      - name: Run tests
+      - name: Run tests 🧪
         run: |
           cd src/
           pytest ./server/
