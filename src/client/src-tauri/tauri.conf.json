@@ -32,7 +32,7 @@
         "icons/256x256.png"
       ],
       "identifier": "abduaziz.ziyodov",
-      "longDescription": "",
+      "longDescription": "Simple lightweight GUI application for working with Docker",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
