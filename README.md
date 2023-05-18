@@ -17,8 +17,11 @@ I changed the way of installing server-side components. You don't need to instal
 
 First, you need to pull the docker image:
 
+> **Note**
+> In this readme I used `tagname`, which you can find from releases section (e.g 2.4.0).
+
 ```sh
-docker pull abduaziz/docker-dashboard:2.3.0
+docker pull abduaziz/docker-dashboard:tagname
 ```
 
 Now it is ready to run, but the docker-dashboard needs access to your local docker UNIX socket. Because it cannot get any data from your docker host, from inside of the container (it is an isolated environment). You have to pass your docker socket path through `-v`.
@@ -29,7 +32,7 @@ Now it is ready to run, but the docker-dashboard needs access to your local dock
 ```sh
 docker run -d -p 2121:2121 -p 9001:9001 \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    abduaziz/docker-dashboard:2.3.0
+    abduaziz/docker-dashboard:tagname
 ```
 
 ![](./assets/docker-pull-run.png)
