@@ -1,116 +1,105 @@
 # 🐳 **Docker Dashboard**
 
+![](./assets/docker-dashboard.png)
+
 > **_Simple lightweight GUI application for working with Docker!_**
 
-Perhaps it can be a good alternative to Docker Desktop in the future 😂
+## **📄 System Requirements**:
 
-## **📄 Requirements**:
-
-- Python **+3.8**
+- Docker
 - Operating system: `ubuntu` (tested `20.04 LTS`, `22.04 LTS`).
 
 ## **📦 Installation**
 
-Go to the [releases](https://github.com/AbduazizZiyodov/docker-dashboard/releases). Download the latest version (`docker-dashboard-*.tar.gz`) and extract archive.
+## **Server** 🚀
 
-```bash
-$ mkdir docker-dashboard/
-$ tar -xf docker-dashboard-*.tar.gz -C docker-dashboard/
+I changed the way of installing server-side components. You don't need to install anything on your local machine.
+
+First, you need to pull the docker image:
+
+```sh
+docker pull abduaziz/docker-dashboard:2.3.0
 ```
 
-Open the directory on the terminal and run this command:
+Now it is ready to run, but the docker-dashboard needs access to your local docker UNIX socket. Because it cannot get any data from your docker host, from inside of the container (it is an isolated environment). You have to pass your docker socket path through `-v`.
 
-```bash
-$ cd docker-dashboard/
-$ sudo ./install.sh
+> **Note**
+> You have to run the docker image on the `2121` port because the client-side application listens on this port. Port `9001` is for the supervisor `inet HTTP server`, it is optional but if you want, you can expose this port.
+
+```sh
+docker run -d -p 2121:2121 -p 9001:9001 \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    abduaziz/docker-dashboard:2.3.0
 ```
-![](/assets/install.png)
 
-- **Supervisor status**:
-  ![](/assets/supervisor_status.png)
+![](./assets/docker-pull-run.png)
 
-- **API status**:
-  ![](/assets/api_status.png)
+Visit http://localhost:2121 🎉
 
+![](./assets/http-req-api.png)
 
+## **Client** 👨‍🦰
+
+Go to the [releases](https://github.com/AbduazizZiyodov/docker-dashboard/releases). Download the latest version according to your operating system.
+
+- **Ubuntu**
+  ```sh
+  sudo dpkg -i docker-dashboard_*.deb
+  ```
+
+> **Warning**
+> I uploaded `.dmg`, `.AppImage` packages also, you can test them. But they are not stable!
 
 ## **🔧 Development**
 
 Clone this repository
 
-```bash
+```sh
 $ git clone https://github.com/AbduazizZiyodov/docker-dashboard
 ```
 
 **Running 🚀**
 
 - `backend` (from src/):
-  ```bash
-  $ uvicorn server.asgi:application --reload --port 2121 # install dependencies from requirements.txt
+  ```sh
+  make run
   ```
-- `tests` (from src/server/)
-  ```bash
-  $ pytest # test_requirements.txt
+- `tests` (from parent dir)
+  ```sh
+  # install test requirements from test_requirements.txt
+  $ make test
   ```
 - `frontend` (from src/client)
-  ```bash
-  $ npm start # or ng serve (global)
+  ```sh
+  npm start # or ng serve (global)
   ```
 
 ## **🏗️ Build**
 
-First, you have to install some system dependencies,`rust` and `cargo`
+First, you have to install some system dependencies,`rust` and `cargo`, then `tauri` itself. You can see all instructions from tauir's documentation.
 
-**Install system dependencies**
+**References**
 
-```bash
-$ sudo apt update
-$ sudo apt install libwebkit2gtk-4.0-dev \
-    build-essential \
-    curl \
-    libssl-dev \
-    libgtk-3-dev \
-    libayatana-appindicator3-dev \
-    librsvg2-dev
+- https://tauri.app/v1/guides/getting-started/prerequisites/
+- https://tauri.app/v1/guides/getting-started/setup/integrate
+- https://tauri.app/v1/guides/development/development-cycle
+- https://doc.rust-lang.org/cargo/getting-started/installation.html
+
+You can run client-side (preview) by this command:
+
+```sh
+cargo tauri dev
 ```
 
-**Install rust 🦀**
+Build client-side. You should check `src/client/src-tauri/target` folder:
 
-```bash
-$ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
-$ rustup update # for updating
+```sh
+cargo tauri build
 ```
 
-**Install cargo📦**
+# **License**
 
-```bash
-$ sudo apt install cargo
-```
-
-### **🧮 Commands**
-
-For testing client-side. You can view, or fix something.
-
-```bash
-$ cargo tauri dev
-```
-
-Build client-side. You should check `src/client/src-tauri/target` folder.
-
-```bash
-$ cargo tauri build
-```
-
-## **🧪 Testing**
-
-Used `pytest`, (tests -> src/server/tests)
-
-```bash
-$ cd src/server
-$ pytest
-```
-
-![](/assets/tests.png)
+This project is licensed under the terms of the MIT license.
 
 <hr>
 
