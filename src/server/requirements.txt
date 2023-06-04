@@ -5,7 +5,7 @@ asgiref==3.5.2
 docker==5.0.3
 nest-asyncio==1.5.5
 pydantic==1.9.1
-requests==2.27.1
+requests==2.31.0
 starlette==0.20.0
 toml==0.10.2
 tomli==2.0.1
