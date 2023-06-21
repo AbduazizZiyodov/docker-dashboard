@@ -6,3 +6,6 @@ test:
 
 testws:
 	@cd src/ && pytest -s server/tests/test_websockets.py
+
+shell:
+	@docker exec -it docker-dashboard /bin/sh

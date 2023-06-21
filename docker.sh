@@ -8,6 +8,9 @@ VERSION=$(cat src/client/package.json | grep version | cut -f2 -d ':' | cut -f2 
 
 DOCKER_IMAGE=$DOCKERHUB_USERNAME/$DOCKER_IMAGE_NAME:$VERSION
 
+echo Docker image is $DOCKER_IMAGE
+echo Docker Socket Path is $DOCKER_SOCKET_PATH
+
 # Copy files
 rsync -av src/server \
   $DOCKERFILE_PATH \
@@ -30,6 +33,7 @@ if [ "$1" = "run" ]; then
   # run container, API url is localhost:2121
   # supervisor(inet http server) localhost:9001
   docker run -d \
+    --name $DOCKER_IMAGE_NAME \
     -p 2121:2121 -p 9001:9001 \
     -v $DOCKER_SOCKET_PATH:$DOCKER_SOCKET_PATH \
     $DOCKER_IMAGE
