@@ -1,6 +1,6 @@
 [package]
 name = "docker-dashboard"
-version = "2.3.0"
+version = "2.4.0"
 description = "Simple lightweight GUI application for working with Docker"
 authors = ["abduaziz.ziyodov@mail.ru"]
 license = ""
