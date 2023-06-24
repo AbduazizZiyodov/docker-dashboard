@@ -49,7 +49,7 @@ def human_readable_size(
 
 
 def calculate_image_disk_space(client: DockerClient):
-    images: t.List[Image] = []
+    images: t.Dict[str, str] = dict()
     total_images_size: int = 0
     unused_images_size: int = 0
 
@@ -61,11 +61,7 @@ def calculate_image_disk_space(client: DockerClient):
 
         image_name, _ = get_image_name_tag(image)
 
-        images.append(
-            {
-                image_name: human_readable_size(image=image),
-            }
-        )
+        images[image_name] = human_readable_size(image=image)
 
     return {
         "total": human_readable_size(total_images_size),
