@@ -22,7 +22,5 @@ RUN cd server/ && pip3 install -r requirements.txt
 
 # API port
 EXPOSE 2121
-# Supervisor inet HTTP port
-EXPOSE 9001
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
