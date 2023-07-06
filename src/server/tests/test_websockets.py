@@ -4,10 +4,6 @@ from server.tests.settings import *
 from starlette.testclient import TestClient
 from starlette.testclient import WebSocketTestSession
 
-import nest_asyncio
-
-nest_asyncio.apply()
-
 CONNECTION_MESSAGE: str = "Connection established"
 TEST_REPO: str = "python"
 TEST_TAG: str = "3.10-alpine"
