@@ -1,4 +1,4 @@
-import docker
+from docker.client import DockerClient
 from docker.models.containers import Container
 
 import starlette.status as status
@@ -9,7 +9,7 @@ import server.core.types as types
 from server.models import ContainerOptions
 from server.core.utils import container_as_dict
 
-client = docker.from_env()
+client = DockerClient().from_env()
 
 
 async def get_containers(_) -> JSONResponse:
@@ -55,9 +55,9 @@ async def stop_container(request: Request) -> JSONResponse:
     )
 
 
-async def remove_container(request: Request) -> JSONResponse:
+async def remove_container(request: Request) -> Response:
     """Remove container by its ID."""
-    force_remove: bool = request.query_params.get("force", False)
+    force_remove: bool = bool(request.query_params.get("force", False))
 
     container: Container = client.containers.get(request.path_params["container_id"])
     container.remove(force=force_remove)

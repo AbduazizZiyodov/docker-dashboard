@@ -39,8 +39,9 @@ websocket_routes = [
 stats_routes = [Route("/api/stats", disk_space_usage, methods=["GET"])]
 
 
-routes = list()
-
-
-for route in [container_routes, image_routes, websocket_routes, stats_routes]:
-    routes.extend(route)
+routes: list[Route | WebSocketRoute] = [
+    *container_routes,
+    *image_routes,
+    *websocket_routes,
+    *stats_routes,
+]

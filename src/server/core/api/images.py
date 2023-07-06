@@ -1,4 +1,4 @@
-import docker
+from docker.client import DockerClient
 
 from docker.models.images import Image
 
@@ -15,7 +15,7 @@ from server.core.utils import (
 
 from server.models import DockerSearchRequest
 
-client = docker.from_env()
+client = DockerClient().from_env()
 
 
 async def get_images(_) -> JSONResponse:
@@ -38,8 +38,8 @@ async def get_image(request: Request) -> JSONResponse:
     return JSONResponse(response)
 
 
-async def remove_image(request: Request) -> JSONResponse:
-    """Remove a specific docker image by IMAGE_ID (force mode!!!).
+async def remove_image(request: Request) -> Response:
+    """Remove a specific docker image by IMAGE_ID (force mode).
     * `docker rmi -f`
     """
     image: Image = client.images.get(request.path_params["image_id"])

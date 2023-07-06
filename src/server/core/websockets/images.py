@@ -57,7 +57,7 @@ class PullImages(WebSocketEndpoint):
         stream_data: dict
         logger.debug(f"Pulling docker image: {data}")
         async for stream_data in client.images.pull(
-            from_image=data.repository, tag=data.tag, stream=True
+            data.repository, tag=data.tag, stream=True
         ):
             await ws.send_json(stream_data)
         logger.debug(f"Completed {data.repository}")

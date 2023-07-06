@@ -5,7 +5,7 @@ import starlette.status as status
 from server.tests.settings import *
 
 
-def filter_images(images: list) -> dict:
+def filter_images(images: list) -> list:
     return list(filter(lambda image: image["name"] == TEST_IMAGE_NAME, images))
 
 
