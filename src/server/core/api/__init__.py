@@ -6,7 +6,7 @@ from .containers import (
     run_container,
     unpause_container,
     stop_container,
-    remove_container
+    remove_container,
 )
 
 from .images import (
@@ -17,6 +17,8 @@ from .images import (
     get_containers_by_image,
 )
 
+
+from .stats import disk_space_usage
 
 __all__ = [
     # containers
@@ -33,4 +35,6 @@ __all__ = [
     "remove_image",
     "search_image",
     "get_containers_by_image",
+    # Stats
+    "disk_space_usage",
 ]

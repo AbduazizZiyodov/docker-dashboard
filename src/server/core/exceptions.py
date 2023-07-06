@@ -9,7 +9,7 @@ import starlette.status as error
 from starlette.responses import JSONResponse
 from starlette.exceptions import HTTPException
 
-from server.types import HttpDockerException
+from server.core.types import HttpDockerException
 
 
 async def http_exception_handler(_, exc: HttpDockerException) -> JSONResponse:

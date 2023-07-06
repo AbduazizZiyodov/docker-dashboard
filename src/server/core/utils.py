@@ -1,10 +1,90 @@
+import logging
+import typing as t
 from docker import DockerClient
 from docker.models.images import Image
 from docker.models.containers import Container
 
-import server.types as types
-from server.utils.stats import human_readable_size, get_image_name_tag
-from server.utils.logs import logger
+import server.core.types as types
+
+
+def configure_logger(
+    log_file_name: t.Optional[str] = "docker_dashboard.log",
+) -> logging.Logger:
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="[%(asctime)s] [%(levelname)-5.5s] -> %(message)s",
+        datefmt="%H:%M:%S",
+        handlers=[logging.FileHandler(log_file_name)],
+    )
+
+    return logging.getLogger("events_logger")
+
+
+def get_image_name_tag(image: Image) -> t.Tuple[str, str]:
+    """Get image's name from model.
+    Attrs dictionary of image model:
+    e.g. RepoTags: ['python:latest']
+
+    Returns tuple, first element is image_name
+    second is image_tag
+    """
+    attrs: dict = image.attrs
+
+    if attrs.get("RepoTags") == []:
+        return "<none>", "<none_tag>"
+
+    repo_tag: str = attrs.get("RepoTags")[0].split(":")
+
+    return repo_tag[0], repo_tag[1]
+
+
+def human_readable_size(
+    size: int = None, image: Image = None, precision: int = 1, system: str = "decimal"
+) -> str:
+    """Converts size (in bytes) to human readable system.
+    It can be used with 2 system, docker CLI uses decimal (10's power).
+    """
+    if not size and image:
+        size = image.attrs["Size"]
+
+    suffixIndex: int = 0
+    decimal_suffixes: list[str] = ["Byte", "KB", "MB", "GB", "TB"]
+    binary_suffixes: list[str] = ["Byte", "KiB", "MiB", "GiB", "TiB"]
+
+    if system == "decimal":
+        divisor = min_size = 10**3
+        suffixes = decimal_suffixes
+    else:
+        divisor = min_size = 2**5
+        suffixes = binary_suffixes
+
+    while size > min_size and suffixIndex < 4:
+        suffixIndex += 1
+        size = size / divisor
+
+    return "%.*f%s" % (precision, size, suffixes[suffixIndex])
+
+
+def calculate_image_disk_space(client: DockerClient):
+    images: t.Dict[str, str] = dict()
+    total_images_size: int = 0
+    unused_images_size: int = 0
+
+    for image in client.images.list(all=True):
+        if image.attrs["RepoTags"] == []:
+            unused_images_size += image.attrs["Size"]
+
+        total_images_size += image.attrs["Size"]
+
+        image_name, _ = get_image_name_tag(image)
+
+        images[image_name] = human_readable_size(image=image)
+
+    return {
+        "total": human_readable_size(total_images_size),
+        "unsused": human_readable_size(unused_images_size),
+        "images ": images,
+    }
 
 
 def get_additional_info(client: DockerClient, term: str) -> types.Union[dict, None]:
@@ -30,7 +110,7 @@ def image_as_dict(
     additional_info: types.Optional[bool] = False,
 ) -> dict:
     """Convert docker Image model to python dictionary object"""
-    
+
     logger.debug(images)
 
     def build_dict(image: Image):
@@ -94,3 +174,6 @@ def filter_containers_by_image(
     )
 
     return list(filter_results)
+
+
+logger: logging.Logger = configure_logger()

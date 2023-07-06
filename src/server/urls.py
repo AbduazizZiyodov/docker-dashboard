@@ -1,5 +1,5 @@
-from .api import *
-from .websockets import *
+from server.core.api import *
+from server.core.websockets import *
 
 from starlette.routing import Route, WebSocketRoute
 
@@ -36,4 +36,11 @@ websocket_routes = [
     WebSocketRoute("/websocket/images/pull", PullImages),
 ]
 
-routes = container_routes + image_routes + websocket_routes
+stats_routes = [Route("/api/stats", disk_space_usage, methods=["GET"])]
+
+
+routes = list()
+
+
+for route in [container_routes, image_routes, websocket_routes, stats_routes]:
+    routes.extend(route)

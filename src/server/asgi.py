@@ -1,6 +1,6 @@
 from starlette.applications import Starlette
 from server.settings import STARLETTE_SETTINGS
-from server.exceptions import exception_handlers
+from server.core.exceptions import exception_handlers
 
 
 application = Starlette(**STARLETTE_SETTINGS)

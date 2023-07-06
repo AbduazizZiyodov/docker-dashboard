@@ -3,7 +3,7 @@ from starlette.middleware import Middleware
 from starlette.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
 
-from server.handlers.urls import routes
+from server.urls import routes
 
 routes += [Route("/", lambda _: JSONResponse("ok"), methods=["GET"])]
 
