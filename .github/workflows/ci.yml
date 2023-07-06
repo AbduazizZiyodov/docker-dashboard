@@ -26,6 +26,11 @@ jobs:
           python -m pip install -U pip
           pip install -r server/requirements.txt
           pip install -r server/test_requirements.txt
+          pip install mypy
+
+      - name: MyPy(static type checking) 🐍
+        run: |
+          mypy src/server
 
       - name: Run tests 🧪
         run: |
