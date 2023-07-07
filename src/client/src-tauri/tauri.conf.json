@@ -58,7 +58,7 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 500,
         "resizable": false,
         "title": "Docker Dashboard",
         "width": 1050,
