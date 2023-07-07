@@ -14,7 +14,13 @@ export interface RunContainerData {
   image?: string;
   command?: string;
   entrypoint?: string;
-  ports?:object;
+  ports?: object;
   firstPort?: string;
   secondPort?: string;
+}
+
+
+export interface ContainerLogsData {
+  logs: string;
+  container: string;
 }

@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Container, RunContainerData } from '@models/container';
+import { Container, RunContainerData, ContainerLogsData } from '@models/container';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContainerService {
   api: string = environment.apiUrl;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getContainers() {
     return this.http.get<Container[]>(`${this.api}/containers`);
@@ -38,6 +38,6 @@ export class ContainerService {
   }
 
   getLogs(container_id: string | undefined) {
-    return this.http.get(`${this.api}/containers/${container_id}/logs`);
+    return this.http.get<ContainerLogsData>(`${this.api}/containers/${container_id}/logs`);
   }
 }
