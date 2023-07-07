@@ -47,8 +47,6 @@ def human_readable_size(
     """Converts size (in bytes) to human readable system.
     It can be used with 2 system, docker CLI uses decimal (10's power).
     """
-    assert size or image, "Size or image should be provided"
-
     if not size and image:
         size = image.attrs["Size"]
 

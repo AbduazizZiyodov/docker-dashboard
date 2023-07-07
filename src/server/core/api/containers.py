@@ -69,4 +69,6 @@ async def get_logs(request: Request) -> JSONResponse:
     """Get logs from the inside of the container"""
     container: Container = client.containers.get(request.path_params["container_id"])
 
-    return JSONResponse({"logs": container.logs().decode("utf-8")})
+    return JSONResponse(
+        {"logs": container.logs().decode("utf-8"), "container": container.name}
+    )
