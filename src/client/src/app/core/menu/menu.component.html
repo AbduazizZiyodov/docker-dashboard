@@ -1,38 +1,28 @@
-<nav class="navbar navbar-expand-lg fixed-top bg-light shadow-1-strong">
-  <div class="container">
-    <h1 class="navbar-text fw-bold dodger-blue" routerLink="">
-      <img src="assets/icons/Icon.svg" width="55px" /> Docker Dashboard
-    </h1>
-  </div>
-</nav>
-
+<button class="btn btn-sm hide-btn" (click)="hideOrShow(sidebar, content)">
+  <i class="fas fa-angle-double-left" *ngIf="!isHidden"></i>
+  <i class="fas fa-angle-double-right" *ngIf="isHidden"></i>
+</button>
 <div class="sidebar fixed" #sidebar>
-  <span class="hide-btn" (click)="hideOrShow(sidebar, content)">
-    <i class="far fa-eye" *ngIf="isHidden"></i>
-    <i class="far fa-eye-slash" *ngIf="!isHidden"></i>
-  </span>
+  <ul>
+    <hr />
+    <li class="pointer" routerLink="containers">
+      <span class="text-gray"> Containers</span>
+    </li>
+    <hr />
+    <li class="pointer" routerLink="images">
+      <span class="text-gray"> Images</span>
+    </li>
 
-  <ul class="list-group text-center p-2">
     <hr />
-    <li class="pointer list-group-item" routerLink="containers">
-      <span class="text-gray"><i class="fas fa-cube"></i> Containers</span>
-    </li>
-    <hr />
-    <li class="pointer list-group-item" routerLink="images">
-      <span class="text-gray"> <i class="fas fa-box-open"></i> Images</span>
-    </li>
-    <hr />
-    <li class="pointer list-group-item" routerLink="pull-list">
-      <span class="text-gray">
-        <i class="fas fa-cloud-download-alt"></i> Pulls
-      </span>
+    <li class="pointer" routerLink="pull-list">
+      <span class="text-gray"> Pulls </span>
       <span class="badge dodger-blue-bg">beta</span>
     </li>
 
     <hr />
 
-    <li class="pointer list-group-item" style="border: none" routerLink="about">
-      <span class="text-gray"> <i class="fas fa-info-circle"></i> About</span>
+    <li class="pointer" routerLink="about">
+      <span class="text-gray"> About</span>
     </li>
     <hr />
   </ul>
@@ -41,16 +31,10 @@
 <div class="content" #content>
   <div class="row">
     <div class="col">
-      <button
-        class="btn btn-sm btn-success float-start rounded m-3"
-        (click)="back()"
-      >
+      <button class="btn btn-sm float-start rounded m-3" (click)="back()">
         <i class="fas fa-arrow-left"></i>
       </button>
-      <button
-        class="btn btn-sm btn-success float-end rounded m-3"
-        (click)="next()"
-      >
+      <button class="btn btn-sm float-end rounded m-3" (click)="next()">
         <i class="fas fa-arrow-right"></i>
       </button>
     </div>

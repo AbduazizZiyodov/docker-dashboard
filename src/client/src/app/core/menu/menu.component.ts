@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent {
-  hideSize: string = '30px';
-  showSize: string = '250px';
+  hideSize: string = '10px';
+  showSize: string = '170px';
   isHidden: boolean = false;
 
   constructor(private location: Location, private router: Router) {}
