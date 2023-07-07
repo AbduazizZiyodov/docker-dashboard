@@ -34,7 +34,6 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
 import { LogsComponent } from '@components/logs/logs.component';
 import { AboutComponent } from '@components/about/about.component';
 import { ModalComponent } from '@components/modal/modal.component';
-import { FooterComponent } from '@components/footer/footer.component';
 import { MenuComponent } from './core/menu/menu.component';
 import { PullMenuComponent } from '@image/pull-menu/pull-menu.component';
 import { PullImageComponent } from '@image/pull-image/pull-image.component';
@@ -71,7 +70,6 @@ const mdbModules = [
     WelcomeComponent,
     LogsComponent,
     ModalComponent,
-    FooterComponent,
     MenuComponent,
     NotFoundComponent,
     ContainersModalComponent,

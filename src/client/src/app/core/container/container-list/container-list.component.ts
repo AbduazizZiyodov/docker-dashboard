@@ -18,7 +18,6 @@ import { switchMap } from 'rxjs/operators';
 })
 export class ContainerListComponent implements OnInit {
   containers!: Container[];
-  timerSubscription!: Subscription;
   modalRef: MdbModalRef<ModalComponent> | null = null;
 
   status: Status = {
@@ -36,11 +35,10 @@ export class ContainerListComponent implements OnInit {
     private toastr: ToastrService,
     private clipboardService: ClipboardService,
     private modalService: MdbModalService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.timerSubscription = timer(0, 3000)
-      .pipe(switchMap(() => this.containerService.getContainers()))
+    this.containerService.getContainers()
       .subscribe((data: Container[]) => {
         this.containers = data.reverse();
       });
@@ -95,9 +93,5 @@ export class ContainerListComponent implements OnInit {
   copyId(content: string) {
     this.clipboardService.copyFromContent(content);
     this.toastr.success('Copied!');
-  }
-
-  ngOnDestroy() {
-    this.timerSubscription.unsubscribe();
   }
 }

@@ -7,22 +7,22 @@
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 
+@font-face {
+  font-family: "FiraCode";
+  src: url("./assets/fonts/FiraCode.ttf");
+}
+
+@font-face {
+  font-family: "Righteous";
+  src: url("./assets/fonts/Righteous.ttf");
+}
+
 * {
-  font-family: "Comfortaa", sans-serif;
-}
-
-@font-face {
-  font-family: "Comfortaa";
-  src: url("./assets/fonts/Comfortaa-VariableFont_wght.ttf");
-}
-
-@font-face {
-  font-family: "Oregano";
-  src: url("./assets/fonts/Oregano-Regular.ttf");
+  font-family: "FiraCode", sans-serif;
 }
 
 .navbar-text {
-  font-family: "Oregano";
+  font-family: "Righteous";
   font-weight: bold;
   font-size: 45px;
   padding: 0;
@@ -41,16 +41,15 @@
 
 textarea {
   resize: none;
-  width: 100%;
+  width: 90%;
+  height: 70vh;
   padding: 8px;
   color: white;
-  font-size: 15px;
+  font-size: 12px;
   margin-bottom: 5px;
-  font-family: "mono";
-  border-radius: 10px;
+  font-family: "FiraCode";
+  border-radius: 5px;
   white-space: pre-line;
   border: 10px solid rgb(41, 41, 41);
   background-color: rgb(41, 41, 41);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
