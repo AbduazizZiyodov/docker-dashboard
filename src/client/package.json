@@ -43,7 +43,7 @@
     "aos": "^2.3.4",
     "autoprefixer": "10.4.5",
     "chart.js": "^3.9.1",
-    "mdb-angular-ui-kit": "^2.2.0",
+    "mdb-angular-ui-kit": "^2.3.0",
     "ngx-clipboard": "^15.1.0",
     "ngx-toastr": "^14.3.0",
     "rxjs": "~7.5.0",
