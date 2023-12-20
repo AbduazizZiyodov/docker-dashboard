@@ -1,0 +1,19 @@
+<div class="card">
+  <p-menubar [model]="items">
+    <ng-template pTemplate="start">
+      <img
+        routerLink="/"
+        style="cursor: pointer"
+        src="assets/images/docker-logo.svg"
+        height="40"
+      />
+    </ng-template>
+    <p-button
+      (onClick)="changeTheme()"
+      [icon]="isDark ? 'fa-regular fa-moon' : 'fa-regular fa-lightbulb'"
+      [outlined]="true"
+    ></p-button>
+  </p-menubar>
+</div>
+
+<router-outlet></router-outlet>

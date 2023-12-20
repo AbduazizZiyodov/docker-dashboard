@@ -1,26 +1,6 @@
 {
-  "name": "docker-dashboard",
-  "description": "Simple lightweight GUI application for working with Docker",
-  "author": {
-    "email": "abduaziz.ziyodov@mail.ru",
-    "name": "Abduaziz",
-    "url": "http://github.com/AbduazizZiyodov"
-  },
-  "license": "MIT",
-  "version": "2.4.0",
-  "main": "main.js",
-  "productName": "Docker Dashboard",
-  "keywords": [
-    "angular",
-    "tauri",
-    "docker",
-    "dashboard",
-    "developer-tool"
-  ],
-  "os": [
-    "darwin",
-    "linux"
-  ],
+  "name": "client",
+  "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -30,42 +10,32 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~13.3.0",
-    "@angular/cdk": "^13.3.9",
-    "@angular/common": "~13.3.0",
-    "@angular/compiler": "~13.3.0",
-    "@angular/core": "~13.3.0",
-    "@angular/forms": "~13.3.0",
-    "@angular/platform-browser": "~13.3.0",
-    "@angular/platform-browser-dynamic": "~13.3.0",
-    "@angular/router": "~13.3.0",
-    "@fortawesome/fontawesome-free": "^6.4.2",
-    "aos": "^2.3.4",
-    "autoprefixer": "10.4.16",
-    "chart.js": "^3.9.1",
-    "mdb-angular-ui-kit": "^2.3.0",
-    "ngx-clipboard": "^15.1.0",
-    "ngx-toastr": "^14.3.0",
-    "rxjs": "~7.5.0",
-    "tslib": "^2.6.2",
+    "@angular/animations": "^17.0.0",
+    "@angular/common": "^17.0.0",
+    "@angular/compiler": "^17.0.0",
+    "@angular/core": "^17.0.0",
+    "@angular/forms": "^17.0.0",
+    "@angular/platform-browser": "^17.0.0",
+    "@angular/platform-browser-dynamic": "^17.0.0",
+    "@angular/router": "^17.0.0",
+    "@fortawesome/fontawesome-free": "^6.5.1",
+    "primeicons": "^6.0.1",
+    "primeng": "^17.1.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
   },
-  "resolutions": {
-    "autoprefixer": "10.4.5"
-  },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~17.0.6",
-    "@angular/cli": "~13.3.4",
-    "@angular/compiler-cli": "~13.3.0",
-    "@types/aos": "^3.0.4",
-    "@types/jasmine": "~3.10.0",
-    "@types/node": "^12.11.1",
-    "jasmine-core": "~4.0.0",
-    "karma": "~6.3.0",
-    "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage": "~2.1.0",
-    "karma-jasmine": "~4.0.0",
-    "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.6.2"
+    "@angular-devkit/build-angular": "^17.0.7",
+    "@angular/cli": "^17.0.7",
+    "@angular/compiler-cli": "^17.0.0",
+    "@types/jasmine": "~5.1.0",
+    "jasmine-core": "~5.1.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.2.2"
   }
 }
