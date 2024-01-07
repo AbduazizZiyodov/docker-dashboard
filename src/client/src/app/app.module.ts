@@ -17,9 +17,11 @@ import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { AvatarModule } from 'primeng/avatar'
 import { ButtonModule } from 'primeng/button';
+import { DividerModule } from 'primeng/divider';
 import { ListboxModule } from 'primeng/listbox';
 import { SidebarModule } from 'primeng/sidebar';
-import { MenubarModule } from 'primeng/menubar';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { TieredMenuModule } from 'primeng/tieredmenu';
 // Components
 import { ContainersComponent } from '@containers/containers.component';
 
@@ -36,7 +38,6 @@ import { ContainersComponent } from '@containers/containers.component';
     HttpClientModule,
     CardModule,
     ButtonModule,
-    MenubarModule,
     ToastModule,
     AvatarModule,
     SidebarModule,
@@ -44,7 +45,10 @@ import { ContainersComponent } from '@containers/containers.component';
     TagModule,
     ListboxModule,
     MenuModule,
-    BadgeModule
+    BadgeModule,
+    TieredMenuModule,
+    DividerModule,
+    PanelMenuModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

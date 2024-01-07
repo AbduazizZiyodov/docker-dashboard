@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { MenuItem, PrimeNGConfig } from 'primeng/api';
 import { ThemeService } from '@services/theme.service';
+import { TreeNode } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,7 @@ import { ThemeService } from '@services/theme.service';
 export class AppComponent {
   isDark: boolean = false;
   items: MenuItem[] | undefined;
+  sidebarVisible: boolean = false;
 
   constructor(
     private primengConfig: PrimeNGConfig,

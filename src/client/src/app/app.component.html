@@ -1,24 +1,40 @@
-<p-menubar [model]="items">
-  <ng-template pTemplate="start">
-    <img
-      routerLink="/"
-      style="cursor: pointer; margin: 10px"
-      [src]="
-        'assets/images/docker-logo-' +
-        (isDark ? 'dark' : 'light') +
-        '-theme.svg'
-      "
-      height="45"
-    />
-  </ng-template>
-  <div style="cursor: pointer; margin: 10px">
-    <p-button
-      (onClick)="changeTheme()"
-      [icon]="isDark ? 'fa-regular fa-moon' : 'fa-regular fa-lightbulb'"
-      [outlined]="true"
-    ></p-button>
-  </div>
-</p-menubar>
+<div class="flex justify-content-center">
+  <p-sidebar [(visible)]="sidebarVisible">
+    <ng-template pTemplate="header">
+      <img
+        routerLink="/"
+        style="cursor: pointer; margin: 10px"
+        [src]="
+          'assets/images/docker-logo-' +
+          (isDark ? 'dark' : 'light') +
+          '-theme.svg'
+        "
+        height="45"
+      />
+      <h2>Admiral</h2>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+      <div class="flex justify-content-center">
+        <p-panelMenu [model]="items" [multiple]="true"></p-panelMenu>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <p-button
+        size="small"
+        [rounded]="true"
+        (onClick)="changeTheme()"
+        [icon]="isDark ? 'fa-regular fa-moon' : 'fa-regular fa-lightbulb'"
+        [outlined]="true"
+      ></p-button>
+      <p-divider></p-divider>
+      <div class="p-2">
+        <span> Admiral v2.0.0 </span>
+      </div>
+    </ng-template>
+  </p-sidebar>
+  <p-button (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
+</div>
 
 <div class="container">
   <router-outlet></router-outlet>
