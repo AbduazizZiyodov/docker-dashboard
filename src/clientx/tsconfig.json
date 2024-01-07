@@ -2,6 +2,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -25,16 +26,16 @@
     ],
     "paths": {
       "@services/*": [
-        "./src/app/services/*"
+        "src/app/services/*"
       ],
       "@models/*": [
-        "./src/app/models/*"
+        "src/app/models/*"
       ],
       "@containers/*": [
-        "./src/app/containers/*"
+        "src/app/containers/*"
       ],
       "@image/*": [
-        "./src/app/images/*"
+        "src/app/images/*"
       ]
     }
   },

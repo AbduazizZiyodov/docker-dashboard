@@ -1,20 +1,49 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 
+// Import PrimeNG modules
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { MenubarModule } from 'primeng/menubar';
 import { MenuItem, PrimeNGConfig } from 'primeng/api';
-import { ThemeService } from '@services/theme.service';
 
+import { ThemeService } from './services/theme.service';
+import { ToastModule } from 'primeng/toast';
+import { SidebarModule } from 'primeng/sidebar';
+import { Sidebar } from 'primeng/sidebar';
+import {AvatarModule} from 'primeng/avatar'
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    ButtonModule,
+    ToastModule,
+    CardModule,
+    MenubarModule,
+    SidebarModule,
+    AvatarModule
+
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   isDark: boolean = false;
   items: MenuItem[] | undefined;
+  sidebarVisible: boolean = false;
+  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
+
+  closeCallback(e: Event): void {
+    this.sidebarRef.close(e);
+  }
+
 
   constructor(
     private primengConfig: PrimeNGConfig,
-    private themeService: ThemeService,
+    private themeService: ThemeService
   ) { }
 
   changeTheme() {
@@ -23,10 +52,6 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      this.changeTheme();
-    }
-
     this.primengConfig.ripple = true;
     this.items = [
       {
@@ -76,7 +101,5 @@ export class AppComponent {
       }
     ];
   }
-
-
 
 }

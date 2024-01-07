@@ -1,19 +1,25 @@
-<div class="card">
-  <p-menubar [model]="items">
-    <ng-template pTemplate="start">
-      <img
-        routerLink="/"
-        style="cursor: pointer"
-        src="assets/images/docker-logo.svg"
-        height="40"
-      />
-    </ng-template>
+<p-menubar [model]="items">
+  <ng-template pTemplate="start">
+    <img
+      routerLink="/"
+      style="cursor: pointer; margin: 10px"
+      [src]="
+        'assets/images/docker-logo-' +
+        (isDark ? 'dark' : 'light') +
+        '-theme.svg'
+      "
+      height="45"
+    />
+  </ng-template>
+  <div style="cursor: pointer; margin: 10px">
     <p-button
       (onClick)="changeTheme()"
       [icon]="isDark ? 'fa-regular fa-moon' : 'fa-regular fa-lightbulb'"
       [outlined]="true"
     ></p-button>
-  </p-menubar>
-</div>
+  </div>
+</p-menubar>
 
-<router-outlet></router-outlet>
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

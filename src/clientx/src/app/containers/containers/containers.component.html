@@ -1,0 +1,64 @@
+
+<div class="card flex justify-content-center gap-2">
+  <p-toast></p-toast>
+  <button type="button" pButton pRipple (click)="showSuccess()" label="Success" class="p-button-success"></button>
+  <button type="button" pButton pRipple (click)="showInfo()" label="Info" class="p-button-info"></button>
+  <button type="button" pButton pRipple (click)="showWarn()" label="Warn" class="p-button-warning"></button>
+  <button type="button" pButton pRipple (click)="showError()" label="Error" class="p-button-danger"></button>
+</div>
+
+<p-card header="List of Containers" class="mx-5" *ngIf="containers.length">
+  <p-table [value]="containers">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Image</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-container let-columns="columns">
+      <tr>
+        <td>
+          <p-tag [value]="container.short_id" severity="info"></p-tag>
+        </td>
+        <td>
+          <p-tag [value]="container.name" severity="success"></p-tag>
+        </td>
+        <td>
+          <p-tag
+            [value]="container.status.toUpperCase()"
+            [severity]="getContainerStatus(container.status)"
+          ></p-tag>
+        </td>
+        <td>
+          <p-tag [value]="container.image.name" severity="warning"></p-tag>
+        </td>
+        <td class="text-center">
+          <p-button
+            class="m-2"
+            [rounded]="true"
+            icon="fa-solid fa-play"
+            severity="success"
+            (onClick)="startContainer()"
+          ></p-button>
+          <p-button
+            class="m-2"
+            [rounded]="true"
+            icon="fa-solid fa-stop"
+            severity="danger"
+          ></p-button>
+
+          <p-button
+            class="m-2"
+            [rounded]="true"
+            icon="fa-solid fa-repeat"
+            severity="primary"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>
+

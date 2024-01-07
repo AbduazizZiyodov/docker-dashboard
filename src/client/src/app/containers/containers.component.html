@@ -1,0 +1,55 @@
+<div class="card m-5" *ngIf="containers.length">
+  <h4>List of Containers</h4>
+  <p-table [value]="containers">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>State</th>
+        <th>Image</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-container let-columns="columns">
+      <tr>
+        <td>
+          <p-tag [value]="container.short_id" severity="info"></p-tag>
+        </td>
+        <td>
+          <p-tag [value]="container.name" severity="success"></p-tag>
+        </td>
+        <td>
+          <p-tag
+            [value]="container.status.toUpperCase()"
+            [severity]="getContainerStatus(container.status)"
+          ></p-tag>
+        </td>
+        <td>
+          <p-tag [value]="container.image.name" severity="warning"></p-tag>
+        </td>
+        <td class="text-center">
+          <p-button
+            class="m-2"
+            [rounded]="true"
+            icon="fa-solid fa-play"
+            severity="success"
+            (onClick)="startContainer()"
+          ></p-button>
+          <p-button
+            class="m-2"
+            [rounded]="true"
+            icon="fa-solid fa-stop"
+            severity="danger"
+          ></p-button>
+
+          <p-button
+            class="m-2"
+            [rounded]="true"
+            icon="fa-solid fa-repeat"
+            severity="primary"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
