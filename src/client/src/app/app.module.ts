@@ -20,8 +20,10 @@ import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { ListboxModule } from 'primeng/listbox';
 import { SidebarModule } from 'primeng/sidebar';
+import { DropdownModule } from 'primeng/dropdown';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { TieredMenuModule } from 'primeng/tieredmenu';
+import { ToolbarModule } from 'primeng/toolbar'
 // Components
 import { ContainersComponent } from '@containers/containers.component';
 
@@ -48,7 +50,9 @@ import { ContainersComponent } from '@containers/containers.component';
     BadgeModule,
     TieredMenuModule,
     DividerModule,
-    PanelMenuModule
+    PanelMenuModule,
+    DropdownModule,
+    ToolbarModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

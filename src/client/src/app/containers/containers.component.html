@@ -1,52 +1,146 @@
+<p-toast position="bottom-right"></p-toast>
+
+<div class="card">
+  <p-toolbar>
+    <div class="p-toolbar-group-start">
+      <button pButton icon="pi pi-plus" class="mr-2"></button>
+      <button pButton icon="pi pi-print" class="mr-2"></button>
+      <button pButton icon="pi pi-upload"></button>
+    </div>
+
+    <div class="p-toolbar-group-end">
+      <p-button
+        class="m-2"
+        icon="fa-solid fa-play"
+        severity="success"
+        label="Start"
+        (onClick)="startContainers()"
+        [disabled]="
+          selectedContainers == undefined || selectedContainers.length == 0
+        "
+      ></p-button>
+      <p-button
+        class="m-2"
+        icon="fa-solid fa-stop"
+        severity="danger"
+        label="Stop"
+        (onClick)="stopContainers()"
+        [disabled]="
+          selectedContainers == undefined || selectedContainers.length == 0
+        "
+      ></p-button>
+      <p-button
+        class="m-2"
+        icon="fa-solid fa-stop"
+        severity="danger"
+        label="Kill"
+        [disabled]="
+          selectedContainers == undefined || selectedContainers.length == 0
+        "
+      ></p-button>
+      <p-button
+        class="m-2"
+        icon="fa-solid fa-repeat"
+        severity="primary"
+        label="Restart"
+        [disabled]="
+          selectedContainers == undefined || selectedContainers.length == 0
+        "
+      ></p-button>
+    </div>
+  </p-toolbar>
+</div>
+
 <div class="card m-5" *ngIf="containers.length">
-  <h4>List of Containers</h4>
-  <p-table [value]="containers">
+  <h2>
+    <i class="fa-solid fa-cube" style="color: #4ade80"></i> Container List
+  </h2>
+  <p-table
+    [rows]="5"
+    [value]="containers"
+    [paginator]="true"
+    [(selection)]="selectedContainers"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [globalFilterFields]="['status']"
+  >
     <ng-template pTemplate="header" let-columns>
       <tr>
-        <th>Id</th>
-        <th>Name</th>
+        <th style="width: 4rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+        <th pSortableColumn="name">
+          Name <p-sortIcon field="name"></p-sortIcon>
+        </th>
         <th>State</th>
-        <th>Image</th>
-        <th class="text-center">Actions</th>
+        <th pSortableColumn="image.name">
+          Image <p-sortIcon field="image.name"></p-sortIcon>
+        </th>
+      </tr>
+      <tr>
+        <th></th>
+        <th></th>
+        <th><p-columnFilter type="text" field="name"></p-columnFilter></th>
+        <th>
+          <p-columnFilter field="status" matchMode="equals" [showMenu]="false">
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-dropdown
+                [options]="statuses"
+                (onChange)="filter($event.value)"
+                placeholder="Any"
+                [showClear]="true"
+              >
+                <ng-template let-option pTemplate="item">
+                  <p-tag
+                    [value]="option.value"
+                    [severity]="getContainerStatus(option.label)"
+                  ></p-tag>
+                </ng-template>
+              </p-dropdown>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th></th>
+        <th></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-container let-columns="columns">
       <tr>
         <td>
-          <p-tag [value]="container.short_id" severity="info"></p-tag>
+          <p-tableCheckbox [value]="container"></p-tableCheckbox>
         </td>
-        <td>
-          <p-tag [value]="container.name" severity="success"></p-tag>
-        </td>
-        <td>
-          <p-tag
-            [value]="container.status.toUpperCase()"
-            [severity]="getContainerStatus(container.status)"
-          ></p-tag>
-        </td>
-        <td>
-          <p-tag [value]="container.image.name" severity="warning"></p-tag>
-        </td>
-        <td class="text-center">
-          <p-button
-            class="m-2"
-            [rounded]="true"
-            icon="fa-solid fa-play"
-            severity="success"
-            (onClick)="startContainer()"
-          ></p-button>
-          <p-button
-            class="m-2"
-            [rounded]="true"
-            icon="fa-solid fa-stop"
-            severity="danger"
-          ></p-button>
 
+        <td>
           <p-button
-            class="m-2"
-            [rounded]="true"
-            icon="fa-solid fa-repeat"
-            severity="primary"
+            [size]="'small'"
+            [label]="container.short_id"
+            severity="info"
+          ></p-button>
+        </td>
+        <td>
+          <p-button
+            [outlined]="true"
+            [label]="container.name"
+            severity="help"
+          ></p-button>
+        </td>
+        <td>
+          <p-button
+            [outlined]="true"
+            [size]="'small'"
+            [label]="container.status.toUpperCase()"
+            [severity]="getContainerStatus(container.status)"
+          ></p-button>
+        </td>
+        <td>
+          <p-button
+            [label]="container.image.name + ':' + container.image.tag"
+            severity="warning"
+            [size]="'small'"
           ></p-button>
         </td>
       </tr>

@@ -57,7 +57,7 @@ export class AppComponent {
         icon: 'fa-solid fa-hard-drive',
         items: [
           {
-            label: 'Create',
+            label: 'Sooon ...',
             icon: 'fa-solid fa-folder-plus'
           }
         ]
@@ -67,7 +67,7 @@ export class AppComponent {
         icon: 'fa-solid fa-server',
         items: [
           {
-            label: 'Somting',
+            label: 'Sooon ...',
             icon: 'pi pi-fw pi-pencil',
           }
         ]

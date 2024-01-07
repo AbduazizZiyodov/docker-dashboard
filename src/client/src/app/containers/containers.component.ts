@@ -7,6 +7,12 @@ import { ContainerService } from '@services/container.service';
 import { MessageService } from 'primeng/api';
 
 
+interface StatusFilter {
+  label: string
+  value: string
+
+}
+
 @Component({
   selector: 'app-containers',
   templateUrl: './containers.component.html',
@@ -15,44 +21,58 @@ import { MessageService } from 'primeng/api';
 export class ContainersComponent implements OnInit {
   containers!: Container[];
   messages!: Message[];
+  selectedContainers!: Container[];
+  statuses: StatusFilter[] = [
+    { label: 'Exited', value: 'exited' },
+    { label: 'Running', value: 'running' }
+  ];
 
   constructor(
-    private containerService: ContainerService, private messageService: MessageService
+    private containerService: ContainerService,
+    private messageService: MessageService
   ) { }
 
-  showSuccess() {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
-  }
-
-  showInfo() {
-    this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Message Content' });
-  }
-
-  showWarn() {
-    this.messageService.add({ severity: 'warn', summary: 'Warn', detail: 'Message Content' });
-  }
-
-  showError() {
-    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Message Content' });
-  }
-
-  startContainer() {
-    console.log("HELLO", this.messages)
-    this.messages = [
-      { severity: 'success', summary: 'Success', detail: 'Message Content', life: 0 }
-    ];
-  }
 
   ngOnInit(): void {
+    this.loadContainers()
+  }
+
+  loadContainers() {
     this.containerService.all()
       .subscribe((data: Container[]) => {
         this.containers = data.reverse();
       });
   }
 
+  startContainers() {
+    console.log(this.selectedContainers)
+
+    for (let container of this.selectedContainers) {
+      this.messageService.add({ severity: 'info', summary: 'Starting', detail: `Starting container ${container.name}` });
+      this.containerService.startStoppedContainer(container.id).subscribe((data: any) => {
+        if (data.started) {
+          this.messageService.add({ severity: 'success', summary: 'Started', detail: `Container ${container.name} started` });
+        }
+        this.loadContainers()
+      })
+    }
+
+  }
+  stopContainers() {
+    for (let container of this.selectedContainers) {
+      this.messageService.add({ severity: 'info', summary: 'Stopping', detail: `Stopping container ${container.name}` });
+      this.containerService.stopContainer(container.id).subscribe((data: any) => {
+        if (data.stopped) {
+          this.messageService.add({ severity: 'warn', summary: 'Stopped', detail: `Container ${container.name} is stopped` });
+        }
+        this.loadContainers()
+      })
+    }
+  }
+
 
   getContainerStatus(status: string): string {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case 'created':
         return 'warning';
       case 'dead':
