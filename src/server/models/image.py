@@ -1,5 +1,14 @@
 import typing as t
+from enum import StrEnum
 from pydantic import BaseModel
+
+class ContainerStatusEnum(StrEnum):
+    dead = "dead"
+    exited = "exited"
+    paused = "paused"
+    running = "running"
+    created = "created"
+    restarting = "restarting"
 
 
 class DockerSearchRequest(BaseModel):
@@ -16,10 +25,25 @@ class DockerPullRequest(BaseModel):
         return f"{self.repository}:{self.tag}"
 
 
-class ImageResponseModel(BaseModel):
+class ImageResponse(BaseModel):
     tag: str
     name: str
     size: str
     long_id: str
     short_id: str
+    labels: dict[str, t.Any]
+
+
+class ImageSearchResult(BaseModel):
+    name: str
+    star_count: int
+    is_official: bool
+    is_automated: bool
+    description: str
+
+
+class ContainerResponseWithoutImage(BaseModel):
+    id: str
+    name: str
+    status: ContainerStatusEnum
     labels: dict[str, t.Any]

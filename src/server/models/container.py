@@ -2,7 +2,7 @@ import typing as t
 from enum import StrEnum
 from pydantic import BaseModel
 
-from server.models.image import ImageResponseModel
+from server.models.image import ImageResponse
 
 
 class ContainerStatusEnum(StrEnum):
@@ -12,13 +12,6 @@ class ContainerStatusEnum(StrEnum):
     running = "running"
     created = "created"
     restarting = "restarting"
-
-
-class ContainerActionStatusEnum(StrEnum):
-    started = "started"
-    paused = "paused"
-    stopped = "stopped"
-    removed = "removed"
 
 
 class ContainerRunOptions(BaseModel):
@@ -35,15 +28,19 @@ class ContainerResponse(BaseModel):
     name: str
     status: ContainerStatusEnum
     labels: dict[str, t.Any]
-    image: ImageResponseModel
+    image: ImageResponse
 
 
 class ContainerActionStatusResponse(BaseModel):
     container_id: str
-    status: ContainerActionStatusEnum
+    status: ContainerStatusEnum
 
 
 class ContainerLogsResponse(BaseModel):
     logs: str
     container_id: str
     container_name: str
+
+
+class DockerPingResponse(BaseModel):
+    success: bool

@@ -166,16 +166,16 @@ def container_as_dict(
 
 
 def format_id(element_id: str) -> str:
-    """Get long ID."""
     return element_id.split(":")[1]
 
 
-def filter_containers_by_image(
-    image_short_id: str, client: DockerClient
-) -> types.Containers:
+def filter_containers_by_image(param: str, client: DockerClient) -> types.Containers:
     """Filter by image short ID (simple)"""
+    print(client.containers.list(all=True)[0].image.id)
     filter_results = filter(
-        lambda container: container.image.short_id == image_short_id,
+        lambda container: format_id(container.image.short_id) == param
+        or get_image_name_tag(container.image)[0] == param
+        or format_id(container.image.id) == param,
         client.containers.list(all=True),
     )
 

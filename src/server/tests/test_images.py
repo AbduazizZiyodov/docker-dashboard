@@ -26,7 +26,7 @@ async def test_get_image(client: AsyncClient):
 
 
 async def test_search_image(client: AsyncClient):
-    response = await client.post("images/search", json={"term": TEST_IMAGE_NAME})
+    response = await client.get(f"images/search/?term={TEST_IMAGE_NAME}")
 
     assert response.status_code == status.HTTP_200_OK
     assert TEST_IMAGE_NAME in [image["name"] for image in response.json()]
@@ -37,26 +37,24 @@ async def test_get_containers_by_image(client: AsyncClient):
         response = await client.post("containers/run", json={"image": TEST_IMAGE_NAME})
 
         assert response.status_code == status.HTTP_201_CREATED
-        pytest.CONTAINER_ID = response.json()["short_id"]
+        pytest.CONTAINER_ID = response.json()["id"]
 
     await on_begin()
 
     response = await client.get(f"images/{pytest.IMAGE_ID}/containers")
 
-    assert all(
-        [
-            container["image"]["name"].startswith(TEST_IMAGE_NAME)
-            for container in response.json()
-        ]
-    )
-
     assert response.status_code == status.HTTP_200_OK
+    assert bool(len(response.json()))
+
+    assert any(
+        [container["id"] == pytest.CONTAINER_ID for container in response.json()]
+    )
 
 
 async def test_delete_container_before_image(client: AsyncClient):
     query_param: str = "force_remove=true"
     response = await client.delete(
-        f"containers/{pytest.CONTAINER_ID}/remove?{query_param}"
+        f"containers/{pytest.CONTAINER_ID}/remove/?{query_param}"
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
