@@ -7,7 +7,7 @@ import { Container, ContainerLogsData, RunContainerData } from '@models/containe
   providedIn: 'root',
 })
 export class ContainerService {
-  api: string = 'http://127.0.0.1:2121/api';
+  api: string = 'http://127.0.0.1:2120/api';
 
   constructor(private http: HttpClient) { }
 
