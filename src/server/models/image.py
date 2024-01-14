@@ -25,7 +25,7 @@ class DockerPullRequest(BaseModel):
         return f"{self.repository}:{self.tag}"
 
 
-class ImageResponse(BaseModel):
+class DockerImageResponse(BaseModel):
     tag: str
     name: str
     size: str
@@ -34,12 +34,12 @@ class ImageResponse(BaseModel):
     labels: dict[str, t.Any]
 
 
-class ImageSearchResult(BaseModel):
+class DockerImageSearchResult(BaseModel):
     name: str
     star_count: int
+    description: str
     is_official: bool
     is_automated: bool
-    description: str
 
 
 class ContainerResponseWithoutImage(BaseModel):

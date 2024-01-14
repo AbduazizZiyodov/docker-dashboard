@@ -3,12 +3,10 @@ import docker
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from server.api.image import router as image_router
-from server.api.container import router as container_router
 from server.websocket.images import PullImages
-
+from server.api.image import router as image_router
 from server.utils.exceptions import exception_handlers
-from server.models.container import DockerPingResponse
+from server.api.container import router as container_router
 
 application = FastAPI(
     redoc_url=None,
@@ -37,8 +35,7 @@ for exception_class, handler in exception_handlers.items():
     application.add_exception_handler(exception_class, handler)
 
 
-@application.get("/", response_model=DockerPingResponse)
+@application.get("/", response_model=str)
 def docker_ping_request():
-    """Checks the server is responsive.
-    """
-    return DockerPingResponse(success=bool(docker.DockerClient().ping()))
+    """Checks the server is responsive."""
+    return "ok" if bool(docker.DockerClient().ping()) else "!ok"
