@@ -32,7 +32,7 @@ async def test_stop_container(client: AsyncClient):
     response = await client.get(f"containers/{pytest.CONTAINER_ID}/stop")
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json()["stopped"] == True
+    assert response.json()["status"] == "exited"
 
     response = await client.get(f"containers/{pytest.CONTAINER_ID}")
     body = response.json()
@@ -42,10 +42,10 @@ async def test_stop_container(client: AsyncClient):
 
 
 async def test_start_container(client: AsyncClient):
-    response = await client.get(f"containers/{pytest.CONTAINER_ID}/start")
+    response = await client.get(f"containers/{pytest.CONTAINER_ID}/unpause")
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json()["started"] == True
+    assert response.json()["status"] == "running"
 
     response = await client.get(f"containers/{pytest.CONTAINER_ID}")
     body = response.json()
@@ -54,9 +54,9 @@ async def test_start_container(client: AsyncClient):
 
 
 async def test_delete_container(client: AsyncClient):
-    query_param: str = "force=true"
+    query_param: str = "force_remove=true"
     response = await client.delete(
-        f"containers/{pytest.CONTAINER_ID}/delete?{query_param}"
+        f"containers/{pytest.CONTAINER_ID}/remove?{query_param}"
     )
 
     assert response.status_code == status.HTTP_204_NO_CONTENT

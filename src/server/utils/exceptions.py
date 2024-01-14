@@ -8,7 +8,7 @@ import starlette.status as error
 from starlette.responses import JSONResponse
 from starlette.exceptions import HTTPException
 
-from server.core.types import HttpDockerException, SupportsRead
+from server.types import HttpDockerException
 
 
 def http_exception_handler(_, exc: HttpDockerException) -> JSONResponse:
@@ -19,13 +19,6 @@ def http_exception_handler(_, exc: HttpDockerException) -> JSONResponse:
         {"detail": detail},
         status_code=exc.status_code,
         headers=exc.headers if isinstance(exc, HTTPException) else {},
-    )
-
-
-def pydantic_exception_handler(_, exc: ValidationError) -> JSONResponse:
-    """Handling pydantic validation exceptions"""
-    return JSONResponse(
-        content=exc.errors(), status_code=error.HTTP_422_UNPROCESSABLE_ENTITY
     )
 
 
@@ -43,8 +36,6 @@ def websocket_request_handler(data: dict, Model: t.Any) -> t.Any:
 
 
 exception_handlers: dict[t.Any, t.Callable[..., t.Any]] = {
-    HTTPException: http_exception_handler,
     DockerException: http_exception_handler,
-    ValidationError: pydantic_exception_handler,
     json.decoder.JSONDecodeError: json_exception_handler,
 }
