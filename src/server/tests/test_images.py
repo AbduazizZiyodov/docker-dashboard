@@ -54,14 +54,14 @@ async def test_get_containers_by_image(client: AsyncClient):
 
 
 async def test_delete_container_before_image(client: AsyncClient):
-    query_param: str = "force=true"
+    query_param: str = "force_remove=true"
     response = await client.delete(
-        f"containers/{pytest.CONTAINER_ID}/delete?{query_param}"
+        f"containers/{pytest.CONTAINER_ID}/remove?{query_param}"
     )
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
 
 async def test_delete_image(client: AsyncClient):
-    response = await client.delete(f"images/{TEST_IMAGE_NAME}/delete")
+    response = await client.delete(f"images/{TEST_IMAGE_NAME}/remove")
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
