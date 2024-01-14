@@ -6,6 +6,8 @@ from server.api.container import router as container_router
 
 from server.websocket.images import PullImages
 
+from server.utils.exceptions import exception_handlers
+
 application = FastAPI(
     redoc_url=None,
     version="2.0.0",
@@ -27,3 +29,7 @@ for router in [container_router, image_router]:
 
 
 application.add_websocket_route("/websocket/images/pull", PullImages)
+
+
+for exception_class, handler in exception_handlers.items():
+    application.add_exception_handler(exception_class, handler)

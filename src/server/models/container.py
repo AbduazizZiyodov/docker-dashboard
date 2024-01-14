@@ -1,11 +1,49 @@
 import typing as t
+from enum import StrEnum
 from pydantic import BaseModel
 
+from server.models.image import ImageResponseModel
 
-class ContainerOptions(BaseModel):
+
+class ContainerStatusEnum(StrEnum):
+    dead = "dead"
+    exited = "exited"
+    paused = "paused"
+    running = "running"
+    created = "created"
+    restarting = "restarting"
+
+
+class ContainerActionStatusEnum(StrEnum):
+    started = "started"
+    paused = "paused"
+    stopped = "stopped"
+    removed = "removed"
+
+
+class ContainerRunOptions(BaseModel):
     image: str
     name: t.Optional[str] = None
     ports: t.Optional[dict] = None
     command: t.Optional[t.Union[str, list]] = None
     labels: t.Optional[t.Union[dict, list]] = None
     environment: t.Optional[t.Union[dict, list]] = None
+
+
+class ContainerResponse(BaseModel):
+    id: str
+    name: str
+    status: ContainerStatusEnum
+    labels: dict[str, t.Any]
+    image: ImageResponseModel
+
+
+class ContainerActionStatusResponse(BaseModel):
+    container_id: str
+    status: ContainerActionStatusEnum
+
+
+class ContainerLogsResponse(BaseModel):
+    logs: str
+    container_id: str
+    container_name: str

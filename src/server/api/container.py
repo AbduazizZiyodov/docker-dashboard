@@ -7,59 +7,71 @@ from fastapi import APIRouter
 import starlette.status as status
 from fastapi.responses import JSONResponse, Response
 
-import server.types as types
-from server.models.container import ContainerOptions
 from server.utils.helpers import container_as_dict
+from server.models.container import (
+    ContainerResponse,
+    ContainerRunOptions,
+    ContainerLogsResponse,
+    ContainerActionStatusResponse,
+)
 
 
 client = DockerClient().from_env()
 router = APIRouter(prefix="/api/containers", tags=["Containers"])
 
 
-@router.get("")
-async def get_containers():
+@router.get("", response_model=t.List[ContainerResponse])
+async def get_containers() -> JSONResponse:
     """Get the list of all containers."""
-    containers: types.Containers = client.containers.list(all=True)
-    return container_as_dict(containers)
+    containers: t.List[Container] = client.containers.list(all=True)
+    return JSONResponse(container_as_dict(containers))
 
 
-@router.get("/{container_id}")
-async def get_container(container_id: str):
+@router.get("/{container_id}", response_model=ContainerResponse)
+async def get_container(container_id: str) -> JSONResponse:
     """Get container(single) by its ID."""
     container: Container = client.containers.get(container_id)
-    return container_as_dict(container)
+    return JSONResponse(container_as_dict(container))
 
 
-@router.post("/run")
-async def run_container(container_options: ContainerOptions):
+@router.post("/run", response_model=ContainerResponse)
+async def run_container(container_options: ContainerRunOptions) -> JSONResponse:
     """Create and run container by options in detached mode."""
 
-    container = client.containers.run(**container_options.dict(), detach=True)
+    container: Container = client.containers.run(
+        **container_options.model_dump(), detach=True
+    )
 
     return JSONResponse(
         content=container_as_dict(container), status_code=status.HTTP_201_CREATED
     )
 
 
-@router.get("/{container_id}/unpause")
-async def unpause_container(container_id: str):
+@router.get("/{container_id}/unpause", response_model=ContainerActionStatusResponse)
+async def unpause_container(container_id: str) -> ContainerActionStatusResponse:
     container: Container = client.containers.get(container_id)
     container.start()
 
-    return {"started": True}
+    return ContainerActionStatusResponse(
+        container_id=container_id, status=container.status
+    )
 
 
-@router.get("/{container_id}/stop")
-async def stop_container(container_id: str):
+@router.get("/{container_id}/stop", response_model=ContainerActionStatusResponse)
+async def stop_container(container_id: str) -> ContainerActionStatusResponse:
     """Stop running container."""
     container: Container = client.containers.get(container_id)
     container.stop()
 
-    return {"stopped": True}
+    return ContainerActionStatusResponse(
+        container_id=container_id, status=container.status
+    )
 
 
 @router.delete("/{container_id}/remove")
-async def remove_container(container_id: str, force_remove: t.Optional[bool] = False):
+async def remove_container(
+    container_id: str, force_remove: t.Optional[bool] = False
+) -> Response:
     """Remove container by its ID."""
     container: Container = client.containers.get(container_id)
     container.remove(force=force_remove)
@@ -67,9 +79,13 @@ async def remove_container(container_id: str, force_remove: t.Optional[bool] = F
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.get("/{container_id}/logs")
-async def get_logs(container_id: str):
+@router.get("/{container_id}/logs", response_model=ContainerLogsResponse)
+async def get_logs(container_id: str) -> ContainerLogsResponse:
     """Get logs from the inside of the container"""
     container: Container = client.containers.get(container_id)
 
-    return {"logs": container.logs().decode("utf-8"), "container": container.name}
+    return ContainerLogsResponse(
+        container_id=container_id,
+        container_name=container.name,
+        logs=container.logs().decode("utf-8"),
+    )

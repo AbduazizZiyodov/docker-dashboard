@@ -1,10 +1,10 @@
-from typing import Optional
+import typing as t
 from pydantic import BaseModel
 
 
 class DockerSearchRequest(BaseModel):
     term: str
-    limit: Optional[int] = 10
+    limit: t.Optional[int] = 10
 
 
 class DockerPullRequest(BaseModel):
@@ -14,3 +14,12 @@ class DockerPullRequest(BaseModel):
 
     def to_string(self) -> str:
         return f"{self.repository}:{self.tag}"
+
+
+class ImageResponseModel(BaseModel):
+    tag: str
+    name: str
+    size: str
+    long_id: str
+    short_id: str
+    labels: dict[str, t.Any]
