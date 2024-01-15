@@ -7,6 +7,7 @@ from docker.models.images import Image
 from docker.models.containers import Container
 
 import server.types as types
+from server.models.stats import DockerAndSystemInfo
 
 
 def configure_logger(
@@ -102,7 +103,6 @@ def get_additional_info(client: DockerClient, term: str) -> types.Union[dict, No
 
     for result in results:
         if result["name"] == term_original:
-            logger.debug(f"Search results: {result} for {term}")
             return result
 
     return None
@@ -114,8 +114,6 @@ def image_as_dict(
     additional_info: types.Optional[bool] = False,
 ) -> list[dict] | dict:
     """Convert docker Image model to python dictionary object"""
-
-    logger.debug(images)
 
     def build_dict(image: Image):
         image_dict: dict = dict()
@@ -145,8 +143,6 @@ def container_as_dict(
     containers: types.Union[types.Containers, Container]
 ) -> list[dict] | dict:
     """Convert docker Container model to python dictionary object"""
-
-    logger.debug(containers)
 
     def build_dict(container: Container) -> dict:
         return dict(
@@ -182,4 +178,35 @@ def filter_containers_by_image(param: str, client: DockerClient) -> types.Contai
     return list(filter_results)
 
 
-logger: logging.Logger = configure_logger()
+def get_docker_and_system_info(client: DockerClient) -> str:
+    info: dict = client.info()
+    version: dict = client.version()
+
+    return DockerAndSystemInfo.parse_obj(
+        {
+            "docker_info": {
+                "api_version": version.get("ApiVersion"),
+                "go_version": version.get("GoVersion"),
+                "platform_name": version.get("Platform", {}).get("Name"),
+                "platform_version": version.get("Version"),
+            },
+            "system_wide_info": {
+                "containers": {
+                    "total": info.get("Containers"),
+                    "paused": info.get("ContainersPaused"),
+                    "running": info.get("ContainersRunning"),
+                    "stopped": info.get("ContainersStopped"),
+                },
+                "root_dir": info.get("DockerRootDir"),
+                "kernel_version": info.get("KernelVersion"),
+                "images": info.get("Images"),
+                "cpu_count": info.get("NCPU"),
+                "total_memory": human_readable_size(size=info.get("MemTotal")),
+                "os": {
+                    "type": info.get("OSType"),
+                    "version": info.get("OSVersion"),
+                    "name": info.get("OperatingSystem"),
+                },
+            },
+        }
+    )

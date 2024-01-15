@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from server.websocket.images import PullImages
 from server.api.image import router as image_router
+from server.api.stats import router as stats_router
 from server.utils.exceptions import exception_handlers
 from server.api.container import router as container_router
 
@@ -24,7 +25,7 @@ application.add_middleware(
     allow_credentials=True,
 )
 
-for router in [container_router, image_router]:
+for router in [container_router, image_router, stats_router]:
     application.include_router(router)
 
 
