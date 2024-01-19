@@ -1,0 +1,182 @@
+<div class="text-center mb-2">
+  <h1
+    pTooltip="I'm not frontend developer, I'm trying my best."
+    tooltipPosition="top"
+  >
+    Dashboard
+  </h1>
+</div>
+
+<div class="grid">
+  <div class="col-6">
+    <p-fieldset legend="Docker">
+      <div class="grid">
+        <div class="col-6">
+          <p-divider align="center" type="solid">
+            <b><i class="fa-brands fa-docker"></i> Docker Related</b>
+          </p-divider>
+          <h3>
+            Docker API Version&nbsp;
+            <p-badge
+              [value]="dashboardInfo.docker_info.api_version"
+              severity="success"
+              size="large"
+              pTooltip="The default (and highest) API version that is supported by the daemon"
+              tooltipPosition="top"
+            ></p-badge>
+          </h3>
+
+          <h3>
+            Platform Version&nbsp;
+            <p-badge
+              [value]="dashboardInfo.docker_info.platform_version"
+              severity="success"
+              size="large"
+              pTooltip="The version of the daemon"
+              tooltipPosition="top"
+            ></p-badge>
+          </h3>
+
+          <h3>
+            Go Version&nbsp;
+            <p-badge
+              [value]="dashboardInfo.docker_info.go_version"
+              severity="warning"
+              size="large"
+              pTooltip="The version Go used to compile the daemon, and the version of the Go runtime in use."
+              tooltipPosition="top"
+            ></p-badge>
+          </h3>
+
+          <h3>
+            Root Dir&nbsp;
+            <p-badge
+              [value]="dashboardInfo.system_wide_info.root_dir"
+              size="large"
+              pTooltip="Root directory of persistent Docker state."
+              tooltipPosition="top"
+            ></p-badge>
+          </h3>
+        </div>
+
+        <div class="col-6 mx-5">
+          <p-divider align="left" type="solid">
+            <b><i class="fa-solid fa-box-open"></i> Containers</b>
+          </p-divider>
+
+          <h3>
+            <i class="fa-solid fa-box-open" style="color: var(--blue-500)"></i>
+            Total&nbsp;
+            <p-badge
+              [value]="
+                dashboardInfo.system_wide_info.containers.total.toString()
+              "
+              size="large"
+            ></p-badge>
+          </h3>
+
+          <h3>
+            <i class="fa-solid fa-rocket" style="color: var(--green-400)"></i>
+            Running&nbsp;
+            <p-badge
+              [value]="
+                dashboardInfo.system_wide_info.containers.running.toString()
+              "
+              severity="success"
+              size="large"
+            ></p-badge>
+          </h3>
+
+          <h3>
+            <i
+              class="fa-solid fa-circle-pause"
+              style="color: var(--orange-400)"
+            ></i>
+            Paused&nbsp;
+            <p-badge
+              [value]="
+                dashboardInfo.system_wide_info.containers.paused.toString()
+              "
+              severity="warning"
+              size="large"
+            ></p-badge>
+          </h3>
+
+          <h3>
+            <i class="fa-solid fa-hand" style="color: var(--red-400)"></i>
+            Stopped&nbsp;
+            <p-badge
+              [value]="
+                dashboardInfo.system_wide_info.containers.stopped.toString()
+              "
+              severity="danger"
+              size="large"
+            ></p-badge>
+          </h3>
+        </div>
+      </div>
+    </p-fieldset>
+  </div>
+
+  <div class="col-6">
+    <p-fieldset legend="System">
+      <p-divider align="center" type="solid">
+        <b><i class="fa-solid fa-desktop"></i> Operating System Info</b>
+      </p-divider>
+      <h3>
+        Name
+        <p-badge
+          [value]="dashboardInfo.system_wide_info.os.name"
+          size="large"
+        ></p-badge>
+      </h3>
+
+      <h3>
+        OS Type
+        <p-badge
+          [value]="dashboardInfo.system_wide_info.os.type"
+          severity="warning"
+          size="large"
+        ></p-badge>
+        &nbsp;Version
+        <p-badge
+          [value]="dashboardInfo.system_wide_info.os.version"
+          severity="success"
+          size="large"
+        ></p-badge>
+      </h3>
+
+      <p-divider align="center" type="solid">
+        <b>Others</b>
+      </p-divider>
+
+      <h3>
+        <i class="fa-solid fa-memory"></i> Total Memory
+        <p-badge
+          [value]="dashboardInfo.system_wide_info.total_memory"
+          severity="success"
+          size="large"
+        ></p-badge>
+        &nbsp; <i class="fa-solid fa-microchip"></i> CPU count
+        <p-badge
+          pTooltip="The number of logical CPUs usable by the daemon."
+          [value]="dashboardInfo.system_wide_info.cpu_count.toString()"
+          severity="danger"
+          size="large"
+        ></p-badge>
+      </h3>
+
+      <h3>
+        Kernel Version
+        <p-badge
+          [value]="dashboardInfo.system_wide_info.kernel_version"
+          size="large"
+        ></p-badge>
+      </h3>
+    </p-fieldset>
+  </div>
+</div>
+
+<div class="text-center">
+  <small>Running on {{ dashboardInfo.docker_info.platform_name }}</small>
+</div>

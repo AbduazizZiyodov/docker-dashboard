@@ -152,6 +152,7 @@ def container_as_dict(
             short_id=container.short_id,
             labels=container.labels,
             image=image_as_dict(container.image),
+            ports=container.ports,
         )
 
     # for multiple instances

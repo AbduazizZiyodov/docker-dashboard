@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 
 import { MenuItem, PrimeNGConfig } from 'primeng/api';
 import { ThemeService } from '@services/theme.service';
-import { TreeNode } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +30,11 @@ export class AppComponent {
 
     this.primengConfig.ripple = true;
     this.items = [
+      {
+        label: 'Home',
+        icon: 'fa-solid fa-house-chimney',
+        routerLink: '/'
+      },
       {
         label: 'Containers',
         icon: 'fa-solid fa-box-open',

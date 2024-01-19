@@ -26,6 +26,7 @@ class ContainerRunOptions(BaseModel):
 class ContainerResponse(BaseModel):
     id: str
     name: str
+    ports: dict
     status: ContainerStatusEnum
     labels: dict[str, t.Any]
     image: DockerImageResponse

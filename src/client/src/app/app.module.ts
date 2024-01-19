@@ -17,20 +17,25 @@ import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { AvatarModule } from 'primeng/avatar'
 import { ButtonModule } from 'primeng/button';
+import { PanelModule } from 'primeng/panel';
+import { ToolbarModule } from 'primeng/toolbar'
+import { TooltipModule } from 'primeng/tooltip';
 import { DividerModule } from 'primeng/divider';
 import { ListboxModule } from 'primeng/listbox';
 import { SidebarModule } from 'primeng/sidebar';
 import { DropdownModule } from 'primeng/dropdown';
+import { FieldsetModule } from 'primeng/fieldset'
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { TieredMenuModule } from 'primeng/tieredmenu';
-import { ToolbarModule } from 'primeng/toolbar'
 // Components
 import { ContainersComponent } from '@containers/containers.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ContainersComponent
+    ContainersComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -49,10 +54,13 @@ import { ContainersComponent } from '@containers/containers.component';
     MenuModule,
     BadgeModule,
     TieredMenuModule,
+    PanelModule,
     DividerModule,
     PanelMenuModule,
     DropdownModule,
-    ToolbarModule
+    ToolbarModule,
+    FieldsetModule,
+    TooltipModule,
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
