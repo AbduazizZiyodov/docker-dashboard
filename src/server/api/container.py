@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse, Response
 
 from server.utils.helpers import container_as_dict
 from server.models.container import (
+    KillSignals,
     ContainerResponse,
     ContainerRunOptions,
     ContainerLogsResponse,
@@ -47,14 +48,30 @@ async def run_container(container_options: ContainerRunOptions) -> JSONResponse:
     )
 
 
-@router.get("/{container_id}/unpause", response_model=ContainerActionStatusResponse)
-async def unpause_container(container_id: str) -> ContainerActionStatusResponse:
+@router.get("/{container_id}/start", response_model=ContainerActionStatusResponse)
+async def start_container(container_id: str) -> ContainerActionStatusResponse:
     """Start this container. Similar to the ``docker start`` command, but
     doesn't support attach options.
     """
     query = client.containers.get
     container: Container = query(container_id)
-    container.start()
+
+    if container.status == "paused":
+        container.unpause()
+    else:
+        container.start()
+
+    return ContainerActionStatusResponse(
+        container_id=container_id, status=query(container_id).status
+    )
+
+
+@router.get("/{container_id}/pause", response_model=ContainerActionStatusResponse)
+async def pause_container(container_id: str) -> ContainerActionStatusResponse:
+    """Pauses all processes within this container."""
+    query = client.containers.get
+    container: Container = query(container_id)
+    container.pause()
 
     return ContainerActionStatusResponse(
         container_id=container_id, status=query(container_id).status
@@ -67,6 +84,20 @@ async def stop_container(container_id: str) -> ContainerActionStatusResponse:
     query = client.containers.get
     container: Container = query(container_id)
     container.stop()
+
+    return ContainerActionStatusResponse(
+        container_id=container_id, status=query(container_id).status
+    )
+
+
+@router.get("/{container_id}/kill", response_model=ContainerActionStatusResponse)
+async def kill_container(
+    container_id: str, signal: KillSignals
+) -> ContainerActionStatusResponse:
+    """Kill or send a signal to the container."""
+    query = client.containers.get
+    container: Container = query(container_id)
+    container.kill()
 
     return ContainerActionStatusResponse(
         container_id=container_id, status=query(container_id).status

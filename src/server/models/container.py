@@ -14,6 +14,15 @@ class ContainerStatusEnum(StrEnum):
     restarting = "restarting"
 
 
+class KillSignals(StrEnum):
+    SIGINT = "SIGINT"
+    SIGHUP = "SIGHUP"
+    SIGQUIT = "SIGQUIT"
+    SIGKILL = "SIGKILL"
+    SIGTERM = "SIGTERM"
+    SIGSTOP = "SIGSTOP"
+
+
 class ContainerRunOptions(BaseModel):
     image: str
     name: t.Optional[str] = None
