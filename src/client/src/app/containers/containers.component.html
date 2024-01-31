@@ -1,54 +1,18 @@
 <p-toast position="bottom-right"></p-toast>
 
-<div class="card">
-  <p-toolbar>
-    <div class="p-toolbar-group-start">
-      <button pButton icon="pi pi-plus" class="mr-2"></button>
-      <button pButton icon="pi pi-print" class="mr-2"></button>
-      <button pButton icon="pi pi-upload"></button>
-    </div>
-
-    <div class="p-toolbar-group-end">
-      <p-button
-        class="m-2"
-        icon="fa-solid fa-play"
-        severity="success"
-        label="Start"
-        (onClick)="startContainers()"
-        [disabled]="
-          selectedContainers == undefined || selectedContainers.length == 0
-        "
-      ></p-button>
-      <p-button
-        class="m-2"
-        icon="fa-solid fa-stop"
-        severity="danger"
-        label="Stop"
-        (onClick)="stopContainers()"
-        [disabled]="
-          selectedContainers == undefined || selectedContainers.length == 0
-        "
-      ></p-button>
-      <p-button
-        class="m-2"
-        icon="fa-solid fa-stop"
-        severity="danger"
-        label="Kill"
-        [disabled]="
-          selectedContainers == undefined || selectedContainers.length == 0
-        "
-      ></p-button>
-      <p-button
-        class="m-2"
-        icon="fa-solid fa-repeat"
-        severity="primary"
-        label="Restart"
-        [disabled]="
-          selectedContainers == undefined || selectedContainers.length == 0
-        "
-      ></p-button>
-    </div>
-  </p-toolbar>
+<div class="card m-5" *ngIf="!containers.length">
+  <div class="text-center">
+    <h2>Containers?</h2>
+    <img
+      src="assets/images/confused.jpg"
+      style="border-radius: 5%"
+      width="30%"
+      alt=""
+    />
+    <p-divider></p-divider>
+    <strong> You can try this in your command line: </strong> <br />
+    <code style="font-family: 'Fira Mono'">docker run hello-world</code>
+  </div>
 </div>
 
 <div class="card m-5" *ngIf="containers.length">
@@ -59,15 +23,11 @@
     [rows]="5"
     [value]="containers"
     [paginator]="true"
-    [(selection)]="selectedContainers"
     [rowsPerPageOptions]="[5, 10, 20]"
-    [globalFilterFields]="['status']"
+    [loading]="isLoading"
   >
     <ng-template pTemplate="header" let-columns>
       <tr>
-        <th style="width: 4rem">
-          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-        </th>
         <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
         <th pSortableColumn="name">
           Name <p-sortIcon field="name"></p-sortIcon>
@@ -76,44 +36,12 @@
         <th pSortableColumn="image.name">
           Image <p-sortIcon field="image.name"></p-sortIcon>
         </th>
-      </tr>
-      <tr>
-        <th></th>
-        <th></th>
-        <th><p-columnFilter type="text" field="name"></p-columnFilter></th>
-        <th>
-          <p-columnFilter field="status" matchMode="equals" [showMenu]="false">
-            <ng-template
-              pTemplate="filter"
-              let-value
-              let-filter="filterCallback"
-            >
-              <p-dropdown
-                [options]="statuses"
-                (onChange)="filter($event.value)"
-                placeholder="Any"
-                [showClear]="true"
-              >
-                <ng-template let-option pTemplate="item">
-                  <p-tag
-                    [value]="option.value"
-                    [severity]="getContainerStatus(option.label)"
-                  ></p-tag>
-                </ng-template>
-              </p-dropdown>
-            </ng-template>
-          </p-columnFilter>
-        </th>
-        <th></th>
-        <th></th>
+
+        <th>Actions</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-container let-columns="columns">
       <tr>
-        <td>
-          <p-tableCheckbox [value]="container"></p-tableCheckbox>
-        </td>
-
         <td>
           <p-button
             [size]="'small'"
@@ -137,13 +65,80 @@
           ></p-button>
         </td>
         <td>
+          <strong>
+            {{ container.image.name + ":" + container.image.tag }}
+          </strong>
+        </td>
+
+        <td>
           <p-button
-            [label]="container.image.name + ':' + container.image.tag"
-            severity="warning"
-            [size]="'small'"
+            severity="success"
+            size="small"
+            *ngIf="container.status != 'running'"
+            class="m-1"
+            (onClick)="startContainer(container)"
+          >
+            <i class="fa-solid fa-play"></i>
+          </p-button>
+
+          <p-button
+            size="small"
+            severity="help"
+            *ngIf="container.status == 'running'"
+            class="m-1"
+            (onClick)="pauseContainer(container)"
+            ><i class="fa-solid fa-pause"></i
           ></p-button>
+
+          <p-button
+            severity="danger"
+            *ngIf="container.status == 'running'"
+            class="m-1"
+            size="small"
+            (onClick)="stopContainer(container)"
+          >
+            <i class="fa-solid fa-stop"></i
+          ></p-button>
+
+          <p-button
+            severity="danger"
+            *ngIf="container.status == 'running'"
+            class="m-1"
+            size="small"
+            (onClick)="openContainerKillDialog(container)"
+          >
+            <i class="fa-solid fa-skull-crossbones"></i>
+          </p-button>
         </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
+
+<p-dialog
+  header="Are you sure?"
+  [visible]="isVisible"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <p class="m-0">
+    You are trying to kill container {{ selectedContainer }}, continue? <br />
+    If so, please select signal code:
+    <p-dropdown
+      [options]="signalOptions"
+      [(ngModel)]="selectedSignal"
+      optionLabel="name"
+      optionValue="code"
+      placeholder="Select a Signal"
+    ></p-dropdown>
+  </p>
+
+  <p-divider></p-divider>
+
+  <p-button severity="danger" class="m-1" (onClick)="killContainer()">
+    <i class="fa-solid fa-gun m-1"></i> Kill</p-button
+  >
+  <p-button severity="success" class="m-1" (onClick)="isVisible = false">
+    <i class="fa-regular fa-circle-xmark m-1"></i> No</p-button
+  >
+</p-dialog>

@@ -1,92 +1,166 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Message } from 'primeng/api';
-
-import { Container } from '@models/container';
-import { ContainerService } from '@services/container.service';
 import { MessageService } from 'primeng/api';
 
+import { ContainerService } from '@services/container.service';
+import { Container, ContainerActionStatusResponse, ContainerStatus } from '@models/container';
 
-interface StatusFilter {
-  label: string
-  value: string
 
+const STATUS_SEVERITY: Map<string, string> = new Map<string, string>(
+  [
+    ["created", 'warning'],
+    ['dead', 'danger'],
+    ['running', 'success'],
+    ['restarting', 'warning'],
+    ['exited', 'danger'],
+    ['removing', 'danger']
+  ]
+)
+
+interface Signal {
+  name: string,
+  code: string;
 }
+const killSignals: Signal[] = [
+  { name: "SIGINT", code: "SIGINT" },
+  { name: "SIGHUP", code: "SIGHUP" },
+  { name: "SIGQUIT", code: "SIGQUIT" },
+  { name: "SIGKILL", code: "SIGKILL" },
+  { name: "SIGTERM", code: "SIGTERM" },
+  { name: "SIGSTOP", code: "SIGSTOP" }
+];
 
 @Component({
   selector: 'app-containers',
   templateUrl: './containers.component.html',
-  styleUrl: './containers.component.scss'
+  styleUrl: './containers.component.scss',
 })
 export class ContainersComponent implements OnInit {
-  containers!: Container[];
-  messages!: Message[];
-  selectedContainers!: Container[];
-  statuses: StatusFilter[] = [
-    { label: 'Exited', value: 'exited' },
-    { label: 'Running', value: 'running' }
-  ];
+  isLoading: boolean = true;
+  isVisible: boolean = false;
+  messages: Message[] = [] as Message[];
+  containers: Container[] = [] as Container[];
+  selectedContainer: Container = {} as Container;
+
+  selectedSignal!: Signal;
+  signalOptions: Signal[] = killSignals;
 
   constructor(
     private containerService: ContainerService,
     private messageService: MessageService
   ) { }
 
-
   ngOnInit(): void {
-    this.loadContainers()
+    this.loadContainers();
   }
 
   loadContainers() {
-    this.containerService.all()
-      .subscribe((data: Container[]) => {
-        this.containers = data.reverse();
+    this.containerService.all().subscribe((data: Container[]) => {
+      this.containers = data.reverse();
+      this.isLoading = false;
+    });
+  }
+
+  startContainer(container: Container) {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Starting',
+      detail: `Starting container ${container.name}`,
+    });
+    this.isLoading = true;
+
+    this.containerService
+      .start(container.id)
+      .subscribe((data: ContainerActionStatusResponse) => {
+        if (data.status == ContainerStatus.running) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Started',
+            detail: `Container ${container.name} started`,
+          });
+        }
+        this.loadContainers();
+      });
+
+  }
+
+  stopContainer(container: Container) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Stopping',
+      detail: `Stopping container ${container.name}`,
+    });
+    this.isLoading = true;
+    this.containerService
+      .stop(container.id)
+      .subscribe((data: ContainerActionStatusResponse) => {
+        if (data.status == ContainerStatus.exited) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Stopped',
+            detail: `Container ${container.name} is stopped`,
+          });
+        }
+        this.loadContainers();
       });
   }
 
-  startContainers() {
-    console.log(this.selectedContainers)
-
-    for (let container of this.selectedContainers) {
-      this.messageService.add({ severity: 'info', summary: 'Starting', detail: `Starting container ${container.name}` });
-      this.containerService.startStoppedContainer(container.id).subscribe((data: any) => {
-        if (data.started) {
-          this.messageService.add({ severity: 'success', summary: 'Started', detail: `Container ${container.name} started` });
+  pauseContainer(container: Container) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Stopping',
+      detail: `Stopping container ${container.name}`,
+    });
+    this.isLoading = true;
+    this.containerService
+      .pause(container.id)
+      .subscribe((data: ContainerActionStatusResponse) => {
+        if (data.status == ContainerStatus.paused) {
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Paused',
+            detail: `Container ${container.name} is paused`,
+          });
         }
-        this.loadContainers()
-      })
-    }
-
-  }
-  stopContainers() {
-    for (let container of this.selectedContainers) {
-      this.messageService.add({ severity: 'info', summary: 'Stopping', detail: `Stopping container ${container.name}` });
-      this.containerService.stopContainer(container.id).subscribe((data: any) => {
-        if (data.stopped) {
-          this.messageService.add({ severity: 'warn', summary: 'Stopped', detail: `Container ${container.name} is stopped` });
-        }
-        this.loadContainers()
-      })
-    }
+        this.loadContainers();
+      });
   }
 
+  killContainer() {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Killing',
+      detail: `Killing container ${this.selectedContainer.name}`,
+    });
+    this.isLoading = true;
+    this.isVisible = false;
+
+    this.containerService
+      .kill(this.selectedContainer.id, this.selectedSignal.code)
+      .subscribe((data: ContainerActionStatusResponse) => {
+        if (data.status == ContainerStatus.exited) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Killed',
+            detail: `Container ${this.selectedContainer.name} is killed`,
+          });
+        }
+        this.loadContainers();
+      });
+  }
+
+  openContainerKillDialog(container: Container) {
+    this.isVisible = true;
+    this.selectedContainer = container;
+  }
 
   getContainerStatus(status: string): string {
-    switch (status.toLowerCase()) {
-      case 'created':
-        return 'warning';
-      case 'dead':
-        return 'danger'
-      case 'running':
-        return 'success'
-      case 'restarting':
-        return 'warning';
-      case 'exited':
-        return 'danger';
-      case 'removing':
-        return 'danger'
-      default:
-        return 'primary'
+    let tempStatus: string | undefined = STATUS_SEVERITY.get(status);
+    if (tempStatus != undefined) {
+      return tempStatus;
     }
+    return "primary"
   }
 }
+

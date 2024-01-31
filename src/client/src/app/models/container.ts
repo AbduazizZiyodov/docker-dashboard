@@ -1,18 +1,18 @@
 import { Image } from './image'
 
-export interface Container {
-  id: string;
-  name: string;
-  status: string | any;
-  short_id: string;
-  labels: object;
-  image: Image;
+export enum ContainerStatus {
+  dead = "dead",
+  exited = "exited",
+  paused = "paused",
+  running = "running",
+  created = "created",
+  restarting = "restarting"
 }
 
 export interface Container {
   id: string;
   name: string;
-  status: string | any;
+  status: ContainerStatus;
   short_id: string;
   labels: object;
   image: Image;
@@ -32,4 +32,9 @@ export interface RunContainerData {
 export interface ContainerLogsData {
   logs: string;
   container: string;
+}
+
+export interface ContainerActionStatusResponse {
+  container_id: string
+  status: ContainerStatus
 }

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -18,6 +18,7 @@ import { TableModule } from 'primeng/table';
 import { AvatarModule } from 'primeng/avatar'
 import { ButtonModule } from 'primeng/button';
 import { PanelModule } from 'primeng/panel';
+import { DialogModule } from 'primeng/dialog';
 import { ToolbarModule } from 'primeng/toolbar'
 import { TooltipModule } from 'primeng/tooltip';
 import { DividerModule } from 'primeng/divider';
@@ -61,6 +62,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     ToolbarModule,
     FieldsetModule,
     TooltipModule,
+    DialogModule,
+    FormsModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

@@ -5,9 +5,12 @@
   font-family: "Fira Mono";
   src: url(assets/fonts/fira-mono.ttf);
 }
-
+@font-face {
+  font-family: "Fira Sans";
+  src: url(assets/fonts/fira-sans.ttf);
+}
 * {
-  font-family: "system-ui";
+  font-family: "Fira Sans";
 }
 html {
   font-size: 14px;

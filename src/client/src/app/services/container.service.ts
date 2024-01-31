@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Container, ContainerLogsData, RunContainerData } from '@models/container';
+import { Container, ContainerLogsData, RunContainerData, ContainerActionStatusResponse } from '@models/container';
 
 @Injectable({
   providedIn: 'root',
@@ -19,26 +19,34 @@ export class ContainerService {
     return this.http.get<Container>(`${this.api}/containers/${container_id}`);
   }
 
-  startStoppedContainer(container_id: string) {
-    return this.http.get(`${this.api}/containers/${container_id}/start`);
+  start(container_id: string) {
+    return this.http.get<ContainerActionStatusResponse>(`${this.api}/containers/${container_id}/start`);
   }
 
-  stopContainer(container_id: string) {
-    return this.http.get(`${this.api}/containers/${container_id}/stop`);
+  stop(container_id: string) {
+    return this.http.get<ContainerActionStatusResponse>(`${this.api}/containers/${container_id}/stop`);
   }
 
-  deleteContainer(container_id: string) {
+  pause(container_id: string) {
+    return this.http.get<ContainerActionStatusResponse>(`${this.api}/containers/${container_id}/pause`);
+  }
+  delete(container_id: string) {
     return this.http.delete(`${this.api}/containers/${container_id}/delete`);
   }
 
-  runContainer(containerData: RunContainerData) {
+  run(containerData: RunContainerData) {
     return this.http.post<Container>(
       `${this.api}/containers/run`,
       containerData
     );
   }
 
-  getLogs(container_id: string | undefined) {
+  kill(containerId: string, signal?: string) {
+    if (signal == undefined) { signal = 'SIGKILL' }
+    return this.http.get<ContainerActionStatusResponse>(`${this.api}/containers/${containerId}/kill?signal=${signal}`)
+  }
+
+  logs(container_id: string | undefined) {
     return this.http.get<ContainerLogsData>(`${this.api}/containers/${container_id}/logs`);
   }
 }
