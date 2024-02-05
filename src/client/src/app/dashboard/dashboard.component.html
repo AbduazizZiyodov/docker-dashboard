@@ -1,9 +1,6 @@
 <div class="text-center mb-2">
-  <h1
-    pTooltip="I'm not frontend developer, I'm trying my best."
-    tooltipPosition="top"
-  >
-    Dashboard
+  <h1 pTooltip="I'm trying my best." tooltipPosition="top">
+    <i class="fa-solid fa-house"></i> Home
   </h1>
 </div>
 
@@ -49,7 +46,7 @@
           </h3>
 
           <h3>
-            Root Dir&nbsp;
+            Root&nbsp;
             <p-badge
               [value]="dashboardInfo.system_wide_info.root_dir"
               size="large"
@@ -60,12 +57,9 @@
         </div>
 
         <div class="col-6 mx-5">
-          <p-divider align="left" type="solid">
-            <b><i class="fa-solid fa-box-open"></i> Containers</b>
-          </p-divider>
+          <p-divider align="left" type="solid"> Containers </p-divider>
 
           <h3>
-            <i class="fa-solid fa-box-open" style="color: var(--blue-500)"></i>
             Total&nbsp;
             <p-badge
               [value]="
@@ -76,7 +70,6 @@
           </h3>
 
           <h3>
-            <i class="fa-solid fa-rocket" style="color: var(--green-400)"></i>
             Running&nbsp;
             <p-badge
               [value]="
@@ -88,10 +81,6 @@
           </h3>
 
           <h3>
-            <i
-              class="fa-solid fa-circle-pause"
-              style="color: var(--orange-400)"
-            ></i>
             Paused&nbsp;
             <p-badge
               [value]="
@@ -103,7 +92,6 @@
           </h3>
 
           <h3>
-            <i class="fa-solid fa-hand" style="color: var(--red-400)"></i>
             Stopped&nbsp;
             <p-badge
               [value]="
@@ -121,7 +109,7 @@
   <div class="col-6">
     <p-fieldset legend="System">
       <p-divider align="center" type="solid">
-        <b><i class="fa-solid fa-desktop"></i> Operating System Info</b>
+        <b><i class="fa-solid fa-desktop"></i> OS Info</b>
       </p-divider>
       <h3>
         Name
@@ -161,7 +149,7 @@
         <p-badge
           pTooltip="The number of logical CPUs usable by the daemon."
           [value]="dashboardInfo.system_wide_info.cpu_count.toString()"
-          severity="danger"
+          severity="warning"
           size="large"
         ></p-badge>
       </h3>

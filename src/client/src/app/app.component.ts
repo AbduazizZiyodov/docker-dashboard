@@ -38,13 +38,7 @@ export class AppComponent {
       {
         label: 'Containers',
         icon: 'fa-solid fa-box-open',
-        routerLink: 'containers',
-        items: [
-          {
-            label: 'Create',
-            icon: 'fa-regular fa-square-plus',
-          }
-        ]
+        routerLink: 'containers'
       },
       {
         label: 'Images',

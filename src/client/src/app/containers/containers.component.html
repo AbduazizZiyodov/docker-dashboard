@@ -1,23 +1,36 @@
-<p-toast position="bottom-right"></p-toast>
+<p-toast position="bottom-left"></p-toast>
 
 <div class="card m-5" *ngIf="!containers.length">
   <div class="text-center">
-    <h2>Containers?</h2>
     <img
       src="assets/images/confused.jpg"
       style="border-radius: 5%"
       width="30%"
       alt=""
     />
-    <p-divider></p-divider>
+    <h2>Containers?</h2>
+    <br />
     <strong> You can try this in your command line: </strong> <br />
     <code style="font-family: 'Fira Mono'">docker run hello-world</code>
+    <p-divider align="center">Or</p-divider>
+    <p-button
+      label="New"
+      icon="fa-solid fa-plus"
+      size="small"
+      severity="success"
+    ></p-button>
   </div>
 </div>
 
-<div class="card m-5" *ngIf="containers.length">
+<div class="card m-2" *ngIf="containers.length">
   <h2>
-    <i class="fa-solid fa-cube" style="color: #4ade80"></i> Container List
+    Containers
+    <p-button
+      label="New"
+      icon="fa-solid fa-plus"
+      size="small"
+      severity="success"
+    ></p-button>
   </h2>
   <p-table
     [rows]="5"
@@ -76,9 +89,9 @@
             size="small"
             *ngIf="container.status != 'running'"
             class="m-1"
-            (onClick)="startContainer(container)"
+            icon="fa-solid fa-play"
+            (onClick)="containerAction(container, 'start')"
           >
-            <i class="fa-solid fa-play"></i>
           </p-button>
 
           <p-button
@@ -86,8 +99,8 @@
             severity="help"
             *ngIf="container.status == 'running'"
             class="m-1"
-            (onClick)="pauseContainer(container)"
-            ><i class="fa-solid fa-pause"></i
+            icon="fa-solid fa-pause"
+            (onClick)="containerAction(container, 'pause')"
           ></p-button>
 
           <p-button
@@ -95,50 +108,12 @@
             *ngIf="container.status == 'running'"
             class="m-1"
             size="small"
-            (onClick)="stopContainer(container)"
+            icon="fa-solid fa-stop"
+            (onClick)="containerAction(container, 'stop')"
           >
-            <i class="fa-solid fa-stop"></i
-          ></p-button>
-
-          <p-button
-            severity="danger"
-            *ngIf="container.status == 'running'"
-            class="m-1"
-            size="small"
-            (onClick)="openContainerKillDialog(container)"
-          >
-            <i class="fa-solid fa-skull-crossbones"></i>
           </p-button>
         </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
-
-<p-dialog
-  header="Are you sure?"
-  [visible]="isVisible"
-  [draggable]="false"
-  [resizable]="false"
->
-  <p class="m-0">
-    You are trying to kill container {{ selectedContainer }}, continue? <br />
-    If so, please select signal code:
-    <p-dropdown
-      [options]="signalOptions"
-      [(ngModel)]="selectedSignal"
-      optionLabel="name"
-      optionValue="code"
-      placeholder="Select a Signal"
-    ></p-dropdown>
-  </p>
-
-  <p-divider></p-divider>
-
-  <p-button severity="danger" class="m-1" (onClick)="killContainer()">
-    <i class="fa-solid fa-gun m-1"></i> Kill</p-button
-  >
-  <p-button severity="success" class="m-1" (onClick)="isVisible = false">
-    <i class="fa-regular fa-circle-xmark m-1"></i> No</p-button
-  >
-</p-dialog>

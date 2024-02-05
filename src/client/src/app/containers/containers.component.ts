@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Message } from 'primeng/api';
+import { ConfirmationService, Message } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 
 import { ContainerService } from '@services/container.service';
@@ -62,97 +62,39 @@ export class ContainersComponent implements OnInit {
     });
   }
 
-  startContainer(container: Container) {
+  containerAction(container: Container, action: string): void {
     this.messageService.add({
       severity: 'info',
-      summary: 'Starting',
-      detail: `Starting container ${container.name}`,
+      detail: `Requested action '${action}' for container ${container.name}`,
+      life: 1000
     });
-    this.isLoading = true;
 
-    this.containerService
-      .start(container.id)
-      .subscribe((data: ContainerActionStatusResponse) => {
-        if (data.status == ContainerStatus.running) {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Started',
-            detail: `Container ${container.name} started`,
-          });
-        }
-        this.loadContainers();
+    let request;
+    switch (action) {
+      case 'start':
+        request = this.containerService.start(container.short_id);
+        break;
+      case 'stop':
+        request = this.containerService.stop(container.short_id);
+        break;
+      case 'pause':
+        request = this.containerService.pause(container.short_id);
+        break;
+    }
+
+    request?.subscribe((data: ContainerActionStatusResponse) => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Processed',
+        detail: `Container ${container.name} status is '${data.status}'`,
       });
 
-  }
-
-  stopContainer(container: Container) {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Stopping',
-      detail: `Stopping container ${container.name}`,
-    });
-    this.isLoading = true;
-    this.containerService
-      .stop(container.id)
-      .subscribe((data: ContainerActionStatusResponse) => {
-        if (data.status == ContainerStatus.exited) {
-          this.messageService.add({
-            severity: 'warn',
-            summary: 'Stopped',
-            detail: `Container ${container.name} is stopped`,
-          });
+      for (let containerToUpdate of this.containers) {
+        if (containerToUpdate.short_id == container.short_id) {
+          containerToUpdate.status = data.status;
         }
-        this.loadContainers();
-      });
-  }
-
-  pauseContainer(container: Container) {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Stopping',
-      detail: `Stopping container ${container.name}`,
+      }
     });
-    this.isLoading = true;
-    this.containerService
-      .pause(container.id)
-      .subscribe((data: ContainerActionStatusResponse) => {
-        if (data.status == ContainerStatus.paused) {
-          this.messageService.add({
-            severity: 'info',
-            summary: 'Paused',
-            detail: `Container ${container.name} is paused`,
-          });
-        }
-        this.loadContainers();
-      });
-  }
-
-  killContainer() {
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Killing',
-      detail: `Killing container ${this.selectedContainer.name}`,
-    });
-    this.isLoading = true;
-    this.isVisible = false;
-
-    this.containerService
-      .kill(this.selectedContainer.id, this.selectedSignal.code)
-      .subscribe((data: ContainerActionStatusResponse) => {
-        if (data.status == ContainerStatus.exited) {
-          this.messageService.add({
-            severity: 'warn',
-            summary: 'Killed',
-            detail: `Container ${this.selectedContainer.name} is killed`,
-          });
-        }
-        this.loadContainers();
-      });
-  }
-
-  openContainerKillDialog(container: Container) {
-    this.isVisible = true;
-    this.selectedContainer = container;
   }
 
   getContainerStatus(status: string): string {
