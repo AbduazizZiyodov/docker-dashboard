@@ -19,9 +19,11 @@
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
     "@fortawesome/fontawesome-free": "^6.5.1",
+    "bootstrap": "^5.3.3",
     "chart.js": "^4.4.1",
+    "primeflex": "^3.3.1",
     "primeicons": "^6.0.1",
-    "primeng": "^17.3.1",
+    "primeng": "^17.14.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
