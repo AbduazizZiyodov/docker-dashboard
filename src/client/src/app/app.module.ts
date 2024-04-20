@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-
 // PrimeNG modules
+
 import { TagModule } from 'primeng/tag'
 import { MenuModule } from 'primeng/menu';
 import { CardModule } from 'primeng/card';
@@ -26,17 +27,24 @@ import { ListboxModule } from 'primeng/listbox';
 import { SidebarModule } from 'primeng/sidebar';
 import { DropdownModule } from 'primeng/dropdown';
 import { FieldsetModule } from 'primeng/fieldset'
+import { StyleClassModule } from 'primeng/styleclass';
+import { InputTextModule } from 'primeng/inputtext';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { TieredMenuModule } from 'primeng/tieredmenu';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 // Components
 import { ContainersComponent } from '@containers/containers.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { CreateContainersComponent } from './create-containers/create-containers.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ContainersComponent,
-    DashboardComponent
+    DashboardComponent,
+    CreateContainersComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +71,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     FieldsetModule,
     TooltipModule,
     DialogModule,
-    FormsModule
+    FormsModule,
+    RouterModule,
+    InputTextModule,
+    InputNumberModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    StyleClassModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
