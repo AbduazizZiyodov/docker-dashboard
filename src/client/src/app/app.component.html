@@ -1,3 +1,5 @@
+<p-button (click)="sidebarVisible = true" severity="success" icon="pi pi-bars"></p-button>
+
 <div class="flex justify-content-center">
   <p-sidebar [(visible)]="sidebarVisible">
     <ng-template pTemplate="header">
@@ -33,9 +35,6 @@
       </div>
     </ng-template>
   </p-sidebar>
-  <p-button (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
 </div>
 
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
+<router-outlet></router-outlet>
