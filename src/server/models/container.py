@@ -30,6 +30,7 @@ class ContainerRunOptions(BaseModel):
     command: t.Optional[t.Union[str, list]] = None
     labels: t.Optional[t.Union[dict, list]] = None
     environment: t.Optional[t.Union[dict, list]] = None
+    working_dir: t.Optional[str] = None
 
 
 class ContainerResponse(BaseModel):
