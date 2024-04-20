@@ -1,170 +1,185 @@
-<div class="text-center mb-2">
-  <h1 pTooltip="I'm trying my best." tooltipPosition="top">
-    <i class="fa-solid fa-house"></i> Home
-  </h1>
-</div>
-
-<div class="grid">
-  <div class="col-6">
-    <p-fieldset legend="Docker">
-      <div class="grid">
-        <div class="col-6">
-          <p-divider align="center" type="solid">
-            <b><i class="fa-brands fa-docker"></i> Docker Related</b>
-          </p-divider>
-          <h3>
-            Docker API Version&nbsp;
-            <p-badge
-              [value]="dashboardInfo.docker_info.api_version"
-              severity="success"
-              size="large"
-              pTooltip="The default (and highest) API version that is supported by the daemon"
-              tooltipPosition="top"
-            ></p-badge>
-          </h3>
-
-          <h3>
-            Platform Version&nbsp;
-            <p-badge
-              [value]="dashboardInfo.docker_info.platform_version"
-              severity="success"
-              size="large"
-              pTooltip="The version of the daemon"
-              tooltipPosition="top"
-            ></p-badge>
-          </h3>
-
-          <h3>
-            Go Version&nbsp;
-            <p-badge
-              [value]="dashboardInfo.docker_info.go_version"
-              severity="warning"
-              size="large"
-              pTooltip="The version Go used to compile the daemon, and the version of the Go runtime in use."
-              tooltipPosition="top"
-            ></p-badge>
-          </h3>
-
-          <h3>
-            Root&nbsp;
-            <p-badge
-              [value]="dashboardInfo.system_wide_info.root_dir"
-              size="large"
-              pTooltip="Root directory of persistent Docker state."
-              tooltipPosition="top"
-            ></p-badge>
-          </h3>
-        </div>
-
-        <div class="col-6 mx-5">
-          <p-divider align="left" type="solid"> Containers </p-divider>
-
-          <h3>
-            Total&nbsp;
-            <p-badge
-              [value]="
-                dashboardInfo.system_wide_info.containers.total.toString()
-              "
-              size="large"
-            ></p-badge>
-          </h3>
-
-          <h3>
-            Running&nbsp;
-            <p-badge
-              [value]="
-                dashboardInfo.system_wide_info.containers.running.toString()
-              "
-              severity="success"
-              size="large"
-            ></p-badge>
-          </h3>
-
-          <h3>
-            Paused&nbsp;
-            <p-badge
-              [value]="
-                dashboardInfo.system_wide_info.containers.paused.toString()
-              "
-              severity="warning"
-              size="large"
-            ></p-badge>
-          </h3>
-
-          <h3>
-            Stopped&nbsp;
-            <p-badge
-              [value]="
-                dashboardInfo.system_wide_info.containers.stopped.toString()
-              "
-              severity="danger"
-              size="large"
-            ></p-badge>
-          </h3>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="surface-card shadow-2 p-5 border-round">
+        <div class="flex justify-content-between mb-1">
+          <div>
+            <span class="block text-500 font-medium mb-3">Total</span>
+            <div class="text-900 font-medium text-xl">
+              {{ dashboardInfo.system_wide_info.containers.total }}
+            </div>
+          </div>
+          <div
+            class="flex align-items-center justify-content-center bg-blue-100 border-round"
+            style="width: 2.5rem; height: 2.5rem"
+          >
+            <i class="fa-solid fa-box-open text-blue-500 text-xl p-2"></i>
+          </div>
         </div>
       </div>
-    </p-fieldset>
+    </div>
+    <div class="col-md-3">
+      <div class="surface-card shadow-2 p-5 border-round">
+        <div class="flex justify-content-between mb-1">
+          <div>
+            <span class="block text-500 font-medium mb-3">Running</span>
+            <div class="text-900 font-medium text-xl">
+              {{ dashboardInfo.system_wide_info.containers.running }}
+            </div>
+          </div>
+          <div
+            class="flex align-items-center justify-content-center bg-green-100 border-round"
+            style="width: 2.5rem; height: 2.5rem"
+          >
+            <i class="fa-solid fa-rocket text-green-500 text-xl p-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="surface-card shadow-2 p-5 border-round">
+        <div class="flex justify-content-between mb-1">
+          <div>
+            <span class="block text-500 font-medium mb-3">Paused</span>
+            <div class="text-900 font-medium text-xl">
+              {{ dashboardInfo.system_wide_info.containers.paused }}
+            </div>
+          </div>
+          <div
+            class="flex align-items-center justify-content-center bg-yellow-100 border-round"
+            style="width: 2.5rem; height: 2.5rem"
+          >
+            <i class="fa-solid fa-circle-pause text-yellow-500 text-xl p-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="surface-card shadow-2 p-5 border-round">
+        <div class="flex justify-content-between mb-1">
+          <div>
+            <span class="block text-500 font-medium mb-3">Stopped</span>
+            <div class="text-900 font-medium text-xl">
+              {{ dashboardInfo.system_wide_info.containers.stopped }}
+            </div>
+          </div>
+          <div
+            class="flex align-items-center justify-content-center bg-red-100 border-round"
+            style="width: 2.5rem; height: 2.5rem"
+          >
+            <i class="fa-solid fa-skull text-red-500 text-xl p-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="col-6">
-    <p-fieldset legend="System">
-      <p-divider align="center" type="solid">
-        <b><i class="fa-solid fa-desktop"></i> OS Info</b>
-      </p-divider>
-      <h3>
-        Name
-        <p-badge
-          [value]="dashboardInfo.system_wide_info.os.name"
-          size="large"
-        ></p-badge>
-      </h3>
+  <div class="row mt-3">
+    <div class="col-md-6">
+      <div class="surface-card shadow-2 p-5 border-round">
+        <div class="flex justify-content-between mb-1">
+          <div>
+            <h3>
+              Docker API Version:
+              <span
+                class="text-blue-500 border-round p-1"
+                pTooltip="The default API version that is supported by the daemon"
+                tooltipPosition="top"
+              >
+                {{ dashboardInfo.docker_info.api_version }}
+              </span>
+            </h3>
 
-      <h3>
-        OS Type
-        <p-badge
-          [value]="dashboardInfo.system_wide_info.os.type"
-          severity="warning"
-          size="large"
-        ></p-badge>
-        &nbsp;Version
-        <p-badge
-          [value]="dashboardInfo.system_wide_info.os.version"
-          severity="success"
-          size="large"
-        ></p-badge>
-      </h3>
+            <h3>
+              Platform Version:
 
-      <p-divider align="center" type="solid">
-        <b>Others</b>
-      </p-divider>
+              <span
+                class="text-yellow-500 border-round p-1"
+                pTooltip="The version of the daemon"
+                tooltipPosition="top"
+              >
+                {{ dashboardInfo.docker_info.platform_version }}
+              </span>
+            </h3>
 
-      <h3>
-        <i class="fa-solid fa-memory"></i> Total Memory
-        <p-badge
-          [value]="dashboardInfo.system_wide_info.total_memory"
-          severity="success"
-          size="large"
-        ></p-badge>
-        &nbsp; <i class="fa-solid fa-microchip"></i> CPU count
-        <p-badge
-          pTooltip="The number of logical CPUs usable by the daemon."
-          [value]="dashboardInfo.system_wide_info.cpu_count.toString()"
-          severity="warning"
-          size="large"
-        ></p-badge>
-      </h3>
+            <h3>
+              Go Version:
+              <span
+                class="text-purple-500 border-round p-1"
+                pTooltip="The version Go used to compile the daemon, and the version of the Go runtime in use."
+                tooltipPosition="top"
+              >
+                {{ dashboardInfo.docker_info.go_version }}
+              </span>
+            </h3>
 
-      <h3>
-        Kernel Version
-        <p-badge
-          [value]="dashboardInfo.system_wide_info.kernel_version"
-          size="large"
-        ></p-badge>
-      </h3>
-    </p-fieldset>
+            <h3>
+              Host OS Type:
+              <span
+                severity="warning"
+                size="large"
+                class="text-green-500 border-round p-1"
+              >
+                {{ dashboardInfo.system_wide_info.os.type }}
+              </span>
+            </h3>
+          </div>
+          <div
+            class="flex align-items-center justify-content-center bg-teal-100 border-round"
+            style="width: 2.5rem; height: 2.5rem"
+          >
+            <i class="fa-solid fa-circle-info text-teal-900 text-xl p-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="surface-card shadow-2 p-5 border-round">
+        <div class="flex justify-content-between mb-1">
+          <div>
+            <h3>
+              OS Name:
+              <span class="text-pink-500 border-round p-2">
+                {{ dashboardInfo.system_wide_info.os.name }}
+              </span>
+            </h3>
+
+            <h3>
+              Total Memory:
+              <span class="text-teal-500 border-round p-1">
+                {{ dashboardInfo.system_wide_info.total_memory }}
+              </span>
+            </h3>
+
+            <h3>
+              CPU count:
+              <span
+                class="text-red-500 border-round p-1"
+                pTooltip="The number of logical CPUs usable by the daemon."
+              >
+                {{ dashboardInfo.system_wide_info.cpu_count.toString() }}
+              </span>
+            </h3>
+
+            <h3>
+              Kernel Version:
+              <span class="text-primary-500 border-round p-1">
+                {{ dashboardInfo.system_wide_info.kernel_version }}
+              </span>
+            </h3>
+          </div>
+          <div
+            class="flex align-items-center justify-content-center bg-indigo-100 border-round"
+            style="width: 2.5rem; height: 2.5rem"
+          >
+            <i class="fa-solid fa-server text-indigo-500 text-xl p-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="text-center">
+<div class="text-center mt-2">
   <small>Running on {{ dashboardInfo.docker_info.platform_name }}</small>
 </div>
