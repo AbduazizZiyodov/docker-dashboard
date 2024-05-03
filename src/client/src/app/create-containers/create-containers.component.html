@@ -1,0 +1,20 @@
+<div class="container-create-form">
+  <p-card>
+    <h2 class="text-center">Run new container</h2>
+
+    <input pInputText id="container_name" placeholder="Container name" />
+    <br />
+    <p-dropdown
+      [options]="imageOptions"
+      [lazy]="true"
+      [(ngModel)]="selectedImage"
+      optionLabel="name"
+      [showClear]="true"
+      placeholder="Select a Docker Image"
+    ></p-dropdown>
+
+    <p-divider></p-divider>
+
+    <p-button size="large" [raised]="true" label="Bake"></p-button>
+  </p-card>
+</div>

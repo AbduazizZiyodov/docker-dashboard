@@ -1,13 +1,13 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-3">
-      <div class="surface-card shadow-2 p-5 border-round">
+    <div class="col-md-3 mb-2">
+      <div class="surface-card shadow-1 p-5 border-round">
         <div class="flex justify-content-between mb-1">
           <div>
             <span class="block text-500 font-medium mb-3">Total</span>
-            <div class="text-900 font-medium text-xl">
+            <h1 class="font-bold p-0 m-0">
               {{ dashboardInfo.system_wide_info.containers.total }}
-            </div>
+            </h1>
           </div>
           <div
             class="flex align-items-center justify-content-center bg-blue-100 border-round"
@@ -18,14 +18,14 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="surface-card shadow-2 p-5 border-round">
+    <div class="col-md-3 mb-2">
+      <div class="surface-card shadow-1 p-5 border-round">
         <div class="flex justify-content-between mb-1">
           <div>
             <span class="block text-500 font-medium mb-3">Running</span>
-            <div class="text-900 font-medium text-xl">
+            <h1 class="font-bold p-0 m-0">
               {{ dashboardInfo.system_wide_info.containers.running }}
-            </div>
+            </h1>
           </div>
           <div
             class="flex align-items-center justify-content-center bg-green-100 border-round"
@@ -36,14 +36,14 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="surface-card shadow-2 p-5 border-round">
+    <div class="col-md-3 mb-2">
+      <div class="surface-card shadow-1 p-5 border-round">
         <div class="flex justify-content-between mb-1">
           <div>
-            <span class="block text-500 font-medium mb-3">Paused</span>
-            <div class="text-900 font-medium text-xl">
+            <span class="block text-500 font-bold mb-3">Paused</span>
+            <h1 class="font-bold p-0 m-0">
               {{ dashboardInfo.system_wide_info.containers.paused }}
-            </div>
+            </h1>
           </div>
           <div
             class="flex align-items-center justify-content-center bg-yellow-100 border-round"
@@ -54,14 +54,14 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="surface-card shadow-2 p-5 border-round">
+    <div class="col-md-3 mb-2">
+      <div class="surface-card shadow-1 p-5 border-round">
         <div class="flex justify-content-between mb-1">
           <div>
-            <span class="block text-500 font-medium mb-3">Stopped</span>
-            <div class="text-900 font-medium text-xl">
+            <span class="block text-500 font-bold mb-3">Stopped</span>
+            <h1 class="font-bold p-0 m-0">
               {{ dashboardInfo.system_wide_info.containers.stopped }}
-            </div>
+            </h1>
           </div>
           <div
             class="flex align-items-center justify-content-center bg-red-100 border-round"
@@ -75,8 +75,8 @@
   </div>
 
   <div class="row mt-3">
-    <div class="col-md-6">
-      <div class="surface-card shadow-2 p-5 border-round">
+    <div class="col-md-6 mb-2">
+      <div class="surface-card shadow-1 p-5 border-round">
         <div class="flex justify-content-between mb-1">
           <div>
             <h3>
@@ -124,17 +124,11 @@
               </span>
             </h3>
           </div>
-          <div
-            class="flex align-items-center justify-content-center bg-teal-100 border-round"
-            style="width: 2.5rem; height: 2.5rem"
-          >
-            <i class="fa-solid fa-circle-info text-teal-900 text-xl p-2"></i>
-          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="surface-card shadow-2 p-5 border-round">
+    <div class="col-md-6 mb-2">
+      <div class="surface-card shadow-1 p-5 border-round">
         <div class="flex justify-content-between mb-1">
           <div>
             <h3>
@@ -168,18 +162,13 @@
               </span>
             </h3>
           </div>
-          <div
-            class="flex align-items-center justify-content-center bg-indigo-100 border-round"
-            style="width: 2.5rem; height: 2.5rem"
-          >
-            <i class="fa-solid fa-server text-indigo-500 text-xl p-2"></i>
-          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="text-center mt-2">
-  <small>Running on {{ dashboardInfo.docker_info.platform_name }}</small>
+<div class="text-center mt-4">
+  <small>Running on {{ dashboardInfo.docker_info.platform_name }} 
+  </small>
 </div>

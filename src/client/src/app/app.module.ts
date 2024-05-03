@@ -34,6 +34,7 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 // Components
 import { ContainersComponent } from '@containers/containers.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -77,7 +78,8 @@ import { CreateContainersComponent } from './create-containers/create-containers
     InputNumberModule,
     InputGroupModule,
     InputGroupAddonModule,
-    StyleClassModule
+    StyleClassModule,
+    ProgressSpinnerModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
