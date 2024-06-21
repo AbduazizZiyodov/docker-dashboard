@@ -153,6 +153,7 @@ def container_as_dict(
             labels=container.labels,
             image=image_as_dict(container.image),
             ports=container.ports,
+            created=container.attrs.get("Created"),
         )
 
     # for multiple instances

@@ -1,6 +1,7 @@
 import typing as t
 from enum import StrEnum
 from pydantic import BaseModel
+from datetime import datetime
 
 from server.models.image import DockerImageResponse
 
@@ -37,6 +38,7 @@ class ContainerResponse(BaseModel):
     id: str
     name: str
     ports: dict
+    created: datetime
     status: ContainerStatusEnum
     labels: dict[str, t.Any]
     image: DockerImageResponse
