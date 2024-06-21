@@ -49,4 +49,5 @@ export class ContainerService {
   logs(container_id: string | undefined) {
     return this.http.get<ContainerLogsData>(`${this.api}/containers/${container_id}/logs`);
   }
+
 }

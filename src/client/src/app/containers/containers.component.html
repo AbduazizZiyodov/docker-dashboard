@@ -34,6 +34,7 @@
       [routerLink]="['new']"
     ></p-button>
   </h2>
+
   <p-table
     class="shadow-1"
     [rows]="5"
@@ -42,34 +43,86 @@
     [rowsPerPageOptions]="[5, 10, 20]"
     [loading]="isLoading"
   >
-    <ng-template pTemplate="header" let-columns>
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <p-columnFilter
+          type="text"
+          field="name"
+          placeholder="Search by name"
+          ariaLabel="Filter Name"
+        />
+
+        <p-columnFilter
+          type="text"
+          field="short_id"
+          placeholder="Search by Id"
+          ariaLabel="Filter Short Id"
+        />
+
+        <p-columnFilter
+        type="text"
+        field="image.name"
+        placeholder="Search by Image Name"
+        ariaLabel="Filter Image Name"
+      />
+
+        <p-columnFilter field="status" matchMode="equals" [showMenu]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-dropdown
+              [(ngModel)]="val"
+              [options]="statuses"
+              (onChange)="filter($event.value)"
+              placeholder="Select One"
+              [showClear]="true"
+            >
+              <ng-template let-option pTemplate="item">
+                <p-tag
+                  [value]="option.label"
+                  [severity]="getContainerStatus(option.value)"
+                />
+              </ng-template>
+            </p-dropdown>
+          </ng-template>
+        </p-columnFilter>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
         <th pSortableColumn="name">
-          Name <p-sortIcon field="name"></p-sortIcon>
+          <div class="flex align-items-center">
+            Name <p-sortIcon field="name"></p-sortIcon>
+          </div>
         </th>
+        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
         <th>State</th>
         <th pSortableColumn="image.name">
           Image <p-sortIcon field="image.name"></p-sortIcon>
         </th>
-
-        <th>Actions</th>
+        
+        <th>
+          Created
+          <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th>Quick Actions</th>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-container let-columns="columns">
       <tr>
-        <td>
-          <p-button
-            [size]="'small'"
-            [label]="container.short_id"
-            severity="info"
-          ></p-button>
-        </td>
         <td>
           <p-button
             [outlined]="true"
             [label]="container.name"
             severity="help"
+          ></p-button>
+        </td>
+        <td>
+          <p-button
+            [size]="'small'"
+            [label]="container.short_id"
+            severity="info"
+            (click)="copyContainerId(container.short_id)"
           ></p-button>
         </td>
         <td>
@@ -85,7 +138,10 @@
             {{ container.image.name + ":" + container.image.tag }}
           </strong>
         </td>
-
+        
+        <td>
+          {{ container.created | date: 'dd/MM/yyyy hh:mm a'}}
+        </td>
         <td>
           <p-button
             severity="success"

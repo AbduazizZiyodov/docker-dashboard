@@ -7,8 +7,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-// PrimeNG modules
+// Third party
+import { ClipboardModule } from 'ngx-clipboard';
 
+// PrimeNG modules
 import { TagModule } from 'primeng/tag'
 import { MenuModule } from 'primeng/menu';
 import { CardModule } from 'primeng/card';
@@ -40,12 +42,14 @@ import { ContainersComponent } from '@containers/containers.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CreateContainersComponent } from './create-containers/create-containers.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     ContainersComponent,
     DashboardComponent,
-    CreateContainersComponent
+    CreateContainersComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -79,7 +83,8 @@ import { CreateContainersComponent } from './create-containers/create-containers
     InputGroupModule,
     InputGroupAddonModule,
     StyleClassModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    ClipboardModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

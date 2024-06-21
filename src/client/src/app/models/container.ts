@@ -16,6 +16,7 @@ export interface Container {
   short_id: string;
   labels: object;
   image: Image;
+  created: Date
 }
 
 export interface RunContainerData {
