@@ -1,3 +1,0 @@
-pytest==7.1.2
-pytest-asyncio==0.18.3
-httpx-ws==0.2.3
