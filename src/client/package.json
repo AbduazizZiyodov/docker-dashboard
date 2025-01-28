@@ -47,7 +47,7 @@
     "ngx-clipboard": "^15.1.0",
     "ngx-toastr": "^14.3.0",
     "rxjs": "~7.5.0",
-    "tslib": "^2.6.2",
+    "tslib": "^2.8.1",
     "zone.js": "~0.14.4"
   },
   "resolutions": {
