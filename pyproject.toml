@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "dramatiq[redis,watch]>=1.17.1",
     "fastapi>=0.115.7",
     "python-decouple>=3.8",
     "uvicorn[standard]>=0.34.0",
@@ -13,5 +14,10 @@ dependencies = [
 [dependency-groups]
 dev = [
     "mypy>=1.14.1",
+    "pre-commit>=4.1.0",
     "ruff>=0.9.3",
 ]
+
+[[tool.mypy.overrides]]
+module = "decouple"
+ignore_missing_imports = true
