@@ -3,18 +3,18 @@ import hashlib
 
 from fastapi import status, Header, HTTPException, Request
 
-from src import config
-from src.logging import log
+from server import config
+from server.logging import log
 
 __all__ = ["validate_webhook_secret"]
 
 
 async def validate_webhook_secret(
-    request: Request, x_hub_signature_256_header: str | None = Header(default=None)
+    request: Request, x_hub_signature_256: str | None = Header(default=None)
 ) -> None:
     request_payload: bytes = await request.body()
 
-    if not (check_signature(request_payload, x_hub_signature_256_header)):
+    if not (check_signature(request_payload, x_hub_signature_256)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid webhook secret, check the value of x_hub_signature_256 header from request",

@@ -1,7 +1,9 @@
 #!/bin/bash
 
+. .env
+
 if [[ $DEBUG ]]; then
-    uvicorn src.application:application --port 2121 --reload
+    uvicorn server.application:application --port 2121 --reload
 else
-    uvicorn src.application:application --port 2121 
+    uvicorn server.application:application --port 2121 
 fi

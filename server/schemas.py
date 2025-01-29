@@ -3,7 +3,11 @@ import typing as t
 from pydantic import BaseModel
 
 
-__all__ = ["WebhookPushEventPayload"]
+__all__ = ["WebhookPushEventPayload", "TaskFile"]
+
+###
+# Webhook related
+###
 
 
 class WebhookPushEventPayload(BaseModel):
@@ -167,3 +171,17 @@ class Sender(BaseModel):
     type: str
     user_view_type: str
     site_admin: bool
+
+
+###
+# Config file
+###
+
+
+class TaskFile(BaseModel):
+    tasks: list["Task"]
+
+
+class Task(BaseModel):
+    repo_url: str
+    command: str

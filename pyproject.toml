@@ -19,5 +19,5 @@ dev = [
 ]
 
 [[tool.mypy.overrides]]
-module = "decouple"
+module = ["decouple", "yaml"]
 ignore_missing_imports = true
