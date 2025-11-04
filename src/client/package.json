@@ -48,7 +48,7 @@
     "ngx-toastr": "^14.3.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.6.2",
-    "zone.js": "~0.14.4"
+    "zone.js": "~0.15.1"
   },
   "resolutions": {
     "autoprefixer": "10.4.5"
