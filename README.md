@@ -2,7 +2,16 @@
 
 ![](./assets/docker-dashboard.png)
 
+
 > **_Simple lightweight GUI application for working with Docker!_**
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://abduaziz.ziyodov.uz/badges/ai-free-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://abduaziz.ziyodov.uz/badges/ai-free-light.svg">
+    <img alt="bruh" src="https://abduaziz.ziyodov.uz/badges/ai-free-dark.svg">
+  </picture>
+</p>
 
 ## **📄 System Requirements**:
 
